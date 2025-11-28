@@ -1,0 +1,2278 @@
+/* Material Dashboard Django - Custom Styles for Andromeda Properties */
+
+/* Material Design Typography - Roboto font family */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+
+:root {
+    /* Material Design Color Palette */
+    --primary-color: #1976d2;
+    --primary-dark: #1565c0;
+    --primary-light: #42a5f5;
+    --secondary-color: #424242;
+    --accent-color: #ff4081;
+    --success-color: #4caf50;
+    --info-color: #2196f3;
+    --warning-color: #ff9800;
+    --danger-color: #f44336;
+    --dark-color: #212121;
+    --light-color: #f5f5f5;
+    --text-primary: rgba(0, 0, 0, 0.87);
+    --text-secondary: rgba(0, 0, 0, 0.54);
+    --text-disabled: rgba(0, 0, 0, 0.38);
+    --divider-color: rgba(0, 0, 0, 0.12);
+    
+    /* Material Design Elevation Shadows */
+    --elevation-0: none;
+    --elevation-1: 0 2px 1px -1px rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);
+    --elevation-2: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
+    --elevation-3: 0 3px 3px -2px rgba(0,0,0,.2), 0 3px 4px 0 rgba(0,0,0,.14), 0 1px 8px 0 rgba(0,0,0,.12);
+    --elevation-4: 0 2px 4px -1px rgba(0,0,0,.2), 0 4px 5px 0 rgba(0,0,0,.14), 0 1px 10px 0 rgba(0,0,0,.12);
+    --elevation-5: 0 3px 5px -1px rgba(0,0,0,.2), 0 5px 8px 0 rgba(0,0,0,.14), 0 1px 14px 0 rgba(0,0,0,.12);
+    --elevation-6: 0 3px 5px -1px rgba(0,0,0,.2), 0 6px 10px 0 rgba(0,0,0,.14), 0 1px 18px 0 rgba(0,0,0,.12);
+    --elevation-8: 0 5px 5px -3px rgba(0,0,0,.2), 0 8px 10px 1px rgba(0,0,0,.14), 0 3px 14px 2px rgba(0,0,0,.12);
+    --elevation-12: 0 7px 8px -4px rgba(0,0,0,.2), 0 12px 17px 2px rgba(0,0,0,.14), 0 5px 22px 4px rgba(0,0,0,.12);
+    --elevation-16: 0 8px 10px -5px rgba(0,0,0,.2), 0 16px 24px 2px rgba(0,0,0,.14), 0 6px 30px 5px rgba(0,0,0,.12);
+    --elevation-24: 0 11px 15px -7px rgba(0,0,0,.2), 0 24px 38px 3px rgba(0,0,0,.14), 0 9px 46px 8px rgba(0,0,0,.12);
+    
+    /* Material Design Border Radius */
+    --border-radius-sm: 4px;
+    --border-radius: 4px;
+    --border-radius-md: 8px;
+    --border-radius-lg: 16px;
+    --border-radius-xl: 24px;
+    --border-radius-round: 50%;
+}
+
+/* Body styles moved to mobile-first section */
+
+/* Google Translate Widget Styling */
+#google_translate_element {
+    display: inline-block;
+}
+
+#google_translate_element .goog-te-banner-frame {
+    display: none !important;
+}
+
+/* Body styles consolidated above */
+
+/* Hide Google Translate branding when collapsed */
+#google_translate_element .goog-te-gadget {
+    font-size: 0 !important;
+    color: transparent !important;
+}
+
+#google_translate_element .goog-te-gadget-simple {
+    background-color: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    font-size: 14px;
+}
+
+#google_translate_element .goog-te-gadget-icon {
+    display: none !important;
+}
+
+#google_translate_element .goog-te-gadget-simple .goog-te-menu-value {
+    color: var(--text-primary) !important;
+}
+
+#google_translate_element .goog-te-gadget-simple .goog-te-menu-value span {
+    color: var(--text-primary) !important;
+}
+    color: var(--text-primary);
+    font-weight: 400;
+    line-height: 1.5;
+    letter-spacing: 0.00938em;
+    margin: 0;
+    padding-left: 0;
+    padding-right: 0;
+    overflow-x: hidden;
+}
+
+/* WhatsApp Floating Button */
+.whatsapp-float {
+    position: fixed;
+    width: 60px;
+    height: 60px;
+    bottom: 20px;
+    right: 20px;
+    background-color: #25d366;
+    color: #fff;
+    border-radius: 50px;
+    text-align: center;
+    font-size: 30px;
+    box-shadow: 0 4px 12px rgba(37, 211, 102, 0.4);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    animation: pulse 2s infinite;
+}
+
+.whatsapp-float:hover {
+    background-color: #20ba5a;
+    color: #fff;
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(37, 211, 102, 0.6);
+    text-decoration: none;
+}
+
+.whatsapp-float i {
+    font-size: 32px;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 4px 12px rgba(37, 211, 102, 0.4);
+    }
+    50% {
+        box-shadow: 0 4px 20px rgba(37, 211, 102, 0.8);
+    }
+    100% {
+        box-shadow: 0 4px 12px rgba(37, 211, 102, 0.4);
+    }
+}
+
+/* Mobile WhatsApp button (base) */
+.whatsapp-float {
+    width: 50px;
+    height: 50px;
+    bottom: 15px;
+    right: 15px;
+    font-size: 24px;
+}
+
+.whatsapp-float i {
+    font-size: 26px;
+}
+
+/* Desktop WhatsApp button */
+@media (min-width: 768px) {
+    .whatsapp-float {
+        width: 60px;
+        height: 60px;
+        bottom: 20px;
+        right: 20px;
+        font-size: 30px;
+    }
+    
+    .whatsapp-float i {
+        font-size: 32px;
+    }
+}
+
+/* Verified Badge */
+.verified-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 4px rgba(102, 126, 234, 0.3);
+}
+
+.verified-badge i {
+    font-size: 0.875rem;
+}
+
+/* Last Updated Timestamp */
+.last-updated {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.last-updated i {
+    font-size: 0.875rem;
+    opacity: 0.7;
+}
+
+.last-updated.recent {
+    color: var(--success-color);
+    font-weight: 500;
+}
+
+/* Performance Optimizations */
+/* Image lazy loading support */
+img[loading="lazy"] {
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+img[loading="lazy"].loaded {
+    opacity: 1;
+}
+
+/* Optimize font loading */
+@font-face {
+    font-family: 'Roboto';
+    font-display: swap;
+}
+
+/* Reduce layout shifts */
+.card-img-top,
+.property-card img {
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+}
+
+/* ============================================
+   MOBILE-FIRST BASE STYLES (Default for mobile)
+   ============================================ */
+
+/* Base typography and body - optimized for mobile (consolidated) */
+body {
+    font-size: 16px;
+    line-height: 1.5;
+    font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    padding-top: 56px; /* Mobile navbar height */
+    background-color: #fafafa;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+    width: 100%;
+    position: relative;
+    top: 0 !important;
+}
+
+h1 { font-size: 1.75rem; }
+h2 { font-size: 1.5rem; }
+h3 { font-size: 1.25rem; }
+h4 { font-size: 1.125rem; }
+h5 { font-size: 1rem; }
+h6 { font-size: 0.875rem; }
+
+/* Mobile-optimized container padding */
+.container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+.container-fluid {
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+/* Mobile-optimized card spacing */
+.card {
+    margin-bottom: 1rem;
+    border-radius: var(--border-radius-md);
+}
+
+/* Touch-friendly buttons (mobile-first) */
+.btn {
+    min-height: 44px;
+    min-width: 44px;
+    padding: 0.625rem 1.25rem;
+    font-size: 1rem;
+    border-radius: var(--border-radius);
+}
+
+/* Mobile-optimized images */
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Mobile-optimized navbar */
+.navbar-custom {
+    min-height: 56px;
+    padding: 0.5rem 1rem;
+}
+
+.navbar-brand {
+    font-size: 0.875rem;
+    display: flex;
+    align-items: center;
+}
+
+.navbar-toggler {
+    border: 1px solid rgba(0,0,0,0.1);
+    padding: 0.25rem 0.75rem;
+    font-size: 1.25rem;
+    line-height: 1;
+    background-color: transparent;
+    border-radius: var(--border-radius);
+}
+
+.navbar-toggler:focus {
+    text-decoration: none;
+    outline: 0;
+    box-shadow: 0 0 0 0.25rem rgba(25, 118, 210, 0.25);
+}
+
+/* Mobile-optimized search section and card styling */
+.search-section,
+.card.mb-4.elevation-2 {
+    background-color: #ffffff !important;
+    border-radius: var(--border-radius-md) !important;
+    box-shadow: var(--elevation-2) !important;
+}
+
+.search-section {
+    padding: 1.5rem 1rem !important;
+    margin: 1rem 0 !important;
+}
+
+.card-body {
+    padding: 1.5rem 1rem !important;
+}
+
+/* Mobile: stack all columns vertically */
+.search-section .row,
+.search-section form.row,
+.search-section form[class*="row"] {
+    display: flex !important;
+    flex-direction: column !important;
+    flex-wrap: wrap !important;
+    margin-right: 0 !important;
+    margin-left: 0 !important;
+    width: 100% !important;
+}
+
+.search-section .row > *,
+.search-section form.row > *,
+.search-section form[class*="row"] > * {
+    padding-right: 0 !important;
+    padding-left: 0 !important;
+    margin-top: 0 !important;
+    margin-bottom: 1rem !important;
+    width: 100% !important;
+    flex: 0 0 100% !important;
+    max-width: 100% !important;
+}
+
+/* Ensure mobile search button is at the very bottom */
+.search-section .col-12.d-md-none {
+    order: 999 !important;
+    margin-top: 1.5rem !important;
+    margin-bottom: 0 !important;
+    width: 100% !important;
+    flex: 0 0 100% !important;
+    max-width: 100% !important;
+    display: block !important;
+}
+
+/* Desktop search button - Bootstrap d-none handles mobile hiding */
+/* No need to override - Bootstrap classes handle visibility */
+
+/* Mobile search button at bottom - enhanced styling */
+.search-section .col-12.d-md-none .btn,
+.card-body .col-12.d-md-none .btn {
+    width: 100% !important;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    min-height: 52px;
+    font-size: 1.125rem;
+    font-weight: 600;
+    padding: 0.875rem 1.5rem;
+    border-radius: var(--border-radius-md);
+    box-shadow: 0 4px 12px rgba(25, 118, 210, 0.3);
+}
+
+/* Mobile-optimized form fields */
+.form-field-wrapper {
+    margin-bottom: 1rem;
+    min-height: auto !important;
+}
+
+.form-label {
+    font-size: 0.875rem !important;
+    margin-bottom: 0.5rem !important;
+}
+
+.form-control,
+.form-select {
+    font-size: 1rem !important;
+    padding: 0.75rem !important;
+    min-height: 44px !important;
+}
+
+/* Hero section styles consolidated in hero-video section above */
+
+/* Mobile-optimized spacing */
+section {
+    padding: 2rem 0;
+}
+
+.py-5 {
+    padding-top: 2rem !important;
+    padding-bottom: 2rem !important;
+}
+
+.mt-5 {
+    margin-top: 2rem !important;
+}
+
+.mb-5 {
+    margin-bottom: 2rem !important;
+}
+
+/* Body styles consolidated in mobile-first section above */
+
+/* Critical CSS - Above the fold content */
+.hero-section,
+.navbar {
+    will-change: transform;
+}
+
+/* Ensure main content is properly positioned */
+main {
+    width: 100%;
+    min-height: calc(100vh - 200px);
+    position: relative;
+    padding: 0;
+    margin: 0;
+    display: block;
+    clear: both;
+}
+
+/* Ensure container-fluid is properly contained */
+.container-fluid {
+    width: 100%;
+    max-width: 100%;
+    padding-left: 15px;
+    padding-right: 15px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Reset any sidebar or layout issues */
+* {
+    box-sizing: border-box;
+}
+
+html {
+    overflow-x: hidden;
+    width: 100%;
+}
+
+/* Body styles consolidated in mobile-first section above */
+
+/* Ensure Bootstrap grid works properly - don't override Bootstrap's defaults */
+.container,
+.container-fluid {
+    width: 100%;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+/* ============================================
+   TABLET STYLES (min-width: 576px)
+   ============================================ */
+@media (min-width: 576px) {
+    .container {
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+    }
+    
+    .search-section {
+        padding: 2rem 1.5rem !important;
+    }
+    
+    .card-body {
+        padding: 2rem 1.5rem !important;
+    }
+    
+    .hero-content h1 {
+        font-size: 2rem;
+    }
+}
+
+/* Material Design Navbar */
+.navbar-custom {
+    background-color: #fff !important;
+    box-shadow: var(--elevation-2);
+    border-bottom: none;
+    transition: box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    min-height: 64px;
+    padding: 0;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    z-index: 1030 !important;
+    margin: 0 !important;
+    display: flex !important;
+    flex-direction: row !important;
+}
+
+.navbar-custom .container-fluid {
+    width: 100% !important;
+    max-width: 100% !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+}
+
+.navbar-custom .navbar-nav {
+    flex-direction: row !important;
+    display: flex !important;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.navbar-custom .nav-item {
+    display: block;
+    position: relative;
+}
+
+.navbar-custom .dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+    min-width: 200px;
+    padding: 0.5rem 0;
+    margin: 0.125rem 0 0;
+    background-color: #fff;
+    border: 1px solid rgba(0,0,0,0.15);
+    border-radius: var(--border-radius);
+    box-shadow: var(--elevation-4);
+    display: none;
+}
+
+.navbar-custom .dropdown-menu.show {
+    display: block !important;
+}
+
+.navbar-custom .dropdown-item {
+    display: block;
+    width: 100%;
+    padding: 0.5rem 1.5rem;
+    clear: both;
+    font-weight: 400;
+    color: var(--text-primary);
+    text-align: inherit;
+    text-decoration: none;
+    white-space: nowrap;
+    background-color: transparent;
+    border: 0;
+    transition: background-color 0.15s ease;
+}
+
+.navbar-custom .dropdown-item:hover,
+.navbar-custom .dropdown-item:focus {
+    color: #fff;
+    background-color: var(--primary-color);
+}
+
+.navbar-custom .dropdown-toggle::after {
+    display: inline-block;
+    margin-left: 0.255em;
+    vertical-align: 0.255em;
+    content: "";
+    border-top: 0.3em solid;
+    border-right: 0.3em solid transparent;
+    border-bottom: 0;
+    border-left: 0.3em solid transparent;
+}
+
+/* Ensure navbar collapse works properly */
+.navbar-collapse {
+    flex-basis: 100%;
+    flex-grow: 1;
+    align-items: center;
+}
+
+@media (max-width: 991.98px) {
+    .navbar-collapse {
+        display: none;
+    }
+    
+    .navbar-collapse.show {
+        display: block !important;
+    }
+    
+    .navbar-nav {
+        flex-direction: column;
+        padding-left: 0;
+        margin-bottom: 0;
+        list-style: none;
+    }
+    
+    .navbar-nav .nav-item {
+        width: 100%;
+    }
+    
+    .navbar-nav .dropdown-menu {
+        position: static;
+        float: none;
+        width: 100%;
+        margin-top: 0;
+        background-color: #f8f9fa;
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+    }
+}
+
+.navbar-custom.scrolled {
+    box-shadow: var(--elevation-4);
+}
+
+    /* Footer - Removed old footer-bg styles, using Soft UI Dashboard footer */
+
+    /* Admin custom hero on index */
+    .admin-hero {
+        background: linear-gradient(180deg, rgba(0,0,0,0.45), rgba(0,0,0,0.35)), url('../images/header-realestate.svg');
+        background-size: cover;
+        background-position: center;
+        color: #fff;
+        padding: 2.5rem 1rem;
+        margin-bottom: 1rem;
+    }
+    .admin-hero .admin-hero-inner {
+        max-width: 1100px;
+        margin: 0 auto;
+    }
+
+    /* Admin dashboard cards */
+    .admin-dashboard-container {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+    .admin-card .card {
+        border-radius: 0.75rem;
+        overflow: hidden;
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+    .admin-card .card-body {
+        padding: 1.25rem;
+    }
+    .admin-card:hover .card {
+        transform: translateY(-6px) scale(1.01);
+        box-shadow: 0 1rem 2.5rem rgba(18, 38, 63, 0.18);
+    }
+    .admin-card-icon {
+        width: 56px;
+        height: 56px;
+        font-size: 22px;
+    }
+    .admin-dashboard .card h5 {
+        font-weight: 700;
+        color: #111;
+    }
+    .admin-dashboard .text-muted {
+        color: rgba(0,0,0,0.55) !important;
+    }
+
+    .admin-card-count {
+        font-size: 1.6rem;
+        font-weight: 700;
+        margin-top: 0.25rem;
+        color: #0b5ed7;
+    }
+
+    /* Make admin base branding pop */
+    .admin-brand-text {
+        color: #ffffff !important;
+        font-size: 1.05rem;
+    }
+
+    /* Improve admin app list readability */
+    .app-list-module {
+        border-radius: 0.5rem;
+        background: rgba(255,255,255,0.03);
+        padding: 0.75rem;
+    }
+
+    /* Responsive tweaks for admin - Mobile first */
+    .admin-card-icon { 
+        width: 40px; 
+        height: 40px; 
+    }
+    
+    @media (min-width: 768px) {
+        .admin-card-icon { 
+            width: 48px; 
+            height: 48px; 
+        }
+    }
+
+    /* Small admin header logo */
+    .admin-logo {
+        height: 32px;
+        width: auto;
+        vertical-align: middle;
+        margin-right: 10px;
+        display: inline-block;
+    }
+    .admin-brand-text {
+        vertical-align: middle;
+        font-weight: 700;
+        color: #fff;
+    }
+
+
+.navbar-custom .navbar-brand {
+    color: var(--primary-color) !important;
+    font-weight: 500;
+    font-size: 1.25rem;
+    letter-spacing: 0.02em;
+    padding: 16px 24px;
+}
+
+.navbar-custom .nav-link {
+    color: var(--text-primary) !important;
+    font-weight: 500;
+    font-size: 0.875rem;
+    letter-spacing: 0.01786em;
+    transition: color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 16px 16px;
+    text-transform: uppercase;
+    position: relative;
+}
+
+.navbar-custom .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background-color: var(--primary-color);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translateX(-50%);
+}
+
+.navbar-custom .nav-link:hover,
+.navbar-custom .nav-link.active {
+    color: var(--primary-color) !important;
+}
+
+.navbar-custom .nav-link:hover::after,
+.navbar-custom .nav-link.active::after {
+    width: calc(100% - 32px);
+}
+
+/* Navigation */
+.navbar-brand {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.navbar-nav .nav-link {
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    transition: color 0.3s;
+}
+
+.navbar-nav .nav-link:hover {
+    color: var(--primary-color) !important;
+}
+
+/* Hero Section - Soft UI Dashboard Style */
+.hero-section {
+    position: relative;
+    overflow: hidden;
+    border-radius: 0 0 var(--border-radius-xl) var(--border-radius-xl);
+    margin-bottom: 2rem;
+    box-shadow: var(--shadow-lg);
+}
+
+/* Video background for hero - Mobile-first with optimizations */
+.hero-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+    /* Mobile optimizations for performance */
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    will-change: transform;
+    /* Reduce quality slightly on mobile for better performance */
+    filter: saturate(0.9) contrast(1.05) brightness(0.8);
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+}
+
+/* Overlay layer on top of video to improve text contrast */
+.hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.5), rgba(0,0,0,0.4));
+    z-index: 1;
+}
+
+/* Hero section base styles - Mobile */
+.hero-section {
+    position: relative;
+    overflow: hidden;
+    min-height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 56px; /* Mobile navbar height */
+    padding: 2rem 1rem;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+}
+
+.hero-content h1 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+.hero-content h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+.hero-content .lead {
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+}
+
+.hero-content .btn {
+    min-height: 48px;
+    padding: 0.75rem 2rem;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 50px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+/* Desktop: Enhanced hero section */
+@media (min-width: 768px) {
+    .hero-section {
+        min-height: 500px;
+        margin-top: 64px; /* Desktop navbar height */
+        padding: 3rem 2rem;
+    }
+    
+    .hero-content h1 {
+        font-size: 3rem;
+    }
+    
+    .hero-content h2 {
+        font-size: 1.75rem;
+    }
+    
+    .hero-content .lead {
+        font-size: 1.25rem;
+    }
+    
+    .hero-content .btn {
+        padding: 1rem 2.5rem;
+        font-size: 1.125rem;
+    }
+}
+
+/* Material Design Cards */
+.card {
+    border: none;
+    border-radius: 4px;
+    box-shadow: var(--elevation-2);
+    transition: box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background: #fff;
+    overflow: hidden;
+    position: relative;
+}
+
+.card:hover {
+    box-shadow: var(--elevation-8);
+}
+
+.card.raised {
+    box-shadow: var(--elevation-4);
+}
+
+.card.raised:hover {
+    box-shadow: var(--elevation-8);
+}
+
+/* Material Design Property Cards */
+.property-card {
+    transition: box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: none;
+    overflow: hidden;
+    border-radius: 4px;
+    box-shadow: var(--elevation-2);
+    display: flex;
+    flex-direction: column;
+    gap: 0 !important;
+    margin: 0 !important;
+    line-height: 0;
+}
+
+.property-card > * {
+    margin: 0 !important;
+    padding-top: 0 !important;
+    margin-bottom: 0 !important;
+}
+
+.property-card .card-img-top + .card-body {
+    margin-top: 0 !important;
+    padding-top: 0.5rem !important;
+    line-height: normal;
+}
+
+/* Remove any gap between image and card-body */
+.property-card img.card-img-top + .card-body,
+.property-card .card-img-top + .card-body {
+    margin-top: 0 !important;
+    padding-top: 0.5rem !important;
+}
+
+/* Ensure no spacing from Bootstrap card defaults */
+.card.property-card {
+    gap: 0 !important;
+}
+
+.card.property-card > img,
+.card.property-card > .card-img-top {
+    margin-bottom: 0 !important;
+    display: block;
+}
+
+.card.property-card > .card-body {
+    margin-top: 0 !important;
+    padding-top: 0.5rem !important;
+    border-top: none !important;
+}
+
+/* Aggressive fix - remove ALL spacing */
+.card.property-card {
+    border-spacing: 0 !important;
+    border-collapse: collapse !important;
+}
+
+.card.property-card img.card-img-top {
+    vertical-align: bottom !important;
+    margin-bottom: -1px !important;
+}
+
+.card.property-card .card-body {
+    margin-top: -1px !important;
+    border-top: 1px solid transparent !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    background-color: transparent;
+}
+
+/* Remove any white background that might create visual space */
+.card.property-card {
+    background: #fff;
+}
+
+.card.property-card .card-body {
+    background: #fff;
+}
+
+/* Ensure image sits flush with card-body */
+.card.property-card img.card-img-top {
+    display: block;
+    margin: 0 !important;
+    margin-bottom: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    outline: none !important;
+    line-height: 0;
+}
+
+.card.property-card img.card-img-top + .card-body {
+    position: relative;
+    top: 0;
+    margin-top: -4px !important;
+    padding-top: 0.5rem !important;
+    min-height: 0 !important;
+    height: auto !important;
+    max-height: none !important;
+}
+
+/* Remove any default Bootstrap card spacing */
+.card.property-card > * {
+    margin-top: 0 !important;
+}
+
+.card.property-card > img + * {
+    margin-top: 0 !important;
+}
+
+/* Style for property card content (replaces card-body) */
+.property-card-content {
+    padding: 0 0.75rem 0.5rem 0.75rem !important;
+    margin: 0 !important;
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 0;
+    flex-shrink: 0;
+    min-height: 0 !important;
+    height: auto !important;
+    border: none !important;
+    background: #fff;
+    line-height: normal;
+}
+
+.property-card-content > *:first-child {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+    margin-bottom: 0.5rem !important;
+    line-height: normal;
+}
+
+.property-card-content .d-flex.mb-2:first-child {
+    margin-top: 0 !important;
+    margin-bottom: 0.5rem !important;
+}
+
+/* Ensure no gap between image and content */
+.card.property-card img.card-img-top + .property-card-content,
+.card.property-card .card-img-top + .property-card-content {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+}
+
+/* Remove any spacing from the card itself */
+.card.property-card {
+    padding: 0 !important;
+    gap: 0 !important;
+    margin: 0 !important;
+}
+
+.card.property-card > img,
+.card.property-card > .card-img-top {
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: block;
+    border-bottom: none !important;
+    outline: none !important;
+    line-height: 0;
+    vertical-align: bottom;
+}
+
+.card.property-card img.card-img-top {
+    vertical-align: bottom !important;
+}
+
+.card.property-card img.card-img-top + .property-card-content {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+    line-height: normal;
+    position: relative;
+    top: 0;
+}
+
+.card.property-card .card-img-top {
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border-bottom: none !important;
+    display: block;
+    line-height: 0;
+}
+
+/* Remove any gap between image and content div */
+.card.property-card > img + div,
+.card.property-card > .card-img-top + div {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+}
+
+/* Remove ALL possible spacing sources */
+.card.property-card {
+    font-size: 0;
+    line-height: 0;
+}
+
+.card.property-card .property-card-content {
+    font-size: 1rem;
+    line-height: normal;
+}
+
+.property-card:hover {
+    box-shadow: var(--elevation-8);
+    transform: translateY(-4px);
+}
+
+.property-card .card-img-top {
+    transition: transform 0.3s;
+    display: block;
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    background-color: #e0e0e0;
+    margin: 0 !important;
+    margin-bottom: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    vertical-align: top;
+}
+
+.property-card .card-img-top::after,
+.property-card .card-img-top::before {
+    display: none !important;
+    content: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Reduce spacing in property card body */
+.property-card .card-body,
+.card.property-card .card-body {
+    padding: 0.5rem 0.75rem !important;
+    padding-top: 0.5rem !important;
+    padding-bottom: 0.75rem !important;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 0;
+    flex-shrink: 0;
+    flex-basis: auto;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    gap: 0.25rem;
+    margin: 0 !important;
+    border: none !important;
+}
+
+.property-card .card-body > *:first-child {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+}
+
+.property-card .card-title {
+    margin-bottom: 0.5rem;
+    margin-top: 0;
+}
+
+.property-card .card-text {
+    margin-bottom: 0.5rem !important;
+    margin-top: 0 !important;
+    padding: 0 !important;
+    min-height: 0 !important;
+    max-height: 3.6em;
+    line-height: 1.4;
+    flex-shrink: 1;
+    overflow: hidden;
+}
+
+.property-card .card-text:empty {
+    display: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    height: 0 !important;
+}
+
+.property-card .property-details {
+    margin-bottom: 0.75rem;
+}
+
+.property-card .last-updated {
+    margin-bottom: 0.5rem;
+}
+
+.property-card .text-muted.small {
+    margin-bottom: 0.75rem;
+}
+
+.property-card .mb-3 {
+    margin-bottom: 0.75rem !important;
+}
+
+.property-card .mb-2 {
+    margin-bottom: 0.5rem !important;
+}
+
+.property-card .d-flex.mb-2 {
+    margin-bottom: 0.5rem !important;
+    margin-top: 0 !important;
+    padding: 0 !important;
+}
+
+.property-card .card-body > * {
+    margin-top: 0 !important;
+}
+
+.property-card .card-body > *:not(:last-child) {
+    margin-bottom: 0.25rem !important;
+}
+
+.property-card .card-body .mb-2 {
+    margin-bottom: 0.25rem !important;
+}
+
+.property-card .card-body .mb-3 {
+    margin-bottom: 0.5rem !important;
+}
+
+.property-card .btn {
+    margin-top: 0.5rem;
+    flex-shrink: 0;
+}
+
+.property-card:hover .card-img-top {
+    transform: scale(1.05);
+}
+
+/* Ensure images are visible */
+.property-card img {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* Ensure all card images are visible */
+.card .card-img-top,
+.card img.card-img-top,
+.card.shadow-sm .card-img-top,
+.card.shadow-sm img.card-img-top {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    max-width: 100%;
+    height: auto;
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+}
+
+/* Remove any white background from card images */
+.card.shadow-sm img[src*="media"] {
+    background: transparent !important;
+    background-color: transparent !important;
+}
+
+/* Override any hiding rules */
+.card img[src*="media"],
+.property-main-image {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: relative !important;
+    z-index: 1 !important;
+}
+
+/* Ensure property detail main image is visible */
+.card.shadow-sm .property-main-image,
+.property-main-image {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    width: 100% !important;
+    height: 500px !important;
+    object-fit: cover !important;
+    background-color: transparent !important;
+    background-image: none !important;
+}
+
+.property-details {
+    font-size: 0.9rem;
+    color: var(--secondary-color);
+}
+
+.property-details i {
+    margin-right: 0.25rem;
+}
+
+/* Material Design Project Cards */
+.project-card {
+    transition: box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: none;
+    border-radius: 4px;
+    box-shadow: var(--elevation-2);
+    overflow: hidden;
+}
+
+.project-card:hover {
+    box-shadow: var(--elevation-8);
+    transform: translateY(-4px);
+}
+
+.project-card .card-img-top {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    width: 100% !important;
+    height: 250px;
+    object-fit: cover;
+    background-color: #e0e0e0;
+}
+
+.project-card img {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* Material Design Blog Cards */
+.blog-card {
+    transition: box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: none;
+    border-radius: 4px;
+    box-shadow: var(--elevation-2);
+}
+
+.blog-card:hover {
+    box-shadow: var(--elevation-8);
+    transform: translateY(-4px);
+}
+
+/* Material Design Buttons */
+.btn {
+    border-radius: 4px;
+    font-weight: 500;
+    font-size: 0.875rem;
+    letter-spacing: 0.08929em;
+    text-transform: uppercase;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 10px 24px;
+    border: none;
+    position: relative;
+    overflow: hidden;
+    min-width: 64px;
+    box-shadow: var(--elevation-2);
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.btn:active::before {
+    width: 300px;
+    height: 300px;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: #fff;
+    box-shadow: var(--elevation-2);
+    display: inline-block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-dark);
+    box-shadow: var(--elevation-4);
+}
+
+.btn-primary:active {
+    box-shadow: var(--elevation-8);
+}
+
+.btn-outline-primary {
+    border: 2px solid var(--primary-color);
+    color: var(--primary-color);
+    background: transparent;
+    box-shadow: none;
+}
+
+.btn-outline-primary:hover {
+    background-color: rgba(25, 118, 210, 0.08);
+    box-shadow: var(--elevation-2);
+}
+
+.btn-outline-primary:active {
+    background-color: rgba(25, 118, 210, 0.16);
+}
+
+/* Material Design Forms - Improved Label Visibility */
+.form-control, .form-select {
+    border-radius: 4px;
+    border: 1px solid var(--divider-color);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 12px 16px;
+    font-size: 1rem;
+    background-color: #fff;
+    box-shadow: var(--elevation-1);
+    width: 100%;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--primary-color);
+    border-width: 2px;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.1), var(--elevation-2);
+    background-color: #fff;
+}
+
+.form-control:hover:not(:focus), .form-select:hover:not(:focus) {
+    border-color: rgba(0, 0, 0, 0.3);
+    box-shadow: var(--elevation-2);
+}
+
+/* Form Field Wrapper - Ensures proper label positioning */
+.form-field-wrapper {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    margin-bottom: 0 !important;
+    position: relative !important;
+    padding: 0 !important;
+    gap: 0 !important;
+    min-height: 90px !important;
+    padding-bottom: 12px !important;
+}
+
+/* Form Labels - Simple, Clear, Always Visible Above Inputs */
+label.form-label,
+.form-label {
+    display: block !important;
+    font-weight: 600 !important;
+    color: #212121 !important;
+    margin: 0 0 12px 0 !important;
+    font-size: 0.95rem !important;
+    line-height: 1.6 !important;
+    position: relative !important;
+    width: 100% !important;
+    clear: both !important;
+    padding: 0 !important;
+    padding-bottom: 8px !important;
+    text-align: left !important;
+    white-space: normal !important;
+    overflow: visible !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    height: auto !important;
+    min-height: auto !important;
+    z-index: 1 !important;
+    flex-shrink: 0 !important;
+}
+
+/* Label with icons */
+.form-label i {
+    display: inline-block;
+    margin-right: 6px;
+    color: var(--primary-color);
+    font-size: 1rem;
+    vertical-align: middle;
+    opacity: 0.9;
+}
+
+/* Property Type Label - Extra Prominent and Visible */
+.property-type-label,
+label[for*="property_type"] {
+    font-weight: 700 !important;
+    color: #1976d2 !important;
+    font-size: 1.05rem !important;
+    margin-bottom: 8px !important;
+    display: block !important;
+    letter-spacing: 0.3px;
+}
+
+.property-type-label i,
+label[for*="property_type"] i {
+    font-size: 1.2rem !important;
+    color: #1976d2 !important;
+    opacity: 1 !important;
+    margin-right: 8px;
+    font-weight: 700;
+}
+
+.property-type-label strong {
+    font-weight: 700;
+    color: #1976d2;
+}
+
+/* Search Section - Clear Label Display */
+.search-section .form-field-wrapper {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    margin-bottom: 0 !important;
+    padding: 0 !important;
+    gap: 0 !important;
+    min-height: 95px !important;
+    padding-bottom: 12px !important;
+}
+
+.search-section .form-label,
+.card-body .form-label {
+    display: block !important;
+    font-weight: 600 !important;
+    color: #212121 !important;
+    margin: 0 0 12px 0 !important;
+    font-size: 0.95rem !important;
+    position: relative !important;
+    width: 100% !important;
+    clear: both !important;
+    padding: 0 !important;
+    padding-bottom: 8px !important;
+    line-height: 1.6 !important;
+    white-space: normal !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    height: auto !important;
+    flex-shrink: 0 !important;
+    z-index: 1 !important;
+}
+
+/* Search Section Property Type Label - Maximum Visibility */
+.search-section .property-type-label,
+.card-body .property-type-label {
+    font-weight: 700 !important;
+    color: #1976d2 !important;
+    font-size: 1.1rem !important;
+    margin: 0 0 8px 0 !important;
+    display: block !important;
+    padding: 0 0 4px 0 !important;
+    border-bottom: 2px solid rgba(25, 118, 210, 0.3) !important;
+    background: transparent !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* Ensure form fields are properly spaced */
+.form-field-wrapper .form-control,
+.form-field-wrapper .form-select {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    display: block !important;
+    width: 100% !important;
+    flex-shrink: 0 !important;
+    position: relative !important;
+    z-index: 1 !important;
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
+    min-height: 38px !important;
+    margin-top: 0 !important;
+}
+
+/* Property Type dropdown - closer to label */
+.form-field-wrapper #home_property_type,
+.form-field-wrapper #list_property_type,
+.form-field-wrapper select[name="property_type"] {
+    margin-top: 0 !important;
+    padding-top: 8px !important;
+    padding-bottom: 8px !important;
+}
+
+/* Search Section Property Type Label - Consolidated and Clear */
+.search-section label[for*="property_type"],
+.search-section .property-type-label,
+.card-body label[for*="property_type"],
+.card-body .property-type-label {
+    font-weight: 700 !important;
+    color: #1976d2 !important;
+    font-size: 1.1rem !important;
+    margin: 0 0 8px 0 !important;
+    display: block !important;
+    padding: 0 0 4px 0 !important;
+    border-bottom: 2px solid rgba(25, 118, 210, 0.3) !important;
+    background: transparent !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    letter-spacing: 0.3px;
+    position: static !important;
+    width: 100% !important;
+    clear: both !important;
+    line-height: 1.5 !important;
+}
+
+.search-section .property-type-label i,
+.search-section label[for*="property_type"] i,
+.card-body .property-type-label i,
+.card-body label[for*="property_type"] i {
+    font-size: 1.2rem !important;
+    color: #1976d2 !important;
+    opacity: 1 !important;
+    margin-right: 8px;
+    font-weight: 700;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.search-section .property-type-label strong,
+.card-body .property-type-label strong {
+    font-weight: 700;
+    color: #1976d2;
+    display: inline;
+}
+
+.form-label.required::after {
+    content: " *";
+    color: var(--danger-color);
+    font-weight: 700;
+}
+
+/* Form Group with better spacing */
+.form-group, .mb-3 {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label, .mb-3 label {
+    font-weight: 600;
+    color: var(--dark-color);
+    margin-bottom: 8px;
+    font-size: 0.875rem;
+    letter-spacing: 0.02em;
+    display: block;
+}
+
+/* Input with label above */
+.form-group .form-control,
+.form-group .form-select,
+.mb-3 .form-control,
+.mb-3 .form-select {
+    margin-top: 4px;
+}
+
+/* Placeholder styling */
+.form-control::placeholder,
+.form-select::placeholder {
+    color: var(--text-secondary);
+    opacity: 0.7;
+    font-size: 0.9rem;
+}
+
+/* Select dropdown styling */
+.form-select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23333' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 40px;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    cursor: pointer;
+}
+
+/* Select option styling for better visibility */
+.form-select option {
+    padding: 8px 12px;
+    background-color: #fff;
+    color: var(--text-primary);
+}
+
+.form-select option:first-child {
+    color: var(--text-secondary);
+    font-style: italic;
+}
+
+/* Textarea specific styling */
+textarea.form-control {
+    min-height: 120px;
+    resize: vertical;
+    padding: 12px 16px;
+}
+
+/* Checkbox and Radio styling */
+.form-check-label {
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-left: 8px;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+.form-check-input {
+    width: 18px;
+    height: 18px;
+    margin-top: 0.25rem;
+    cursor: pointer;
+    border: 2px solid var(--divider-color);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.form-check-input:checked {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.form-check-input:focus {
+    box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.1);
+    border-color: var(--primary-color);
+}
+
+/* Help text styling */
+.form-text, .form-help, small.form-text, small.text-muted {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    margin-top: 6px;
+    display: block;
+    line-height: 1.4;
+}
+
+/* Field wrapper for better organization - Override any conflicting rules */
+.form-field-wrapper {
+    margin-bottom: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+}
+
+.form-field-wrapper .form-label {
+    margin-bottom: 8px !important;
+    margin-top: 0 !important;
+}
+
+/* Input group styling */
+.input-group .form-label {
+    margin-bottom: 8px;
+}
+
+.input-group-text {
+    background-color: #f5f5f5;
+    border: 1px solid var(--divider-color);
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+/* Focused state improvements */
+.form-control:focus,
+.form-select:focus {
+    background-color: #fff;
+}
+
+/* Disabled state */
+.form-control:disabled,
+.form-select:disabled {
+    background-color: #f5f5f5;
+    color: var(--text-disabled);
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+/* Readonly state */
+.form-control[readonly] {
+    background-color: #fafafa;
+    border-color: var(--divider-color);
+}
+
+/* Error message styling */
+.form-control.is-invalid,
+.form-select.is-invalid {
+    border-color: var(--danger-color);
+    border-width: 2px;
+}
+
+.invalid-feedback {
+    display: block;
+    color: var(--danger-color);
+    font-size: 0.875rem;
+    margin-top: 4px;
+    font-weight: 500;
+}
+
+/* Success state */
+.form-control.is-valid,
+.form-select.is-valid {
+    border-color: var(--success-color);
+}
+
+.valid-feedback {
+    display: block;
+    color: var(--success-color);
+    font-size: 0.875rem;
+    margin-top: 4px;
+}
+
+/* Card Header */
+.card-header {
+    border-radius: var(--border-radius-md) var(--border-radius-md) 0 0 !important;
+    background: linear-gradient(to bottom, #fff 0%, #f8f9fa 100%);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    padding: 1.25rem 1.5rem;
+    font-weight: 600;
+}
+
+.card-body {
+    padding: 1.5rem;
+}
+
+/* Override for property cards - must come after general card-body rule */
+.card.property-card .card-body {
+    padding: 0.5rem 0.75rem !important;
+}
+
+/* Ensure property cards don't stretch unnecessarily */
+.property-card {
+    height: auto !important;
+    min-height: auto !important;
+}
+
+.property-card .card-body {
+    flex-grow: 0 !important;
+    height: auto !important;
+    min-height: 0 !important;
+}
+
+/* Material Design Badges */
+.badge {
+    padding: 4px 8px;
+    font-weight: 500;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    box-shadow: var(--elevation-1);
+}
+
+/* Material Design Footer */
+footer {
+    margin-top: auto;
+    background-color: #212121;
+    box-shadow: var(--elevation-4);
+    position: relative;
+    color: rgba(255, 255, 255, 0.87);
+}
+
+footer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background-color: var(--primary-color);
+}
+
+footer a {
+    transition: color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+}
+
+footer a:hover {
+    color: #fff !important;
+}
+
+/* Material Design Statistics Section */
+.bg-primary {
+    background-color: var(--primary-color) !important;
+    position: relative;
+    overflow: hidden;
+    color: #fff;
+}
+
+.bg-primary::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, rgba(255,255,255,0.1) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.1) 75%, rgba(255,255,255,0.1)), linear-gradient(45deg, rgba(255,255,255,0.1) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.1) 75%, rgba(255,255,255,0.1));
+    background-size: 60px 60px;
+    background-position: 0 0, 30px 30px;
+    opacity: 0.1;
+}
+
+/* Material Design Search Section */
+.search-section {
+    background: #fff;
+    border-radius: 4px;
+    box-shadow: var(--elevation-2);
+    padding: 24px;
+    margin: 2rem 0;
+}
+
+
+/* Mobile-first responsive styles - base styles are mobile, desktop overrides below */
+/* These mobile styles are already set in the mobile-first base section above */
+
+/* Desktop overrides */
+@media (min-width: 768px) {
+    .property-card, .project-card, .blog-card {
+        margin-bottom: 2rem;
+    }
+}
+
+/* Loading Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease-in;
+}
+
+/* Smooth Scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Material Design Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f5f5f5;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.26);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(0, 0, 0, 0.38);
+}
+
+/* Image Placeholder */
+.bg-secondary {
+    background-color: #6c757d !important;
+}
+
+/* Sticky Elements */
+.sticky-top {
+    position: sticky;
+    top: 100px;
+    z-index: 1020;
+}
+
+/* Breadcrumb */
+.breadcrumb {
+    background-color: transparent;
+    padding: 0;
+}
+
+.breadcrumb-item a {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+.breadcrumb-item a:hover {
+    text-decoration: underline;
+}
+
+/* Material Design Team Cards */
+.team-card {
+    transition: box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 4px;
+    box-shadow: var(--elevation-2);
+    overflow: hidden;
+}
+
+.team-card:hover {
+    box-shadow: var(--elevation-8);
+    transform: translateY(-4px);
+}
+
+/* Material Design Pagination */
+.pagination .page-link {
+    color: var(--primary-color);
+    border-color: var(--divider-color);
+    border-radius: 4px;
+    margin: 0 4px;
+    padding: 8px 12px;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    min-width: 40px;
+    text-align: center;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: #fff;
+    box-shadow: var(--elevation-2);
+}
+
+.pagination .page-link:hover {
+    background-color: rgba(25, 118, 210, 0.08);
+    border-color: var(--primary-color);
+    box-shadow: var(--elevation-2);
+}
+
+/* Material Design Alert Messages */
+.alert {
+    border-radius: 4px;
+    border: none;
+    box-shadow: var(--elevation-2);
+    padding: 16px 24px;
+    font-weight: 400;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Material Design Contact Form */
+.contact-form {
+    background: #fff;
+    padding: 24px;
+    border-radius: 4px;
+    box-shadow: var(--elevation-2);
+}
+
+/* Property Inquiry Form */
+.inquiry-form {
+    position: sticky;
+    top: 100px;
+}
+
+/* Icons */
+.bi {
+    vertical-align: -0.125em;
+}
+
+/* Material Design Utilities */
+.text-muted {
+    color: var(--text-secondary) !important;
+}
+
+.text-secondary {
+    color: var(--text-secondary) !important;
+}
+
+.text-dark {
+    color: var(--dark-color) !important;
+}
+
+.shadow-soft {
+    box-shadow: var(--elevation-2) !important;
+}
+
+.elevation-2 {
+    box-shadow: var(--elevation-2) !important;
+}
+
+/* ============================================
+   DESKTOP STYLES (min-width: 768px)
+   ============================================ */
+@media (min-width: 768px) {
+    /* Desktop typography */
+    body {
+        font-size: 16px;
+    }
+    
+    h1 { font-size: 2.5rem; }
+    h2 { font-size: 2rem; }
+    h3 { font-size: 1.75rem; }
+    
+    /* Desktop container padding */
+    .container {
+        padding-left: 2rem;
+        padding-right: 2rem;
+    }
+    
+    /* Desktop navbar */
+    .navbar-custom {
+        min-height: 64px;
+        padding: 0.75rem 1.5rem;
+    }
+    
+    .navbar-brand {
+        font-size: 1rem;
+    }
+    
+    body {
+        padding-top: 64px;
+    }
+    
+    /* Desktop search section - columns side by side */
+    .search-section {
+        padding: 3rem 2.5rem !important;
+        margin: 2rem 0 !important;
+    }
+    
+    .search-section .row,
+    .search-section form.row,
+    .search-section form[class*="row"] {
+        flex-direction: row !important;
+        margin-right: -12px !important;
+        margin-left: -12px !important;
+    }
+    
+    .search-section .row > *,
+    .search-section form.row > *,
+    .search-section form[class*="row"] > * {
+        padding-right: 12px !important;
+        padding-left: 12px !important;
+        margin-bottom: 0 !important;
+    }
+    
+    .search-section .row .col-md-3,
+    .search-section form.row .col-md-3,
+    .search-section form[class*="row"] .col-md-3 {
+        flex: 0 0 25% !important;
+        max-width: 25% !important;
+        width: 25% !important;
+    }
+    
+    /* Ensure search button column displays properly on desktop */
+    .search-section .col-12.col-md-3.d-flex,
+    /* Desktop: Show desktop search button, hide mobile button */
+    .search-section .col-md-3.d-none.d-md-flex,
+    .card-body .col-md-3.d-none.d-md-flex {
+        display: flex !important;
+        align-items: flex-end;
+        width: 25% !important;
+        flex: 0 0 25% !important;
+        max-width: 25% !important;
+        margin-bottom: 0 !important;
+    }
+    
+    .search-section .col-md-3.d-none.d-md-flex .btn {
+        display: block !important;
+        visibility: visible !important;
+        min-height: 44px;
+    }
+    
+    /* Hide mobile button on desktop */
+    .search-section .col-12.d-md-none,
+    .card-body .col-12.d-md-none {
+        display: none !important;
+    }
+    
+    .search-section .row .col-md-2,
+    .search-section form.row .col-md-2,
+    .search-section form[class*="row"] .col-md-2 {
+        flex: 0 0 16.66666667% !important;
+        max-width: 16.66666667% !important;
+        width: 16.66666667% !important;
+    }
+    
+    /* Desktop form fields */
+    .form-field-wrapper {
+        min-height: 90px !important;
+    }
+    
+    .form-label {
+        font-size: 0.95rem !important;
+        margin-bottom: 12px !important;
+    }
+    
+    /* Desktop spacing */
+    section {
+        padding: 3rem 0;
+    }
+    
+    .py-5 {
+        padding-top: 3rem !important;
+        padding-bottom: 3rem !important;
+    }
+    
+    .mt-5 {
+        margin-top: 3rem !important;
+    }
+    
+    .mb-5 {
+        margin-bottom: 3rem !important;
+    }
+    
+    /* Desktop property cards */
+    .property-card img {
+        height: 250px;
+    }
+    
+    .property-card .card-body {
+        padding: 0.5rem 0.75rem !important;
+        height: auto !important;
+        min-height: 0 !important;
+        flex-grow: 0;
+    }
+    
+    .property-card .card-title {
+        font-size: 1.25rem;
+    }
+    
+    /* Desktop navbar */
+    .navbar-brand {
+        font-size: 1rem;
+        max-width: none;
+    }
+    
+    .navbar-nav .nav-link {
+        padding: 0.5rem 1.25rem;
+        font-size: 1rem;
+    }
+    
+    /* Desktop buttons */
+    .btn-lg {
+        padding: 1rem 2.5rem;
+        font-size: 1.125rem;
+    }
+    
+    /* Hide mobile search button on desktop */
+    .search-section .col-12.d-md-none {
+        display: none !important;
+    }
+    
+    /* Reset order for desktop */
+    .search-section .col-md-3.d-flex {
+        order: 0 !important;
+    }
+}
+
+.elevation-4 {
+    box-shadow: var(--elevation-4) !important;
+}
+
+.elevation-8 {
+    box-shadow: var(--elevation-8) !important;
+}
+
+/* Material Design Icon Circles */
+.icon-circle {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--primary-color);
+    color: #fff;
+    box-shadow: var(--elevation-4);
+}
+
+/* Spacing Utilities */
+.mt-5 {
+    margin-top: 3rem !important;
+}
+
+.mb-5 {
+    margin-bottom: 3rem !important;
+}
+
+.py-5 {
+    padding-top: 3rem !important;
+    padding-bottom: 3rem !important;
+}
+

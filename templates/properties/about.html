@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}About Us - Andromeda Properties{% endblock %}
+
+{% block content %}
+<div class="container mt-5 pt-4">
+    <div class="row mb-5">
+        <div class="col-12 text-center">
+            <h1 class="display-4 fw-bold mb-4">About Andromeda Properties</h1>
+            <p class="lead text-muted">The Best Real Estate In Ethiopia</p>
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-md-6">
+            <h2 class="mb-4">Our Mission</h2>
+            <p class="lead">Andromeda Properties / Andromeda Real Estate is becoming the best real estate developer in Addis Ababa, Ethiopia. We are one of the top real estate high quality developers in Addis Ababa, Ethiopia.</p>
+            <p>At Andromeda, our pride comes from a simple, powerful mission: to do more than just build; we want to make the dream of owning a home a reality for everyone. We are all about delivering high-quality apartments in a timely manner.</p>
+        </div>
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-body text-center p-5">
+                    <h3 class="mb-4">Watch this video to know us better</h3>
+                    <div class="bg-secondary rounded d-flex align-items-center justify-content-center" style="height: 300px;">
+                        <i class="bi bi-play-circle text-white" style="font-size: 4rem;"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Statistics -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="bg-primary text-white p-5 rounded">
+                <div class="row text-center">
+                    <div class="col-md-4 mb-4">
+                        <h2 class="display-3 fw-bold">{{ stats.customers }}+</h2>
+                        <p class="lead">Customers</p>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <h2 class="display-3 fw-bold">{{ stats.years_experience }}+</h2>
+                        <p class="lead">Years Of Experience</p>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <h2 class="display-3 fw-bold">{{ stats.delivered_projects }}+</h2>
+                        <p class="lead">Delivered Projects</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Why Choose Us -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h2 class="text-center mb-5">Why Choose Us</h2>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body text-center">
+                    <i class="bi bi-geo-alt-fill text-primary" style="font-size: 3rem;"></i>
+                    <h4 class="mt-3">Location</h4>
+                    <p class="text-muted">Discover thoughtfully designed properties that suit your lifestyle, with easy access to essential amenities, top-rated schools, and major transportation hubs</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body text-center">
+                    <i class="bi bi-currency-dollar text-primary" style="font-size: 3rem;"></i>
+                    <h4 class="mt-3">Affordable</h4>
+                    <p class="text-muted">Find your ideal home at a price that fits your budget. Our collection offers quality and affordability with clear, upfront pricing.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body text-center">
+                    <i class="bi bi-award text-primary" style="font-size: 3rem;"></i>
+                    <h4 class="mt-3">Quality</h4>
+                    <p class="text-muted">Make smart property investments backed by a focus on safety, long-lasting quality, and strong value—guaranteed through thorough inspections.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body text-center">
+                    <i class="bi bi-shield-check text-primary" style="font-size: 3rem;"></i>
+                    <h4 class="mt-3">Safety & Security</h4>
+                    <p class="text-muted">Discover safe neighborhoods and well-appointed properties featuring key security measures and a strong sense of community.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body text-center">
+                    <i class="bi bi-graph-up-arrow text-primary" style="font-size: 3rem;"></i>
+                    <h4 class="mt-3">Investment</h4>
+                    <p class="text-muted">Invest in properties designed to grow in value, perfectly aligned with your long-term financial goals and dreams.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body text-center">
+                    <i class="bi bi-star text-primary" style="font-size: 3rem;"></i>
+                    <h4 class="mt-3">Amenity</h4>
+                    <p class="text-muted">Enjoy comfort and ease in properties packed with amenities, designed to fit your lifestyle and personal needs.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

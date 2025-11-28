@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans "Buying Guides" %} - Andromeda Properties{% endblock %}
+
+{% block content %}
+<div class="container mt-5 pt-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="display-5 fw-bold">{% trans "Buying Guides" %}</h1>
+            <p class="lead text-muted">{% trans "Expert advice and guides to help you make informed real estate decisions" %}</p>
+        </div>
+    </div>
+
+    <!-- Featured Guides -->
+    {% if featured_guides %}
+    <div class="row mb-5">
+        <div class="col-12">
+            <h3 class="mb-4">{% trans "Featured Guides" %}</h3>
+        </div>
+        {% for guide in featured_guides %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                {% if guide.featured_image %}
+                    <img src="{{ guide.featured_image.url }}" class="card-img-top" alt="{{ guide.title }}" style="height: 200px; object-fit: cover;">
+                {% else %}
+                    <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" style="height: 200px;">
+                        <i class="bi bi-book text-white" style="font-size: 3rem;"></i>
+                    </div>
+                {% endif %}
+                <div class="card-body">
+                    <span class="badge bg-info mb-2">{{ guide.get_category_display }}</span>
+                    <h5 class="card-title">{{ guide.title }}</h5>
+                    {% if guide.excerpt %}
+                        <p class="card-text text-muted small">{{ guide.excerpt|truncatewords:20 }}</p>
+                    {% endif %}
+                    <div class="d-flex justify-content-between align-items-center">
+                        <small class="text-muted">
+                            <i class="bi bi-calendar"></i> {{ guide.publication_date|date:"M Y" }}
+                        </small>
+                        <small class="text-muted">
+                            <i class="bi bi-eye"></i> {{ guide.view_count }} {% trans "views" %}
+                        </small>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent">
+                    <a href="{% url 'properties:buying_guide_detail' guide.slug %}" class="btn btn-primary btn-sm w-100">
+                        {% trans "Read Guide" %}
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Category Filter -->
+    <div class="mb-4">
+        <div class="btn-group" role="group">
+            <a href="{% url 'properties:buying_guide_list' %}" 
+               class="btn btn-outline-primary {% if not current_category %}active{% endif %}">
+                {% trans "All Categories" %}
+            </a>
+            {% for choice_value, choice_label in guide.CATEGORY_CHOICES %}
+                <a href="?category={{ choice_value }}" 
+                   class="btn btn-outline-primary {% if current_category == choice_value %}active{% endif %}">
+                    {{ choice_label }}
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- All Guides -->
+    <div class="row g-4">
+        {% for guide in guides %}
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                {% if guide.featured_image %}
+                    <img src="{{ guide.featured_image.url }}" class="card-img-top" alt="{{ guide.title }}" style="height: 200px; object-fit: cover;">
+                {% else %}
+                    <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" style="height: 200px;">
+                        <i class="bi bi-book text-white" style="font-size: 3rem;"></i>
+                    </div>
+                {% endif %}
+                <div class="card-body">
+                    <span class="badge bg-info mb-2">{{ guide.get_category_display }}</span>
+                    <h5 class="card-title">{{ guide.title }}</h5>
+                    {% if guide.excerpt %}
+                        <p class="card-text text-muted small">{{ guide.excerpt|truncatewords:20 }}</p>
+                    {% endif %}
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <small class="text-muted">
+                            <i class="bi bi-calendar"></i> {{ guide.publication_date|date:"M Y" }}
+                        </small>
+                        <small class="text-muted">
+                            <i class="bi bi-eye"></i> {{ guide.view_count }}
+                        </small>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent">
+                    <a href="{% url 'properties:buying_guide_detail' guide.slug %}" class="btn btn-primary btn-sm w-100">
+                        {% trans "Read Guide" %}
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center py-5">
+            <i class="bi bi-book text-muted" style="font-size: 4rem;"></i>
+            <p class="text-muted mt-3">{% trans "No buying guides available at the moment." %}</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    {% if guides.has_other_pages %}
+    <nav aria-label="Page navigation" class="mt-5">
+        <ul class="pagination justify-content-center">
+            {% if guides.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ guides.previous_page_number }}">{% trans "Previous" %}</a>
+                </li>
+            {% endif %}
+            {% for num in guides.paginator.page_range %}
+                {% if guides.number == num %}
+                    <li class="page-item active">
+                        <span class="page-link">{{ num }}</span>
+                    </li>
+                {% elif num > guides.number|add:'-3' and num < guides.number|add:'3' %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+            {% if guides.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ guides.next_page_number }}">{% trans "Next" %}</a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+</div>
+{% endblock %}
+

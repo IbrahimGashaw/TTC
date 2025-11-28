@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Register - Andromeda Properties{% endblock %}
+
+{% block content %}
+<div class="container mt-5 pt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <div class="card elevation-4">
+                <div class="card-body p-5">
+                    <div class="text-center mb-4">
+                        <div class="icon-circle mx-auto mb-3">
+                            <i class="bi bi-person-plus-fill" style="font-size: 2rem;"></i>
+                        </div>
+                        <h2 class="fw-bold text-dark">Create an account</h2>
+                        <p class="text-secondary">Sign up to access exclusive features</p>
+                    </div>
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label class="form-label required">Username</label>
+                            <input type="text" name="username" class="form-control" required autofocus>
+                            <small class="form-text">Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.</small>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label required">Password</label>
+                            <input type="password" name="password1" class="form-control" required>
+                            <small class="form-text">Your password must contain at least 8 characters.</small>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label required">Password confirmation</label>
+                            <input type="password" name="password2" class="form-control" required>
+                            <small class="form-text">Enter the same password as before, for verification.</small>
+                        </div>
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="terms" required>
+                            <label class="form-check-label" for="terms">
+                                I agree with terms & conditions
+                            </label>
+                        </div>
+                        {% if form.errors %}
+                            <div class="alert alert-danger elevation-2">
+                                <strong>Please correct the following errors:</strong>
+                                <ul class="mb-0 mt-2">
+                                    {% for field, errors in form.errors.items %}
+                                        {% for error in errors %}
+                                            <li>{{ error }}</li>
+                                        {% endfor %}
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        {% endif %}
+                        <button type="submit" class="btn btn-primary w-100 mb-3">Register</button>
+                    </form>
+                    <hr>
+                    <div class="text-center">
+                        <p class="mb-0">Already have an account? <a href="{% url 'accounts:login' %}" class="text-decoration-none">Back to login</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

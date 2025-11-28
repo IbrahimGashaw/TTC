@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans "Book Property" %} - {{ property.title }}{% endblock %}
+
+{% block content %}
+<div class="container mt-5 pt-4">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card elevation-4">
+                <div class="card-header">
+                    <h2 class="mb-0">{% trans "Book Property" %}</h2>
+                </div>
+                <div class="card-body">
+                    <div class="mb-4">
+                        <h4>{{ property.title }}</h4>
+                        <p class="text-secondary">{{ property.location }}</p>
+                        <p><strong>{% trans "Price" %}:</strong> 
+                            {% if property.price %}
+                                {{ property.price|floatformat:2 }} ETB
+                            {% else %}
+                                {% trans "Contact for price" %}
+                            {% endif %}
+                        </p>
+                    </div>
+
+                    {% if active_bookings %}
+                        <div class="alert alert-warning">
+                            <strong>{% trans "Note" %}:</strong> {% trans "This property has active bookings during the following periods:" %}
+                            <ul class="mb-0 mt-2">
+                                {% for booking in active_bookings %}
+                                    <li>{{ booking.start_date|date:"M d, Y" }} - {{ booking.end_date|date:"M d, Y" }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label required">{% trans "Full Name" %}</label>
+                                {{ form.full_name }}
+                                {% if form.full_name.errors %}
+                                    <div class="invalid-feedback d-block">{{ form.full_name.errors|first }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label required">{% trans "Email" %}</label>
+                                {{ form.email }}
+                                {% if form.email.errors %}
+                                    <div class="invalid-feedback d-block">{{ form.email.errors|first }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label required">{% trans "Phone" %}</label>
+                                {{ form.phone }}
+                                {% if form.phone.errors %}
+                                    <div class="invalid-feedback d-block">{{ form.phone.errors|first }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">{% trans "ID Number" %}</label>
+                                {{ form.id_number }}
+                                {% if form.id_number.errors %}
+                                    <div class="invalid-feedback d-block">{{ form.id_number.errors|first }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label required">{% trans "Start Date" %}</label>
+                                {{ form.start_date }}
+                                {% if form.start_date.errors %}
+                                    <div class="invalid-feedback d-block">{{ form.start_date.errors|first }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label required">{% trans "End Date" %}</label>
+                                {{ form.end_date }}
+                                {% if form.end_date.errors %}
+                                    <div class="invalid-feedback d-block">{{ form.end_date.errors|first }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">{% trans "Additional Notes" %}</label>
+                                {{ form.notes }}
+                                {% if form.notes.errors %}
+                                    <div class="invalid-feedback d-block">{{ form.notes.errors|first }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% if form.non_field_errors %}
+                            <div class="alert alert-danger mt-3 elevation-2">
+                                <strong>{% trans "Error" %}:</strong>
+                                {% for error in form.non_field_errors %}
+                                    <div>{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        <div class="mt-4">
+                            <button type="submit" class="btn btn-primary">{% trans "Submit Booking Request" %}</button>
+                            <a href="{% url 'properties:property_detail' property.slug %}" class="btn btn-outline-secondary">{% trans "Cancel" %}</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

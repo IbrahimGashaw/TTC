@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans "Book a Viewing" %} - {{ property.title }} - Andromeda Properties{% endblock %}
+
+{% block content %}
+<div class="container mt-5 pt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">
+                        <i class="bi bi-calendar-event"></i> {% trans "Book a Viewing" %}
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <!-- Property Info -->
+                    <div class="mb-4 p-3 bg-light rounded">
+                        <h5 class="mb-2">{{ property.title }}</h5>
+                        <p class="text-muted mb-0">
+                            <i class="bi bi-geo-alt"></i> {{ property.location }}, {{ property.address }}
+                        </p>
+                        {% if property.price %}
+                            <p class="mb-0 mt-2">
+                                <strong>{% trans "Price" %}:</strong> 
+                                {{ property.price|floatformat:0 }} {% trans "ETB" %}
+                            </p>
+                        {% endif %}
+                    </div>
+
+                    <!-- Viewing Appointment Form -->
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.full_name.id_for_label }}" class="form-label required">
+                                    {% trans "Full Name" %}
+                                </label>
+                                {{ form.full_name }}
+                                {% if form.full_name.errors %}
+                                    <div class="text-danger small">{{ form.full_name.errors|first }}</div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.email.id_for_label }}" class="form-label required">
+                                    {% trans "Email" %}
+                                </label>
+                                {{ form.email }}
+                                {% if form.email.errors %}
+                                    <div class="text-danger small">{{ form.email.errors|first }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.phone.id_for_label }}" class="form-label required">
+                                    {% trans "Phone Number" %}
+                                </label>
+                                {{ form.phone }}
+                                {% if form.phone.errors %}
+                                    <div class="text-danger small">{{ form.phone.errors|first }}</div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.whatsapp_number.id_for_label }}" class="form-label">
+                                    {% trans "WhatsApp Number (Optional)" %}
+                                </label>
+                                {{ form.whatsapp_number }}
+                                {% if form.whatsapp_number.errors %}
+                                    <div class="text-danger small">{{ form.whatsapp_number.errors|first }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.preferred_date.id_for_label }}" class="form-label required">
+                                    {% trans "Preferred Date" %}
+                                </label>
+                                {{ form.preferred_date }}
+                                {% if form.preferred_date.errors %}
+                                    <div class="text-danger small">{{ form.preferred_date.errors|first }}</div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.preferred_time.id_for_label }}" class="form-label required">
+                                    {% trans "Preferred Time" %}
+                                </label>
+                                {{ form.preferred_time }}
+                                {% if form.preferred_time.errors %}
+                                    <div class="text-danger small">{{ form.preferred_time.errors|first }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ form.notes.id_for_label }}" class="form-label">
+                                {% trans "Additional Notes" %}
+                            </label>
+                            {{ form.notes }}
+                            {% if form.notes.errors %}
+                                <div class="text-danger small">{{ form.notes.errors|first }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="bi bi-calendar-check"></i> {% trans "Submit Viewing Request" %}
+                            </button>
+                            <a href="{% url 'properties:property_detail' property.slug %}" class="btn btn-outline-secondary">
+                                {% trans "Cancel" %}
+                            </a>
+                        </div>
+                    </form>
+
+                    {% load property_tags %}
+                    {% if site_settings.whatsapp_enabled and site_settings.whatsapp_number %}
+                        <hr>
+                        <div class="text-center">
+                            <p class="text-muted mb-2">{% trans "Or contact us directly" %}</p>
+                            {% whatsapp_url property.title as whatsapp_url %}
+                            {% if whatsapp_url %}
+                                <a href="{{ whatsapp_url }}" 
+                                   target="_blank" 
+                                   rel="noopener noreferrer"
+                                   class="btn btn-success">
+                                    <i class="bi bi-whatsapp"></i> {% trans "Chat on WhatsApp" %}
+                                </a>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

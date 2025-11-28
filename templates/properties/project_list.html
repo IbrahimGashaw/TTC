@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Projects - Andromeda Properties{% endblock %}
+
+{% block content %}
+<div class="container mt-5 pt-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="display-5 fw-bold">Our Projects</h1>
+            <p class="text-muted">Explore our real estate projects in Ethiopia</p>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        {% for project in projects %}
+        <div class="col-md-4">
+            <div class="card project-card h-100 shadow-sm">
+                {% if project.image %}
+                    <img src="{{ project.image.url }}" 
+                         class="card-img-top" 
+                         alt="{{ project.name }}" 
+                         style="height: 250px; object-fit: cover; width: 100%; display: block;"
+                         loading="lazy"
+                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" style="height: 250px; width: 100%; display: none;">
+                        <i class="bi bi-building text-white" style="font-size: 3rem;"></i>
+                    </div>
+                {% else %}
+                    <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" style="height: 250px; width: 100%;">
+                        <i class="bi bi-building text-white" style="font-size: 3rem;"></i>
+                    </div>
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ project.name }}</h5>
+                    <p class="text-muted">
+                        <i class="bi bi-geo-alt"></i> {{ project.location }}
+                    </p>
+                    <p class="text-muted">{{ project.property_count }} listing{{ project.property_count|pluralize }}</p>
+                    {% if project.description %}
+                        <p class="card-text">{{ project.description|truncatewords:20 }}</p>
+                    {% endif %}
+                    <a href="{% url 'properties:project_detail' project.slug %}" class="btn btn-primary">View Project</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center py-5">
+            <i class="bi bi-inbox text-muted" style="font-size: 4rem;"></i>
+            <p class="text-muted mt-3">No projects available at the moment.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+

@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+{% load property_tags %}
+
+{% block title %}{{ agent.name }} - {% trans "Agent Profile" %} - Andromeda Properties{% endblock %}
+
+{% block content %}
+<div class="container mt-5 pt-4">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card shadow-sm sticky-top" style="top: 100px;">
+                {% if agent.image %}
+                    <img src="{{ agent.image.url }}" class="card-img-top" alt="{{ agent.name }}" style="height: 400px; object-fit: cover;">
+                {% else %}
+                    <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" style="height: 400px;">
+                        <i class="bi bi-person text-white" style="font-size: 6rem;"></i>
+                    </div>
+                {% endif %}
+                <div class="card-body text-center">
+                    <div class="d-flex justify-content-center align-items-center gap-2 mb-2">
+                        <h3 class="card-title mb-0">{{ agent.name }}</h3>
+                        {% if agent.is_verified %}
+                            <span class="verified-badge" title="{% trans 'Verified Agent' %}">
+                                <i class="bi bi-patch-check-fill"></i> {% trans "Verified" %}
+                            </span>
+                        {% endif %}
+                    </div>
+                    <p class="text-muted mb-3">{{ agent.get_role_display }}</p>
+                    
+                    {% if agent.years_experience > 0 %}
+                        <p class="mb-2">
+                            <i class="bi bi-award text-primary"></i> 
+                            <strong>{{ agent.years_experience }}</strong> {% trans "years of experience" %}
+                        </p>
+                    {% endif %}
+                    
+                    {% if agent.languages %}
+                        <p class="mb-2">
+                            <i class="bi bi-translate text-primary"></i> 
+                            <strong>{% trans "Languages" %}:</strong> {{ agent.languages }}
+                        </p>
+                    {% endif %}
+                    
+                    <hr>
+                    
+                    <div class="d-grid gap-2">
+                        {% if agent.email %}
+                            <a href="mailto:{{ agent.email }}" class="btn btn-outline-primary">
+                                <i class="bi bi-envelope"></i> {% trans "Send Email" %}
+                            </a>
+                        {% endif %}
+                        {% if agent.phone %}
+                            <a href="tel:{{ agent.phone }}" class="btn btn-outline-success">
+                                <i class="bi bi-phone"></i> {% trans "Call" %} {{ agent.phone }}
+                            </a>
+                        {% endif %}
+                        {% if agent.whatsapp_number %}
+                            {% whatsapp_url_simple as whatsapp_base_url %}
+                            {% if whatsapp_base_url %}
+                                <a href="{{ whatsapp_base_url }}?text=Hello {{ agent.name }}" 
+                                   target="_blank" 
+                                   rel="noopener noreferrer"
+                                   class="btn btn-success">
+                                    <i class="bi bi-whatsapp"></i> {% trans "Chat on WhatsApp" %}
+                                </a>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-8">
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h4 class="mb-4">{% trans "About" %}</h4>
+                    {% if agent.bio %}
+                        <p class="lead">{{ agent.bio|linebreaks }}</p>
+                    {% else %}
+                        <p class="text-muted">{% trans "No biography available." %}</p>
+                    {% endif %}
+                </div>
+            </div>
+            
+            {% if properties %}
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="bi bi-building"></i> {% trans "Featured Properties" %}</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        {% for property in properties %}
+                        <div class="col-md-6">
+                            <div class="card h-100">
+                                {% if property.images.first %}
+                                    <img src="{{ property.images.first.image.url }}" 
+                                         class="card-img-top" 
+                                         alt="{{ property.title }}" 
+                                         style="height: 200px; object-fit: cover;">
+                                {% elif property.main_image %}
+                                    <img src="{{ property.main_image.url }}" 
+                                         class="card-img-top" 
+                                         alt="{{ property.title }}" 
+                                         style="height: 200px; object-fit: cover;">
+                                {% endif %}
+                                <div class="card-body">
+                                    <h6 class="card-title">{{ property.title }}</h6>
+                                    <p class="text-muted small mb-2">
+                                        <i class="bi bi-geo-alt"></i> {{ property.location }}
+                                    </p>
+                                    {% if property.price %}
+                                        <p class="text-primary fw-bold mb-2">
+                                            {{ property.price|floatformat:0 }} ETB
+                                        </p>
+                                    {% endif %}
+                                    <a href="{% url 'properties:property_detail' property.slug %}" class="btn btn-sm btn-primary">
+                                        {% trans "View Details" %}
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+

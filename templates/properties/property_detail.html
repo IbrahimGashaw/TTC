@@ -1,0 +1,484 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{{ property.title }} - Andromeda Properties{% endblock %}
+
+{% block content %}
+<div class="container mt-5 pt-4">
+    <div class="row">
+        <div class="col-md-8">
+            <!-- Property Images -->
+            <div class="card mb-4 shadow-sm">
+                {% if property.images.first %}
+                    {% with main_img=property.images.first.image %}
+                        <img src="{{ main_img.url }}" 
+                             class="card-img-top" 
+                             alt="{{ property.title }}" 
+                             style="height: 500px; object-fit: cover; width: 100%;">
+                    {% endwith %}
+                {% elif property.main_image %}
+                    <img src="{{ property.main_image.url }}" 
+                         class="card-img-top" 
+                         alt="{{ property.title }}" 
+                         style="height: 500px; object-fit: cover; width: 100%;">
+                {% else %}
+                    <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" style="height: 500px; width: 100%;">
+                        <i class="bi bi-image text-white" style="font-size: 4rem;"></i>
+                    </div>
+                {% endif %}
+                {% if property.images.all %}
+                <div class="card-body">
+                    <div class="row g-2">
+                        {% for image in property.images.all %}
+                        <div class="col-md-3">
+                            <img src="{{ image.image.url }}" class="img-thumbnail" alt="{{ image.alt_text }}" style="height: 100px; object-fit: cover; width: 100%;">
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Video Walkthrough -->
+            {% if property.walkthrough_video or property.walkthrough_video_url %}
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="bi bi-play-circle"></i> {% trans "Video Walkthrough" %}</h5>
+                </div>
+                <div class="card-body">
+                    {% if property.walkthrough_video_url %}
+                        <!-- YouTube/Vimeo Embed -->
+                        {% if 'youtube.com' in property.walkthrough_video_url or 'youtu.be' in property.walkthrough_video_url %}
+                            {% with video_id=property.walkthrough_video_url|slice:"-11:" %}
+                                <div class="ratio ratio-16x9">
+                                    <iframe src="https://www.youtube.com/embed/{{ video_id }}" 
+                                            frameborder="0" 
+                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                            allowfullscreen></iframe>
+                                </div>
+                            {% endwith %}
+                        {% elif 'vimeo.com' in property.walkthrough_video_url %}
+                            {% with video_id=property.walkthrough_video_url|slice:"-9:" %}
+                                <div class="ratio ratio-16x9">
+                                    <iframe src="https://player.vimeo.com/video/{{ video_id }}" 
+                                            frameborder="0" 
+                                            allow="autoplay; fullscreen; picture-in-picture" 
+                                            allowfullscreen></iframe>
+                                </div>
+                            {% endwith %}
+                        {% else %}
+                            <div class="ratio ratio-16x9">
+                                <iframe src="{{ property.walkthrough_video_url }}" 
+                                        frameborder="0" 
+                                        allowfullscreen></iframe>
+                            </div>
+                        {% endif %}
+                    {% elif property.walkthrough_video %}
+                        <!-- Uploaded Video -->
+                        <div class="ratio ratio-16x9">
+                            <video controls class="w-100" style="object-fit: contain;">
+                                <source src="{{ property.walkthrough_video.url }}" type="video/mp4">
+                                {% trans "Your browser does not support the video tag." %}
+                            </video>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Virtual Tour -->
+            {% if property.virtual_tour_image or property.virtual_tour_url %}
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="bi bi-camera-video"></i> {% trans "Virtual Tour" %}</h5>
+                </div>
+                {% if property.virtual_tour_url %}
+                    <!-- External Virtual Tour (Matterport, Kuula, etc.) -->
+                    <div class="ratio ratio-16x9">
+                        <iframe src="{{ property.virtual_tour_url }}" 
+                                frameborder="0" 
+                                allow="fullscreen; vr" 
+                                allowfullscreen
+                                style="width: 100%; height: 100%;"></iframe>
+                    </div>
+                {% elif property.virtual_tour_image %}
+                    <!-- 360-Degree Panoramic Image using Pannellum -->
+                    <div id="virtual-tour-viewer" style="width: 100%; height: 500px;"></div>
+                {% endif %}
+            </div>
+            {% endif %}
+
+            <!-- Floor Plans -->
+            {% if property.floor_plans.all %}
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="bi bi-diagram-3"></i> {% trans "Floor Plans" %}</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        {% for floor_plan in property.floor_plans.all %}
+                        <div class="col-md-6">
+                            <div class="card">
+                                {% if floor_plan.title %}
+                                    <div class="card-header">
+                                        <h6 class="mb-0">{{ floor_plan.title }}</h6>
+                                    </div>
+                                {% endif %}
+                                <div class="card-body p-0">
+                                    <img src="{{ floor_plan.image.url }}" 
+                                         class="img-fluid w-100" 
+                                         alt="{% if floor_plan.title %}{{ floor_plan.title }}{% else %}Floor Plan{% endif %}"
+                                         style="cursor: pointer;"
+                                         data-bs-toggle="modal" 
+                                         data-bs-target="#floorPlanModal{{ floor_plan.id }}">
+                                    {% if floor_plan.description %}
+                                        <div class="p-3">
+                                            <p class="text-muted small mb-0">{{ floor_plan.description }}</p>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Floor Plan Modal -->
+                        <div class="modal fade" id="floorPlanModal{{ floor_plan.id }}" tabindex="-1">
+                            <div class="modal-dialog modal-lg modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">
+                                            {% if floor_plan.title %}{{ floor_plan.title }}{% else %}{% trans "Floor Plan" %}{% endif %}
+                                        </h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <div class="modal-body p-0">
+                                        <img src="{{ floor_plan.image.url }}" 
+                                             class="img-fluid w-100" 
+                                             alt="{% if floor_plan.title %}{{ floor_plan.title }}{% else %}Floor Plan{% endif %}">
+                                        {% if floor_plan.description %}
+                                            <div class="p-3">
+                                                <p class="mb-0">{{ floor_plan.description }}</p>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Interactive Map with Amenities -->
+            {% if property.latitude and property.longitude %}
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="bi bi-geo-alt-fill"></i> {% trans "Location & Nearby Amenities" %}</h5>
+                </div>
+                <div class="card-body p-0">
+                    <div id="property-map" style="height: 400px; width: 100%;"></div>
+                    <div class="p-3">
+                        <p class="mb-0">
+                            <i class="bi bi-geo-alt"></i> 
+                            <strong>{% trans "Address" %}:</strong> {{ property.address }}, {{ property.location }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Property Details -->
+            <div class="card mb-4 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div>
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <h1 class="h3 mb-0">{{ property.title }}</h1>
+                                {% if property.is_verified %}
+                                    <span class="verified-badge" title="{% trans 'Verified Property' %}">
+                                        <i class="bi bi-patch-check-fill"></i> {% trans "Verified" %}
+                                    </span>
+                                {% endif %}
+                            </div>
+                            <p class="text-muted mb-1">
+                                <i class="bi bi-geo-alt"></i> {{ property.location }}, {{ property.address }}
+                            </p>
+                            <p class="last-updated {% if property.updated_at|timesince|slice:':2'|add:'0' <= 7 %}recent{% endif %} mb-0">
+                                <i class="bi bi-clock-history"></i> 
+                                {% trans "Last updated" %}: {{ property.updated_at|timesince }} {% trans "ago" %}
+                            </p>
+                        </div>
+                        <div class="text-end">
+                            <span class="badge bg-success fs-6">{{ property.get_sale_type_display }}</span>
+                            <span class="badge bg-info fs-6">{{ property.get_status_display }}</span>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row mb-3">
+                        {% if property.bedrooms > 0 %}
+                        <div class="col-md-3 text-center mb-3">
+                            <i class="bi bi-door-open text-primary" style="font-size: 2rem;"></i>
+                            <p class="mb-0"><strong>{{ property.bedrooms }}</strong></p>
+                            <p class="text-muted small mb-0">Bedrooms</p>
+                        </div>
+                        {% endif %}
+                        {% if property.bathrooms > 0 %}
+                        <div class="col-md-3 text-center mb-3">
+                            <i class="bi bi-droplet text-primary" style="font-size: 2rem;"></i>
+                            <p class="mb-0"><strong>{{ property.bathrooms }}</strong></p>
+                            <p class="text-muted small mb-0">Bathrooms</p>
+                        </div>
+                        {% endif %}
+                        <div class="col-md-3 text-center mb-3">
+                            <i class="bi bi-rulers text-primary" style="font-size: 2rem;"></i>
+                            <p class="mb-0"><strong>{{ property.size }} m²</strong></p>
+                            <p class="text-muted small mb-0">Size</p>
+                        </div>
+                        <div class="col-md-3 text-center mb-3">
+                            <i class="bi bi-building text-primary" style="font-size: 2rem;"></i>
+                            <p class="mb-0"><strong>{{ property.get_property_type_display }}</strong></p>
+                            <p class="text-muted small mb-0">Type</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <h5 class="mb-3">{% trans "Description" %}</h5>
+                    <p>{{ property.description|linebreaks }}</p>
+                    {% if property.project %}
+                    <hr>
+                    <p class="mb-0">
+                        <strong>{% trans "Project" %}:</strong> 
+                        <a href="{% url 'properties:project_detail' property.project.slug %}">{{ property.project.name }}</a>
+                    </p>
+                    {% endif %}
+                    {% if property.status in 'active,new_offer' %}
+                    <hr>
+                    <div class="d-flex flex-column gap-2">
+                        <a href="{% url 'properties:book_viewing' property.slug %}" class="btn btn-primary btn-lg">
+                            <i class="bi bi-calendar-event"></i> {% trans "Book a Viewing" %}
+                        </a>
+                        {% load property_tags %}
+                        {% if site_settings.whatsapp_enabled and site_settings.whatsapp_number %}
+                            {% whatsapp_url property.title as whatsapp_url %}
+                            {% if whatsapp_url %}
+                                <a href="{{ whatsapp_url }}" 
+                                   target="_blank" 
+                                   rel="noopener noreferrer"
+                                   class="btn btn-success btn-lg">
+                                    <i class="bi bi-whatsapp"></i> {% trans "Chat on WhatsApp" %}
+                                </a>
+                            {% endif %}
+                        {% endif %}
+                        {% if user.is_authenticated %}
+                            <a href="{% url 'properties:book_property' property.slug %}" class="btn btn-outline-primary">
+                                <i class="bi bi-calendar-check"></i> {% trans "Book This Property" %}
+                            </a>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <!-- Contact Form -->
+            <div class="card mb-4 shadow-sm sticky-top" style="top: 100px;">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="bi bi-envelope"></i> Contact Me</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label class="form-label required">Name</label>
+                            {{ form.name }}
+                            {% if form.name.errors %}
+                                <div class="invalid-feedback d-block">{{ form.name.errors|first }}</div>
+                            {% endif %}
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label required">Email</label>
+                            {{ form.email }}
+                            {% if form.email.errors %}
+                                <div class="invalid-feedback d-block">{{ form.email.errors|first }}</div>
+                            {% endif %}
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Phone</label>
+                            {{ form.phone }}
+                            {% if form.phone.errors %}
+                                <div class="invalid-feedback d-block">{{ form.phone.errors|first }}</div>
+                            {% endif %}
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label required">Message</label>
+                            {{ form.message }}
+                            {% if form.message.errors %}
+                                <div class="invalid-feedback d-block">{{ form.message.errors|first }}</div>
+                            {% endif %}
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="bi bi-send"></i> Send Inquiry
+                        </button>
+                    </form>
+                    <hr>
+                    <div class="text-center">
+                        <p class="mb-2"><strong>Hotline - 6033</strong></p>
+                        <p class="mb-0"><i class="bi bi-phone"></i> +251975666699</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Related Properties -->
+    {% if related_properties %}
+    <div class="row mt-4">
+        <div class="col-12">
+            <h3 class="mb-4">Related Properties</h3>
+            <div class="row g-4">
+                {% for related in related_properties %}
+                <div class="col-md-4">
+                    <div class="card property-card h-100 shadow-sm">
+                        {% with display_image=related.get_display_image %}
+                            {% if display_image %}
+                                <img src="{{ display_image.url }}" class="card-img-top" alt="{{ related.title }}" style="height: 200px; object-fit: cover; width: 100%;">
+                            {% else %}
+                                <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" style="height: 200px; width: 100%;">
+                                    <i class="bi bi-image text-white"></i>
+                                </div>
+                            {% endif %}
+                        {% endwith %}
+                        <div class="card-body">
+                            <h6 class="card-title">{{ related.title }}</h6>
+                            <p class="text-muted small mb-2">{{ related.location }}</p>
+                            <div class="property-details d-flex gap-2 small mb-2">
+                                {% if related.bedrooms > 0 %}<span>{{ related.bedrooms }} Beds</span>{% endif %}
+                                {% if related.bathrooms > 0 %}<span>{{ related.bathrooms }} Baths</span>{% endif %}
+                                <span>{{ related.size }} m²</span>
+                            </div>
+                            <a href="{% url 'properties:property_detail' related.slug %}" class="btn btn-sm btn-outline-primary w-100">View Details</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_css %}
+{% if property.virtual_tour_image %}
+<!-- Pannellum CSS for 360-degree virtual tour -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.css">
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+{% if property.virtual_tour_image %}
+<!-- Pannellum JS for 360-degree virtual tour -->
+<script src="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        pannellum.viewer('virtual-tour-viewer', {
+            "type": "equirectangular",
+            "panorama": "{{ property.virtual_tour_image.url }}",
+            "autoLoad": true,
+            "autoRotate": 0,
+            "compass": true,
+            "showControls": true,
+            "showFullscreenCtrl": true,
+            "keyboardZoom": true,
+            "mouseZoom": true,
+            "hfov": 100,
+            "minHfov": 50,
+            "maxHfov": 120
+        });
+    });
+</script>
+{% endif %}
+{% if property.latitude and property.longitude and GOOGLE_MAPS_API_KEY %}
+<script>
+    function initPropertyMap() {
+        const lat = {{ property.latitude }};
+        const lng = {{ property.longitude }};
+        const map = new google.maps.Map(document.getElementById('property-map'), {
+            center: { lat: parseFloat(lat), lng: parseFloat(lng) },
+            zoom: 15,
+            mapTypeControl: true,
+            streetViewControl: true,
+        });
+        
+        // Property marker
+        const propertyMarker = new google.maps.Marker({
+            position: { lat: parseFloat(lat), lng: parseFloat(lng) },
+            map: map,
+            title: '{{ property.title|escapejs }}',
+        });
+        
+        // Info window
+        const infoWindow = new google.maps.InfoWindow({
+            content: `
+                <div style="padding: 10px;">
+                    <h6 style="margin: 0 0 5px 0;">{{ property.title|escapejs }}</h6>
+                    <p style="margin: 0; font-size: 12px; color: #666;">{{ property.address|escapejs }}</p>
+                </div>
+            `
+        });
+        
+        propertyMarker.addListener('click', () => {
+            infoWindow.open(map, propertyMarker);
+        });
+        
+        // Nearby amenities (using Places API)
+        if (typeof google.maps.places !== 'undefined') {
+            const service = new google.maps.places.PlacesService(map);
+            const request = {
+                location: { lat: parseFloat(lat), lng: parseFloat(lng) },
+                radius: 2000,
+                type: ['school', 'hospital', 'restaurant', 'shopping_mall', 'bank']
+            };
+            
+            service.nearbySearch(request, (results, status) => {
+                if (status === google.maps.places.PlacesServiceStatus.OK && results) {
+                    results.slice(0, 10).forEach((place) => {
+                        if (place.geometry && place.geometry.location) {
+                            const marker = new google.maps.Marker({
+                                position: place.geometry.location,
+                                map: map,
+                                title: place.name,
+                                icon: {
+                                    path: google.maps.SymbolPath.CIRCLE,
+                                    scale: 8,
+                                    fillColor: '#4285F4',
+                                    fillOpacity: 1,
+                                    strokeColor: '#fff',
+                                    strokeWeight: 2,
+                                }
+                            });
+                            
+                            const placeInfoWindow = new google.maps.InfoWindow({
+                                content: `
+                                    <div style="padding: 5px;">
+                                        <strong>${place.name || 'Place'}</strong><br>
+                                        <small>${place.types && place.types[0] ? place.types[0] : ''}</small>
+                                    </div>
+                                `
+                            });
+                            
+                            marker.addListener('click', () => {
+                                placeInfoWindow.open(map, marker);
+                            });
+                        }
+                    });
+                }
+            });
+        }
+    }
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key={{ GOOGLE_MAPS_API_KEY }}&libraries=places&callback=initPropertyMap" async defer></script>
+{% endif %}
+{% endblock %}
+

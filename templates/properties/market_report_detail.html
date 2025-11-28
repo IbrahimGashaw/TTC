@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{{ report.title }} - {% trans "Market Reports" %} - Andromeda Properties{% endblock %}
+
+{% block content %}
+<div class="container mt-5 pt-4">
+    <div class="row">
+        <div class="col-md-8">
+            <article>
+                <!-- Breadcrumb -->
+                <nav aria-label="breadcrumb" class="mb-4">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'properties:home' %}">{% trans "Home" %}</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'properties:market_report_list' %}">{% trans "Market Reports" %}</a></li>
+                        <li class="breadcrumb-item active">{{ report.title }}</li>
+                    </ol>
+                </nav>
+
+                <!-- Report Header -->
+                <div class="card mb-4 shadow-sm">
+                    {% if report.featured_image %}
+                        <img src="{{ report.featured_image.url }}" class="card-img-top" alt="{{ report.title }}" style="height: 400px; object-fit: cover;">
+                    {% endif %}
+                    <div class="card-body">
+                        {% if report.category %}
+                            <span class="badge bg-primary mb-3">{{ report.category }}</span>
+                        {% endif %}
+                        <h1 class="display-5 fw-bold mb-3">{{ report.title }}</h1>
+                        <div class="d-flex gap-4 text-muted mb-4">
+                            <span><i class="bi bi-calendar"></i> {{ report.publication_date|date:"F d, Y" }}</span>
+                            <span><i class="bi bi-eye"></i> {{ report.view_count }} {% trans "views" %}</span>
+                        </div>
+                        {% if report.excerpt %}
+                            <p class="lead text-muted">{{ report.excerpt }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Report Content -->
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-body">
+                        <div class="content">
+                            {{ report.content|linebreaks }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PDF Download -->
+                {% if report.pdf_file %}
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-body text-center">
+                        <h5 class="mb-3">{% trans "Download Full Report" %}</h5>
+                        <a href="{{ report.pdf_file.url }}" class="btn btn-primary btn-lg" download>
+                            <i class="bi bi-download"></i> {% trans "Download PDF" %}
+                        </a>
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Tags -->
+                {% if report.tags %}
+                <div class="mb-4">
+                    <h6>{% trans "Tags" %}:</h6>
+                    {% for tag in report.get_tags_list %}
+                        <span class="badge bg-secondary me-2">{{ tag }}</span>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </article>
+        </div>
+
+        <div class="col-md-4">
+            <!-- Related Reports -->
+            {% if related_reports %}
+            <div class="card mb-4 shadow-sm sticky-top" style="top: 100px;">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">{% trans "Related Reports" %}</h5>
+                </div>
+                <div class="list-group list-group-flush">
+                    {% for related in related_reports %}
+                    <a href="{% url 'properties:market_report_detail' related.slug %}" class="list-group-item list-group-item-action">
+                        <h6 class="mb-1">{{ related.title }}</h6>
+                        <small class="text-muted">{{ related.publication_date|date:"M Y" }}</small>
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+

@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{{ guide.title }} - {% trans "Buying Guides" %} - Andromeda Properties{% endblock %}
+
+{% block content %}
+<div class="container mt-5 pt-4">
+    <div class="row">
+        <div class="col-md-8">
+            <article>
+                <!-- Breadcrumb -->
+                <nav aria-label="breadcrumb" class="mb-4">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'properties:home' %}">{% trans "Home" %}</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'properties:buying_guide_list' %}">{% trans "Buying Guides" %}</a></li>
+                        <li class="breadcrumb-item active">{{ guide.title }}</li>
+                    </ol>
+                </nav>
+
+                <!-- Guide Header -->
+                <div class="card mb-4 shadow-sm">
+                    {% if guide.featured_image %}
+                        <img src="{{ guide.featured_image.url }}" class="card-img-top" alt="{{ guide.title }}" style="height: 400px; object-fit: cover;">
+                    {% endif %}
+                    <div class="card-body">
+                        <span class="badge bg-info mb-3">{{ guide.get_category_display }}</span>
+                        <h1 class="display-5 fw-bold mb-3">{{ guide.title }}</h1>
+                        <div class="d-flex gap-4 text-muted mb-4">
+                            <span><i class="bi bi-calendar"></i> {{ guide.publication_date|date:"F d, Y" }}</span>
+                            <span><i class="bi bi-eye"></i> {{ guide.view_count }} {% trans "views" %}</span>
+                        </div>
+                        {% if guide.excerpt %}
+                            <p class="lead text-muted">{{ guide.excerpt }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Guide Content -->
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-body">
+                        <div class="content">
+                            {{ guide.content|linebreaks }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tags -->
+                {% if guide.tags %}
+                <div class="mb-4">
+                    <h6>{% trans "Tags" %}:</h6>
+                    {% for tag in guide.get_tags_list %}
+                        <span class="badge bg-secondary me-2">{{ tag }}</span>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </article>
+        </div>
+
+        <div class="col-md-4">
+            <!-- Related Guides -->
+            {% if related_guides %}
+            <div class="card mb-4 shadow-sm sticky-top" style="top: 100px;">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">{% trans "Related Guides" %}</h5>
+                </div>
+                <div class="list-group list-group-flush">
+                    {% for related in related_guides %}
+                    <a href="{% url 'properties:buying_guide_detail' related.slug %}" class="list-group-item list-group-item-action">
+                        <h6 class="mb-1">{{ related.title }}</h6>
+                        <small class="text-muted">{{ related.get_category_display }} • {{ related.publication_date|date:"M Y" }}</small>
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Related Properties -->
+            {% if related_properties %}
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">{% trans "Featured Properties" %}</h5>
+                </div>
+                <div class="list-group list-group-flush">
+                    {% for property in related_properties %}
+                    <a href="{% url 'properties:property_detail' property.slug %}" class="list-group-item list-group-item-action">
+                        <div class="d-flex align-items-center">
+                            {% if property.images.first %}
+                                <img src="{{ property.images.first.image.url }}" 
+                                     class="me-3 rounded" 
+                                     alt="{{ property.title }}" 
+                                     style="width: 60px; height: 60px; object-fit: cover;">
+                            {% endif %}
+                            <div>
+                                <h6 class="mb-0 small">{{ property.title }}</h6>
+                                <small class="text-muted">{{ property.location }}</small>
+                            </div>
+                        </div>
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="400" viewBox="0 0 1600 400" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="fgrad" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#1e3c72"/>
+      <stop offset="100%" stop-color="#2a5298"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="400" fill="url(#fgrad)"/>
+  <g opacity="0.12" fill="#fff">
+    <circle cx="400" cy="80" r="180"/>
+    <circle cx="1000" cy="220" r="200"/>
+  </g>
+  <g transform="translate(60,30)" fill="rgba(255,255,255,0.06)">
+    <rect x="20" y="240" width="220" height="90" rx="10"/>
+    <rect x="280" y="160" width="360" height="160" rx="10"/>
+  </g>
+</svg>

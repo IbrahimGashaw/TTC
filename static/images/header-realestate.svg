@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="400" viewBox="0 0 1600 400" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="hgrad" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#3a7bd5"/>
+      <stop offset="50%" stop-color="#00d2ff"/>
+      <stop offset="100%" stop-color="#8e2de2"/>
+    </linearGradient>
+    <filter id="grain"><feTurbulence baseFrequency="0.6" numOctaves="2" stitchTiles="stitch"/></filter>
+  </defs>
+  <rect width="1600" height="400" fill="url(#hgrad)"/>
+  <g opacity="0.18" fill="#fff">
+    <ellipse cx="300" cy="200" rx="450" ry="120"/>
+    <ellipse cx="950" cy="120" rx="600" ry="160"/>
+    <ellipse cx="1300" cy="240" rx="420" ry="100"/>
+  </g>
+  <g transform="translate(80,40)">
+    <rect x="0" y="220" width="380" height="120" rx="12" fill="rgba(255,255,255,0.05)"/>
+    <rect x="440" y="160" width="560" height="220" rx="12" fill="rgba(255,255,255,0.06)"/>
+  </g>
+</svg>
