@@ -1039,10 +1039,16 @@ html {
 }
 
 .property-card-content > *:first-child {
-    margin-top: 0 !important;
+    margin-top: 0.5rem !important;
     padding-top: 0 !important;
     margin-bottom: 0.5rem !important;
     line-height: normal;
+}
+
+/* For project cards, ensure first child spacing */
+.project-card .property-card-content > *:first-child {
+    margin-top: 0 !important;
+    padding-top: 0.5rem !important;
 }
 
 .property-card-content .d-flex.mb-2:first-child {
@@ -1052,9 +1058,20 @@ html {
 
 /* Ensure no gap between image and content */
 .card.property-card img.card-img-top + .property-card-content,
-.card.property-card .card-img-top + .property-card-content {
-    margin-top: 0 !important;
+.card.property-card .card-img-top + .property-card-content,
+.card.project-card img.card-img-top + .property-card-content,
+.card.project-card .card-img-top + .property-card-content,
+.card.project-card .card-img-top + div.property-card-content,
+.card.project-card img + div.property-card-content,
+.card.project-card > img + .property-card-content,
+.card.project-card > .card-img-top + .property-card-content {
+    margin-top: -2px !important;
     padding-top: 0 !important;
+    padding: 0 0.75rem 0.5rem 0.75rem !important;
+    position: relative;
+    top: 0;
+    border-top: none !important;
+    outline: none !important;
 }
 
 /* Remove any spacing from the card itself */
@@ -1107,14 +1124,44 @@ html {
 }
 
 /* Remove ALL possible spacing sources */
-.card.property-card {
+.card.property-card,
+.card.project-card {
     font-size: 0;
     line-height: 0;
 }
 
-.card.property-card .property-card-content {
+.card.property-card .property-card-content,
+.card.project-card .property-card-content {
     font-size: 1rem;
     line-height: normal;
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+}
+
+/* Remove any gap from hidden fallback divs */
+.card.property-card .card-img-top[style*="display: none"],
+.card.project-card .card-img-top[style*="display: none"] {
+    display: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    height: 0 !important;
+    line-height: 0 !important;
+    visibility: hidden !important;
+}
+
+/* Ensure fallback divs are hidden by default */
+.card.project-card .card-img-top.bg-secondary {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.card.project-card .card-img-top.bg-secondary[style*="display: flex"] {
+    display: flex !important;
+    visibility: visible !important;
+    height: 250px !important;
 }
 
 .property-card:hover {
@@ -1324,12 +1371,74 @@ html {
     height: 250px;
     object-fit: cover;
     background-color: #e0e0e0;
+    margin: 0 !important;
+    margin-bottom: 0 !important;
+    padding: 0 !important;
+    vertical-align: bottom;
+    line-height: 0;
 }
 
 .project-card img {
     display: block !important;
     visibility: visible !important;
     opacity: 1 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    line-height: 0;
+}
+
+.project-card .card-body {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+    line-height: normal;
+}
+
+.project-card img.card-img-top + .card-body,
+.project-card .card-img-top + .card-body {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+}
+
+.project-card .card-body > *:first-child {
+    margin-top: 0.5rem !important;
+    padding-top: 0 !important;
+}
+
+.project-card .card-title {
+    margin-top: 0 !important;
+    margin-bottom: 0.5rem !important;
+    padding-top: 0.5rem !important;
+}
+
+/* Remove any gap between image and card-body for project cards */
+.card.project-card {
+    font-size: 0;
+    line-height: 0;
+}
+
+.card.project-card .card-body {
+    font-size: 1rem;
+    line-height: normal;
+}
+
+.card.project-card > img + .card-body,
+.card.project-card > .card-img-top + .card-body {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+    border-top: none !important;
+}
+
+.card.project-card img.card-img-top {
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+    display: block;
+    line-height: 0;
+    vertical-align: bottom;
+}
+
+.card.project-card .card-img-top + .card-body {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
 }
 
 /* Material Design Blog Cards */
@@ -1818,6 +1927,75 @@ textarea.form-control {
     padding: 1.5rem;
 }
 
+/* Override for project cards - use same approach as property cards */
+.card.project-card {
+    padding: 0 !important;
+    gap: 0 !important;
+    border: none !important;
+    margin: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    row-gap: 0 !important;
+    column-gap: 0 !important;
+}
+
+.card.project-card > * {
+    padding: 0 !important;
+    margin: 0 !important;
+    flex-shrink: 0;
+}
+
+.card.project-card img.card-img-top {
+    border-bottom: none !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.card.project-card .property-card-content,
+.project-card .property-card-content,
+div.property-card-content.text-center,
+.card.project-card div.property-card-content,
+.card.project-card .property-card-content.text-center {
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+    padding-left: 0.75rem !important;
+    padding-right: 0.75rem !important;
+    padding-bottom: 0.5rem !important;
+    border-top: none !important;
+    min-height: 0 !important;
+    height: auto !important;
+    box-sizing: border-box !important;
+}
+
+/* Override any Bootstrap card-body styles that might be applied */
+.card.project-card .property-card-content,
+.card.project-card div.property-card-content {
+    padding: 0 0.75rem 0.5rem 0.75rem !important;
+}
+
+.card.project-card img.card-img-top + .property-card-content,
+.card.project-card .card-img-top + .property-card-content {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+    border-top: none !important;
+}
+
+.project-card .property-card-content > *:first-child {
+    margin-top: 0 !important;
+    padding-top: 0.5rem !important;
+}
+
+.card.project-card > img,
+.card.project-card > .card-img-top {
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+    display: block;
+    border-bottom: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
 /* Override for property cards - must come after general card-body rule */
 .card.property-card .card-body {
     padding: 0.5rem 0.75rem !important;
@@ -2207,6 +2385,14 @@ html {
         height: auto !important;
         min-height: 0 !important;
         flex-grow: 0;
+    }
+    
+    /* Desktop override for project cards */
+    .project-card .card-body,
+    .card.project-card .card-body {
+        padding: 0 0.75rem 0.5rem 0.75rem !important;
+        padding-top: 0 !important;
+        margin-top: 0 !important;
     }
     
     .property-card .card-title {

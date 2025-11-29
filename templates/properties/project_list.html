@@ -15,24 +15,23 @@
     <div class="row g-4">
         {% for project in projects %}
         <div class="col-md-4">
-            <div class="card project-card h-100 shadow-sm">
+            <div class="card project-card shadow-sm" style="padding: 0 !important; gap: 0 !important; margin: 0 !important; display: flex !important; flex-direction: column !important; row-gap: 0 !important;">
                 {% if project.image %}
                     <img src="{{ project.image.url }}" 
                          class="card-img-top" 
                          alt="{{ project.name }}" 
-                         style="height: 250px; object-fit: cover; width: 100%; display: block;"
+                         style="height: 250px; object-fit: cover; width: 100%; display: block; margin: 0 !important; margin-bottom: 0 !important; padding: 0 !important; vertical-align: bottom; line-height: 0;"
                          loading="lazy"
                          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                    <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" style="height: 250px; width: 100%; display: none;">
+                    <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" style="height: 250px; width: 100%; display: none !important; margin: 0 !important; padding: 0 !important; line-height: 0; visibility: hidden !important;">
                         <i class="bi bi-building text-white" style="font-size: 3rem;"></i>
                     </div>
                 {% else %}
-                    <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" style="height: 250px; width: 100%;">
+                    <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" style="height: 250px; width: 100%; margin: 0 !important; padding: 0 !important; line-height: 0;">
                         <i class="bi bi-building text-white" style="font-size: 3rem;"></i>
                     </div>
-                {% endif %}
-                <div class="card-body">
-                    <h5 class="card-title">{{ project.name }}</h5>
+                {% endif %}<div class="property-card-content" style="padding: 0 0.75rem 0.5rem 0.75rem !important; margin: 0 !important; margin-top: -2px !important; padding-top: 0 !important; line-height: normal; position: relative; top: 0; border-top: none !important;">
+                    <h5 class="card-title" style="margin-top: 0 !important; margin-bottom: 0.5rem !important; padding-top: 0.5rem !important; display: block;">{{ project.name }}</h5>
                     <p class="text-muted">
                         <i class="bi bi-geo-alt"></i> {{ project.location }}
                     </p>
