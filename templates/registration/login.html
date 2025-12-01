@@ -1,0 +1,68 @@
+{% extends "admin/login.html" %}
+{% load static %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+    .password-toggle-wrapper {
+        position: relative;
+    }
+    .password-toggle-btn {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 5px 10px;
+        color: #6c757d;
+        z-index: 10;
+    }
+    .password-toggle-btn:hover {
+        color: #495057;
+    }
+    #id_password {
+        padding-right: 45px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+{{ block.super }}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const passwordField = document.getElementById('id_password');
+    if (passwordField) {
+        // Create toggle button
+        const toggleBtn = document.createElement('button');
+        toggleBtn.type = 'button';
+        toggleBtn.className = 'password-toggle-btn';
+        toggleBtn.innerHTML = '<i class="bi bi-eye" id="password-toggle-icon"></i>';
+        toggleBtn.setAttribute('aria-label', 'Toggle password visibility');
+        
+        // Wrap password field in a container
+        const wrapper = document.createElement('div');
+        wrapper.className = 'password-toggle-wrapper';
+        passwordField.parentNode.insertBefore(wrapper, passwordField);
+        wrapper.appendChild(passwordField);
+        wrapper.appendChild(toggleBtn);
+        
+        // Toggle password visibility
+        toggleBtn.addEventListener('click', function() {
+            const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordField.setAttribute('type', type);
+            
+            // Toggle icon
+            const icon = document.getElementById('password-toggle-icon');
+            if (type === 'password') {
+                icon.className = 'bi bi-eye';
+            } else {
+                icon.className = 'bi bi-eye-slash';
+            }
+        });
+    }
+});
+</script>
+{% endblock %}
+

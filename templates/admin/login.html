@@ -1,0 +1,135 @@
+{% extends "registration/base.html" %}
+
+{% load i18n jazzmin %}
+{% get_jazzmin_settings request as jazzmin_settings %}
+{% get_jazzmin_ui_tweaks as jazzmin_ui %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+    .password-toggle-wrapper {
+        position: relative;
+    }
+    .password-toggle-btn {
+        position: absolute;
+        right: 50px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 5px 10px;
+        color: #6c757d;
+        z-index: 10;
+        font-size: 14px;
+    }
+    .password-toggle-btn:hover {
+        color: #495057;
+    }
+    .password-input-group {
+        position: relative;
+    }
+    .password-input-group .form-control {
+        padding-right: 80px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+    <p class="login-box-msg">{{ jazzmin_settings.welcome_sign }}</p>
+    <form action="{{ app_path }}" method="post">
+        {% csrf_token %}
+        {% if user.is_authenticated %}
+            <p class="errornote">
+                <div class="callout callout-danger">
+                    <p>
+                        {% blocktrans trimmed %}
+                            You are authenticated as {{ username }}, but are not authorized to
+                            access this page. Would you like to login to a different account?
+                        {% endblocktrans %}
+                    </p>
+                </div>
+            </p>
+        {% endif %}
+        {% if form.errors %}
+            {% if form.username.errors %}
+                <div class="callout callout-danger">
+                    <p>{{ form.username.label }}: {{ form.username.errors|join:', ' }}</p>
+                </div>
+            {% endif %}
+            {% if form.password.errors %}
+                <div class="callout callout-danger">
+                    <p>{{ form.password.label }}: {{ form.password.errors|join:', ' }}</p>
+                </div>
+            {% endif %}
+            {% if form.non_field_errors %}
+                <div class="callout callout-danger">
+                    {% for error in form.non_field_errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endif %}
+        <div class="input-group mb-3">
+            <input type="text" name="username" class="form-control" placeholder="{{ form.username.label }}" required>
+            <div class="input-group-append">
+                <div class="input-group-text">
+                    <span class="fas fa-user"></span>
+                </div>
+            </div>
+        </div>
+        <div class="input-group mb-3 password-input-group">
+            <input type="password" name="password" id="id_password" class="form-control" placeholder="{{ form.password.label }}" required>
+            <button type="button" class="password-toggle-btn" id="password-toggle-btn" aria-label="Toggle password visibility">
+                <span class="fas fa-eye" id="password-toggle-icon"></span>
+            </button>
+            <div class="input-group-append">
+                <div class="input-group-text">
+                    <span class="fas fa-lock"></span>
+                </div>
+            </div>
+        </div>
+        {% url 'admin_password_reset' as password_reset_url %}
+        {% if password_reset_url %}
+            <div class="mb-3">
+                <a href="{{ password_reset_url }}">{% trans 'Forgotten your password or username?' %}</a>
+            </div>
+        {% endif %}
+        <div class="row">
+            <div class="col-12">
+                <button type="submit" class="btn {{ jazzmin_ui.button_classes.primary }} btn-block">
+                    {% trans 'Log in' %}
+                </button>
+            </div>
+        </div>
+    </form>
+{% endblock %}
+
+{% block extrajs %}
+{{ block.super }}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const passwordField = document.getElementById('id_password');
+    const toggleBtn = document.getElementById('password-toggle-btn');
+    const toggleIcon = document.getElementById('password-toggle-icon');
+    
+    if (passwordField && toggleBtn && toggleIcon) {
+        toggleBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordField.setAttribute('type', type);
+            
+            // Toggle icon
+            if (type === 'password') {
+                toggleIcon.className = 'fas fa-eye';
+            } else {
+                toggleIcon.className = 'fas fa-eye-slash';
+            }
+        });
+    }
+});
+</script>
+{% endblock %}
+

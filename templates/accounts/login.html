@@ -24,7 +24,12 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label required">Password</label>
-                            <input type="password" name="password" class="form-control" required>
+                            <div class="position-relative">
+                                <input type="password" name="password" id="id_password" class="form-control" required style="padding-right: 45px;">
+                                <button type="button" class="btn btn-link position-absolute" id="password-toggle-btn" style="right: 0; top: 50%; transform: translateY(-50%); padding: 0.375rem 0.75rem; color: #6c757d; text-decoration: none; border: none; background: none; z-index: 10;" aria-label="Toggle password visibility">
+                                    <i class="bi bi-eye" id="password-toggle-icon"></i>
+                                </button>
+                            </div>
                         </div>
                         <div class="mb-3 form-check">
                             <input type="checkbox" class="form-check-input" id="remember">
@@ -44,5 +49,32 @@
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const passwordField = document.getElementById('id_password');
+    const toggleBtn = document.getElementById('password-toggle-btn');
+    const toggleIcon = document.getElementById('password-toggle-icon');
+    
+    if (passwordField && toggleBtn && toggleIcon) {
+        toggleBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordField.setAttribute('type', type);
+            
+            // Toggle icon
+            if (type === 'password') {
+                toggleIcon.className = 'bi bi-eye';
+            } else {
+                toggleIcon.className = 'bi bi-eye-slash';
+            }
+        });
+    }
+});
+</script>
 {% endblock %}
 
