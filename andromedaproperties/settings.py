@@ -32,6 +32,8 @@ GOOGLE_MAPS_API_KEY = os.environ.get('GOOGLE_MAPS_API_KEY', '')
 
 INSTALLED_APPS = [
     'jazzmin',  # Must be before django.contrib.admin
+    'material',  # Material Design components for frontend forms
+    'material.admin',  # Material Design admin (optional, jazzmin takes precedence)
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -337,6 +339,28 @@ JAZZMIN_UI_TWEAKS = {
         "success": "btn-success"
     }
 }
+
+# Django Material Configuration
+# Note: django-material has been merged into django-viewflow, but still works
+# Material admin will work alongside jazzmin (jazzmin takes precedence for admin UI)
+MATERIAL_ADMIN_SITE = {
+    'HEADER': 'Andromeda Properties Admin',  # Admin site header
+    'TITLE': 'Andromeda Admin Portal',  # Admin site title
+    'FAVICON_PATH': 'images/andromeda-logo.svg',  # Admin site favicon
+    'MAIN_BG_COLOR': '#1976d2',  # Main background color
+    'MAIN_HOVER_COLOR': '#1565c0',  # Main hover color
+    'PROFILE_PICTURE': None,  # Profile picture (None for default)
+    'PROFILE_BG': None,  # Profile background
+    'LOGIN_LOGO': None,  # Login logo (None for default)
+    'LOGOUT_BG': None,  # Logout background
+    'SHOW_THEMES': True,  # Show theme switcher
+    'TRAY_REVERSE': True,  # Reverse tray position
+    'NAVBAR_REVERSE': False,  # Reverse navbar position
+    'SHOW_COUNTS': True,  # Show model counts
+}
+
+# Material Frontend Settings (for frontend forms)
+MATERIAL_FRONTEND_AUTOREGISTER = True  # Auto-register Material Design components
 
 # Load local settings if available (for development overrides)
 try:

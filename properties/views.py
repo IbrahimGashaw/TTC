@@ -143,7 +143,21 @@ def project_detail(request, slug):
 
 
 def about(request):
-    return render(request, 'properties/about.html')
+    from .models import AboutPageSettings
+    about_settings = AboutPageSettings.load()
+    
+    # Statistics (you can make these dynamic later)
+    stats = {
+        'customers': 1000,
+        'years_experience': 10,
+        'delivered_projects': 50,
+    }
+    
+    context = {
+        'about_settings': about_settings,
+        'stats': stats,
+    }
+    return render(request, 'properties/about.html', context)
 
 
 def team(request):
@@ -176,10 +190,49 @@ def agent_detail(request, agent_id):
 
 
 def market_report_list(request):
-    """List all published market reports"""
+    """List all published market reports and generate dynamic reports from property data"""
+    from django.db.models import Count, Avg, Max, Min, Q
+    from datetime import datetime, timedelta
+    from django.utils import timezone
+    
+    # Get published market reports from database
     reports = MarketReport.objects.filter(is_published=True)
     featured_reports = reports.filter(is_featured=True)[:3]
     categories = MarketReport.objects.filter(is_published=True).values_list('category', flat=True).distinct()
+    
+    # Generate dynamic market analysis from property database
+    active_properties = Property.objects.filter(status__in=['active', 'new_offer'])
+    
+    # Property statistics for market analysis
+    market_stats = {
+        'total_properties': active_properties.count(),
+        'for_sale_count': active_properties.filter(sale_type='for_sale').count(),
+        'for_rent_count': active_properties.filter(sale_type='for_rent').count(),
+        'avg_price': active_properties.filter(price__isnull=False).aggregate(Avg('price'))['price__avg'],
+        'max_price': active_properties.filter(price__isnull=False).aggregate(Max('price'))['price__max'],
+        'min_price': active_properties.filter(price__isnull=False).aggregate(Min('price'))['price__min'],
+        'apartments_count': active_properties.filter(property_type='apartment').count(),
+        'shops_count': active_properties.filter(property_type='shop').count(),
+        'commercial_count': active_properties.filter(property_type='commercial').count(),
+        'avg_size': active_properties.aggregate(Avg('size'))['size__avg'],
+        'avg_bedrooms': active_properties.filter(bedrooms__gt=0).aggregate(Avg('bedrooms'))['bedrooms__avg'],
+        'avg_bathrooms': active_properties.filter(bathrooms__gt=0).aggregate(Avg('bathrooms'))['bathrooms__avg'],
+    }
+    
+    # Location analysis
+    location_stats = active_properties.values('location').annotate(
+        count=Count('id'),
+        avg_price=Avg('price')
+    ).order_by('-count')[:10]
+    
+    # Property type distribution
+    type_distribution = active_properties.values('property_type').annotate(
+        count=Count('id')
+    )
+    
+    # Recent properties (last 30 days)
+    thirty_days_ago = timezone.now() - timedelta(days=30)
+    recent_properties = active_properties.filter(created_at__gte=thirty_days_ago).count()
     
     # Filter by category if provided
     category = request.GET.get('category')
@@ -198,6 +251,10 @@ def market_report_list(request):
         'categories': categories,
         'current_category': category,
         'site_settings': site_settings,
+        'market_stats': market_stats,
+        'location_stats': location_stats,
+        'type_distribution': type_distribution,
+        'recent_properties': recent_properties,
     }
     return render(request, 'properties/market_reports.html', context)
 

@@ -77,6 +77,115 @@
     </div>
     {% endif %}
 
+    <!-- Market Analysis from Database -->
+    {% if market_stats %}
+    <div class="row mb-5">
+        <div class="col-12">
+            <h3 class="mb-4">{% trans "Market Analysis" %}</h3>
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <div class="text-center p-3 bg-light rounded">
+                                <h4 class="text-primary">{{ market_stats.total_properties }}</h4>
+                                <p class="mb-0 text-muted">{% trans "Total Properties" %}</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="text-center p-3 bg-light rounded">
+                                <h4 class="text-success">{{ market_stats.for_sale_count }}</h4>
+                                <p class="mb-0 text-muted">{% trans "For Sale" %}</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="text-center p-3 bg-light rounded">
+                                <h4 class="text-info">{{ market_stats.for_rent_count }}</h4>
+                                <p class="mb-0 text-muted">{% trans "For Rent" %}</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="text-center p-3 bg-light rounded">
+                                <h4 class="text-warning">{{ recent_properties }}</h4>
+                                <p class="mb-0 text-muted">{% trans "New (30 days)" %}</p>
+                            </div>
+                        </div>
+                    </div>
+                    {% if market_stats.avg_price %}
+                    <div class="row mt-3">
+                        <div class="col-md-4 mb-3">
+                            <div class="p-3 border rounded">
+                                <strong>{% trans "Average Price:" %}</strong>
+                                <p class="mb-0">ETB {{ market_stats.avg_price|floatformat:2 }}</p>
+                            </div>
+                        </div>
+                        {% if market_stats.max_price %}
+                        <div class="col-md-4 mb-3">
+                            <div class="p-3 border rounded">
+                                <strong>{% trans "Highest Price:" %}</strong>
+                                <p class="mb-0">ETB {{ market_stats.max_price|floatformat:2 }}</p>
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% if market_stats.min_price %}
+                        <div class="col-md-4 mb-3">
+                            <div class="p-3 border rounded">
+                                <strong>{% trans "Lowest Price:" %}</strong>
+                                <p class="mb-0">ETB {{ market_stats.min_price|floatformat:2 }}</p>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                    {% if type_distribution %}
+                    <div class="row mt-3">
+                        <div class="col-12">
+                            <h5>{% trans "Property Type Distribution" %}</h5>
+                            <div class="row">
+                                {% for type in type_distribution %}
+                                <div class="col-md-4 mb-2">
+                                    <div class="d-flex justify-content-between align-items-center p-2 bg-light rounded">
+                                        <span>{% if type.property_type == 'apartment' %}{% trans "Apartments" %}{% elif type.property_type == 'shop' %}{% trans "Shops" %}{% else %}{% trans "Commercial" %}{% endif %}</span>
+                                        <span class="badge bg-primary">{{ type.count }}</span>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% if location_stats %}
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <h5>{% trans "Top Locations" %}</h5>
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>{% trans "Location" %}</th>
+                                            <th>{% trans "Properties" %}</th>
+                                            {% if market_stats.avg_price %}<th>{% trans "Avg Price" %}</th>{% endif %}
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for loc in location_stats|slice:":5" %}
+                                        <tr>
+                                            <td>{{ loc.location }}</td>
+                                            <td><span class="badge bg-primary">{{ loc.count }}</span></td>
+                                            {% if market_stats.avg_price %}<td>{% if loc.avg_price %}ETB {{ loc.avg_price|floatformat:2 }}{% else %}-{% endif %}</td>{% endif %}
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
     <!-- All Reports -->
     <div class="row g-4">
         {% for report in reports %}

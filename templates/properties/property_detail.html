@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load i18n %}
+{% load content_filters %}
 
 {% block title %}{{ property.title }} - Andromeda Properties{% endblock %}
 
@@ -50,22 +51,26 @@
                     {% if property.walkthrough_video_url %}
                         <!-- YouTube/Vimeo Embed -->
                         {% if 'youtube.com' in property.walkthrough_video_url or 'youtu.be' in property.walkthrough_video_url %}
-                            {% with video_id=property.walkthrough_video_url|slice:"-11:" %}
+                            {% with video_id=property.walkthrough_video_url|extract_youtube_id %}
+                                {% if video_id %}
                                 <div class="ratio ratio-16x9">
                                     <iframe src="https://www.youtube.com/embed/{{ video_id }}" 
                                             frameborder="0" 
                                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
                                             allowfullscreen></iframe>
                                 </div>
+                                {% endif %}
                             {% endwith %}
                         {% elif 'vimeo.com' in property.walkthrough_video_url %}
-                            {% with video_id=property.walkthrough_video_url|slice:"-9:" %}
+                            {% with video_id=property.walkthrough_video_url|extract_vimeo_id %}
+                                {% if video_id %}
                                 <div class="ratio ratio-16x9">
                                     <iframe src="https://player.vimeo.com/video/{{ video_id }}" 
                                             frameborder="0" 
                                             allow="autoplay; fullscreen; picture-in-picture" 
                                             allowfullscreen></iframe>
                                 </div>
+                                {% endif %}
                             {% endwith %}
                         {% else %}
                             <div class="ratio ratio-16x9">

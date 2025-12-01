@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load i18n %}
+{% load content_filters %}
 
 {% block title %}{{ guide.title }} - {% trans "Buying Guides" %} - Andromeda Properties{% endblock %}
 
@@ -40,7 +41,7 @@
                 <div class="card mb-4 shadow-sm">
                     <div class="card-body">
                         <div class="content">
-                            {{ guide.content|linebreaks }}
+                            {{ guide.content|sanitize_html }}
                         </div>
                     </div>
                 </div>

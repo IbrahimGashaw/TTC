@@ -670,6 +670,60 @@ class SiteSettings(models.Model):
         return f"https://wa.me/{phone}?text={encoded_msg}"
 
 
+class AboutPageSettings(models.Model):
+    """Singleton model for about page settings including video"""
+    # Video Settings
+    about_video = models.FileField(
+        upload_to='videos/about/',
+        blank=True,
+        null=True,
+        help_text=_('Video file for about page (MP4 recommended)'),
+        verbose_name=_('About Page Video')
+    )
+    about_video_url = models.URLField(
+        blank=True,
+        null=True,
+        help_text=_('External video URL (YouTube, Vimeo, etc.)'),
+        verbose_name=_('Video URL')
+    )
+    about_video_poster = models.ImageField(
+        upload_to='images/about/',
+        blank=True,
+        null=True,
+        help_text=_('Poster image shown before video loads'),
+        verbose_name=_('Video Poster Image')
+    )
+    about_video_enabled = models.BooleanField(
+        default=True,
+        help_text=_('Enable/disable video display'),
+        verbose_name=_('Video Enabled')
+    )
+    
+    updated_at = models.DateTimeField(auto_now=True, verbose_name=_('Updated At'))
+    
+    class Meta:
+        verbose_name = _('About Page Settings')
+        verbose_name_plural = _('About Page Settings')
+    
+    def __str__(self):
+        return 'About Page Settings'
+    
+    def save(self, *args, **kwargs):
+        # Ensure only one instance exists (singleton pattern)
+        self.pk = 1
+        super().save(*args, **kwargs)
+    
+    def delete(self, *args, **kwargs):
+        # Prevent deletion - just reset to defaults
+        pass
+    
+    @classmethod
+    def load(cls):
+        """Get or create the singleton instance"""
+        obj, created = cls.objects.get_or_create(pk=1)
+        return obj
+
+
 class ViewingAppointment(models.Model):
     """Model for property viewing appointments (quick lead capture)"""
     STATUS_CHOICES = [

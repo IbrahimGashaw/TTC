@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load content_filters %}
 
 {% block title %}About Us - Andromeda Properties{% endblock %}
 
@@ -20,11 +21,80 @@
         </div>
         <div class="col-md-6">
             <div class="card shadow-sm">
-                <div class="card-body text-center p-5">
+                <div class="card-body text-center p-4">
                     <h3 class="mb-4">Watch this video to know us better</h3>
-                    <div class="bg-secondary rounded d-flex align-items-center justify-content-center" style="height: 300px;">
-                        <i class="bi bi-play-circle text-white" style="font-size: 4rem;"></i>
-                    </div>
+                    {% if about_settings.about_video_enabled %}
+                        {% if about_settings.about_video_url %}
+                            <!-- External Video (YouTube, Vimeo, etc.) -->
+                            {% if 'youtube.com' in about_settings.about_video_url or 'youtu.be' in about_settings.about_video_url %}
+                                {% with video_id=about_settings.about_video_url|extract_youtube_id %}
+                                    {% if video_id %}
+                                    <div class="ratio ratio-16x9">
+                                        <iframe src="https://www.youtube.com/embed/{{ video_id }}" 
+                                                frameborder="0" 
+                                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                                allowfullscreen
+                                                title="About Andromeda Properties Video"
+                                                style="border-radius: 8px;"></iframe>
+                                    </div>
+                                    {% endif %}
+                                {% endwith %}
+                            {% elif 'vimeo.com' in about_settings.about_video_url %}
+                                {% with video_id=about_settings.about_video_url|extract_vimeo_id %}
+                                    {% if video_id %}
+                                    <div class="ratio ratio-16x9">
+                                        <iframe src="https://player.vimeo.com/video/{{ video_id }}" 
+                                                frameborder="0" 
+                                                allow="autoplay; fullscreen; picture-in-picture" 
+                                                allowfullscreen
+                                                title="About Andromeda Properties Video"
+                                                style="border-radius: 8px;"></iframe>
+                                    </div>
+                                    {% endif %}
+                                {% endwith %}
+                            {% else %}
+                                <!-- Generic iframe for other video URLs -->
+                                <div class="ratio ratio-16x9">
+                                    <iframe src="{{ about_settings.about_video_url }}" 
+                                            frameborder="0" 
+                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                            allowfullscreen
+                                            title="About Andromeda Properties Video"
+                                            style="border-radius: 8px;"></iframe>
+                                </div>
+                            {% endif %}
+                        {% elif about_settings.about_video %}
+                            <!-- Uploaded Video File -->
+                            <div class="ratio ratio-16x9">
+                                <video 
+                                    class="w-100 h-100" 
+                                    controls 
+                                    preload="metadata"
+                                    {% if about_settings.about_video_poster %}poster="{{ about_settings.about_video_poster.url }}"{% endif %}
+                                    style="border-radius: 8px; object-fit: cover;">
+                                    <source src="{{ about_settings.about_video.url }}" type="video/mp4">
+                                    Your browser does not support the video tag.
+                                </video>
+                            </div>
+                        {% else %}
+                            <!-- No video configured - show placeholder -->
+                            <div class="bg-secondary rounded d-flex align-items-center justify-content-center" style="height: 300px; border-radius: 8px;">
+                                <div class="text-center text-white">
+                                    <i class="bi bi-play-circle" style="font-size: 4rem;"></i>
+                                    <p class="mt-3">No video configured</p>
+                                    <small>Upload a video in admin settings</small>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% else %}
+                        <!-- Video disabled -->
+                        <div class="bg-secondary rounded d-flex align-items-center justify-content-center" style="height: 300px; border-radius: 8px;">
+                            <div class="text-center text-white">
+                                <i class="bi bi-play-circle" style="font-size: 4rem;"></i>
+                                <p class="mt-3">Video is disabled</p>
+                            </div>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
         </div>

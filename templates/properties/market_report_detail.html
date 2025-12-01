@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load i18n %}
+{% load content_filters %}
 
 {% block title %}{{ report.title }} - {% trans "Market Reports" %} - Andromeda Properties{% endblock %}
 
@@ -42,7 +43,7 @@
                 <div class="card mb-4 shadow-sm">
                     <div class="card-body">
                         <div class="content">
-                            {{ report.content|linebreaks }}
+                            {{ report.content|sanitize_html }}
                         </div>
                     </div>
                 </div>

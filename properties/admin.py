@@ -3,7 +3,7 @@ from django.utils.translation import gettext_lazy as _
 from .models import (
     Project, Property, PropertyImage, Contact, TeamMember,
     PropertyBooking, ConstructionProgress, ConstructionProgressImage,
-    HomePageSettings, SiteSettings, ViewingAppointment, FloorPlan,
+    HomePageSettings, SiteSettings, AboutPageSettings, ViewingAppointment, FloorPlan,
     MarketReport, BuyingGuide
 )
 
@@ -228,6 +228,39 @@ class SiteSettingsAdmin(admin.ModelAdmin):
             'fields': (
                 'company_phone',
                 'company_email',
+            )
+        }),
+        (_('Metadata'), {
+            'fields': ('updated_at',),
+            'classes': ('collapse',)
+        }),
+    )
+    
+    readonly_fields = ['updated_at']
+
+
+@admin.register(AboutPageSettings)
+class AboutPageSettingsAdmin(admin.ModelAdmin):
+    """Admin for about page settings - singleton pattern"""
+    def has_add_permission(self, request):
+        # Only allow one instance
+        try:
+            return not AboutPageSettings.objects.exists()
+        except:
+            # Table doesn't exist yet (during migrations)
+            return True
+    
+    def has_delete_permission(self, request, obj=None):
+        # Prevent deletion
+        return False
+    
+    fieldsets = (
+        (_('Video Settings'), {
+            'fields': (
+                'about_video_enabled',
+                'about_video',
+                'about_video_url',
+                'about_video_poster',
             )
         }),
         (_('Metadata'), {
