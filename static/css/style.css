@@ -499,6 +499,58 @@
     }
 }
 
+/* Statistics Banner */
+.statistics-banner {
+    background-color: #2f4050;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.statistics-number {
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: #fff;
+    margin: 0;
+    line-height: 1.2;
+}
+
+.statistics-label {
+    font-size: 1.1rem;
+    color: #fff;
+    font-weight: 400;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+@media (max-width: 768px) {
+    .statistics-number {
+        font-size: 2.5rem;
+    }
+    
+    .statistics-label {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .statistics-number {
+        font-size: 2rem;
+    }
+    
+    .statistics-label {
+        font-size: 0.9rem;
+    }
+    
+    .statistics-banner .col-md-4 {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .statistics-banner .col-md-4:last-child {
+        border-bottom: none;
+    }
+}
+
 .whatsapp-float i {
     font-size: 32px;
 }
