@@ -1,28 +1,52 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load i18n %}
+{% load translation_tags %}
 
 {% block title %}{% trans "Properties" %} - Andromeda Properties{% endblock %}
 
 {% block content %}
-<div class="container mt-5 pt-4">
-    <div class="row mb-4">
-        <div class="col-md-8">
-            <h1 class="display-5 fw-bold">Properties</h1>
-            <p class="text-muted">Find your perfect property in Ethiopia</p>
+<!-- Intro Single - EstateAgency Style -->
+<section class="intro-single">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-lg-8">
+                <div class="title-single-box">
+                    <h1 class="title-single">{% translate_text "Properties" CURRENT_LANGUAGE_CODE %}</h1>
+                    <span class="color-text-a">{% translate_text "Find your perfect property in Ethiopia" CURRENT_LANGUAGE_CODE %}</span>
+                </div>
+            </div>
+            <div class="col-md-12 col-lg-4">
+                <nav aria-label="breadcrumb" class="breadcrumb-box d-flex justify-content-lg-end">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="{% url 'properties:home' %}">{% translate_text "Home" CURRENT_LANGUAGE_CODE %}</a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">
+                            {% translate_text "Properties" CURRENT_LANGUAGE_CODE %}
+                        </li>
+                    </ol>
+                </nav>
+            </div>
         </div>
     </div>
+</section>
+<!--/ Intro Single End /-->
 
-    <!-- Search Form - Material Dashboard Style -->
-    <div class="card mb-4 elevation-2">
+<section class="property-grid grid">
+    <div class="container">
+        <!-- Search Form - EstateAgency Style -->
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="search-form-estateagency">
         <div class="card-body">
             <form method="get" id="search-form" class="row g-4">
                 <div class="col-md-3">
                     <div class="form-field-wrapper">
                         <label for="list_location" class="form-label">
-                            <i class="bi bi-geo-alt"></i> {% trans "Location" %}
+                            <i class="bi bi-geo-alt"></i> {% translate_text "Location" CURRENT_LANGUAGE_CODE %}
                         </label>
-                        <input type="text" id="list_location" name="location" class="form-control" placeholder="{% trans 'Search by location' %}" value="{{ request.GET.location }}">
+                        <input type="text" id="list_location" name="location" class="form-control" placeholder="{% translate_text 'Search by location' CURRENT_LANGUAGE_CODE %}" value="{{ request.GET.location }}">
                     </div>
                 </div>
                 <div class="col-md-2">
@@ -42,15 +66,15 @@
                 <div class="col-md-2">
                     <div class="form-field-wrapper">
                         <label for="list_bedrooms" class="form-label">
-                            <i class="bi bi-door-open"></i> {% trans "Bedrooms" %}
+                            <i class="bi bi-door-open"></i> {% translate_text "Bedrooms" CURRENT_LANGUAGE_CODE %}
                         </label>
-                        <input type="number" id="list_bedrooms" name="bedrooms" class="form-control" placeholder="{% trans 'Bedrooms' %}" value="{{ request.GET.bedrooms }}" min="0">
+                        <input type="number" id="list_bedrooms" name="bedrooms" class="form-control" placeholder="{% translate_text 'Bedrooms' CURRENT_LANGUAGE_CODE %}" value="{{ request.GET.bedrooms }}" min="0">
                     </div>
                 </div>
                 <div class="col-md-2">
                     <div class="form-field-wrapper">
                         <label for="list_bathrooms" class="form-label">
-                            <i class="bi bi-droplet"></i> {% trans "Bathrooms" %}
+                            <i class="bi bi-droplet"></i> {% translate_text "Bathrooms" CURRENT_LANGUAGE_CODE %}
                         </label>
                         <input type="number" id="list_bathrooms" name="bathrooms" class="form-control" placeholder="{% trans 'Bathrooms' %}" value="{{ request.GET.bathrooms }}" min="0">
                     </div>
@@ -58,7 +82,7 @@
                 <div class="col-md-2">
                     <div class="form-field-wrapper">
                         <label for="list_status" class="form-label">
-                            <i class="bi bi-info-circle"></i> {% trans "Status" %}
+                            <i class="bi bi-info-circle"></i> {% translate_text "Status" CURRENT_LANGUAGE_CODE %}
                         </label>
                         <select id="list_status" name="status" class="form-select" title="{% trans 'Status' %}">
                             <option value="">{% trans "All Status" %}</option>
@@ -72,23 +96,23 @@
                         <div class="col-md-3">
                             <div class="form-field-wrapper">
                                 <label for="list_min_price" class="form-label">
-                                    <i class="bi bi-currency-dollar"></i> {% trans "Min Price (ETB)" %}
+                                    <i class="bi bi-currency-dollar"></i> {% translate_text "Min Price (ETB)" CURRENT_LANGUAGE_CODE %}
                                 </label>
-                                <input type="number" id="list_min_price" name="min_price" class="form-control" placeholder="{% trans 'Min' %}" value="{{ request.GET.min_price }}" min="0" step="1000">
+                                <input type="number" id="list_min_price" name="min_price" class="form-control" placeholder="{% translate_text 'Min' CURRENT_LANGUAGE_CODE %}" value="{{ request.GET.min_price }}" min="0" step="1000">
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="form-field-wrapper">
                                 <label for="list_max_price" class="form-label">
-                                    <i class="bi bi-currency-dollar"></i> {% trans "Max Price (ETB)" %}
+                                    <i class="bi bi-currency-dollar"></i> {% translate_text "Max Price (ETB)" CURRENT_LANGUAGE_CODE %}
                                 </label>
-                                <input type="number" id="list_max_price" name="max_price" class="form-control" placeholder="{% trans 'Max' %}" value="{{ request.GET.max_price }}" min="0" step="1000">
+                                <input type="number" id="list_max_price" name="max_price" class="form-control" placeholder="{% translate_text 'Max' CURRENT_LANGUAGE_CODE %}" value="{{ request.GET.max_price }}" min="0" step="1000">
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="form-field-wrapper">
                                 <label for="list_sale_type" class="form-label">
-                                    <i class="bi bi-tag"></i> {% trans "Sale Type" %}
+                                    <i class="bi bi-tag"></i> {% translate_text "Sale Type" CURRENT_LANGUAGE_CODE %}
                                 </label>
                                 <select id="list_sale_type" name="sale_type" class="form-select">
                                     <option value="">{% trans "All" %}</option>
@@ -100,7 +124,7 @@
                         <!-- Desktop search button - at the end of all fields -->
                         <div class="col-md-3 d-none d-md-flex align-items-end">
                             <button type="submit" class="btn btn-primary w-100">
-                                <i class="bi bi-search"></i> {% trans "Search" %}
+                                <i class="bi bi-search"></i> {% translate_text "Search" CURRENT_LANGUAGE_CODE %}
                             </button>
                         </div>
                     </div>
@@ -112,30 +136,30 @@
                     </button>
                 </div>
             </form>
+                </div>
+            </div>
         </div>
-        </div>
-    </div>
 
-    <!-- View Toggle Buttons -->
-    <div class="d-flex justify-content-end mb-3 gap-2">
-        <a href="{% url 'properties:property_list' %}{% if request.GET.location %}?location={{ request.GET.location }}{% endif %}{% if request.GET.property_type %}&property_type={{ request.GET.property_type }}{% endif %}{% if request.GET.bedrooms %}&bedrooms={{ request.GET.bedrooms }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}{% if request.GET.min_price %}&min_price={{ request.GET.min_price }}{% endif %}{% if request.GET.max_price %}&max_price={{ request.GET.max_price }}{% endif %}{% if request.GET.sale_type %}&sale_type={{ request.GET.sale_type }}{% endif %}" 
-           class="btn btn-outline-primary {% if view_mode != 'map' %}active{% endif %}">
-            <i class="bi bi-list-ul"></i> {% trans "List View" %}
-        </a>
-        <a href="{% url 'properties:property_list' %}?view=map{% if request.GET.location %}&location={{ request.GET.location }}{% endif %}{% if request.GET.property_type %}&property_type={{ request.GET.property_type }}{% endif %}{% if request.GET.bedrooms %}&bedrooms={{ request.GET.bedrooms }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}{% if request.GET.min_price %}&min_price={{ request.GET.min_price }}{% endif %}{% if request.GET.max_price %}&max_price={{ request.GET.max_price }}{% endif %}{% if request.GET.sale_type %}&sale_type={{ request.GET.sale_type }}{% endif %}" 
-           class="btn btn-outline-primary {% if view_mode == 'map' %}active{% endif %}">
-            <i class="bi bi-map"></i> {% trans "Map View" %}
-        </a>
-    </div>
-
-    {% if view_mode == 'map' %}
-    <!-- Map View -->
-    {% if GOOGLE_MAPS_API_KEY and properties_with_coords %}
-    <div class="card mb-4 elevation-2">
-        <div class="card-body p-0">
-            <div id="properties-map" style="width: 100%; height: 600px; border-radius: var(--border-radius-md);"></div>
+        <!-- View Toggle Buttons -->
+        <div class="d-flex justify-content-end mb-4 gap-2">
+            <a href="{% url 'properties:property_list' %}{% if request.GET.location %}?location={{ request.GET.location }}{% endif %}{% if request.GET.property_type %}&property_type={{ request.GET.property_type }}{% endif %}{% if request.GET.bedrooms %}&bedrooms={{ request.GET.bedrooms }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}{% if request.GET.min_price %}&min_price={{ request.GET.min_price }}{% endif %}{% if request.GET.max_price %}&max_price={{ request.GET.max_price }}{% endif %}{% if request.GET.sale_type %}&sale_type={{ request.GET.sale_type }}{% endif %}" 
+               class="btn btn-b-n {% if view_mode != 'map' %}active{% endif %}">
+                <i class="bi bi-list-ul"></i> {% translate_text "List View" CURRENT_LANGUAGE_CODE %}
+            </a>
+            <a href="{% url 'properties:property_list' %}?view=map{% if request.GET.location %}&location={{ request.GET.location }}{% endif %}{% if request.GET.property_type %}&property_type={{ request.GET.property_type }}{% endif %}{% if request.GET.bedrooms %}&bedrooms={{ request.GET.bedrooms }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}{% if request.GET.min_price %}&min_price={{ request.GET.min_price }}{% endif %}{% if request.GET.max_price %}&max_price={{ request.GET.max_price }}{% endif %}{% if request.GET.sale_type %}&sale_type={{ request.GET.sale_type }}{% endif %}" 
+               class="btn btn-b-n {% if view_mode == 'map' %}active{% endif %}">
+                <i class="bi bi-map"></i> {% translate_text "Map View" CURRENT_LANGUAGE_CODE %}
+            </a>
         </div>
-    </div>
+
+        {% if view_mode == 'map' %}
+        <!-- Map View -->
+        {% if GOOGLE_MAPS_API_KEY and properties_with_coords %}
+        <div class="card-box-a card-shadow mb-4">
+            <div class="card-body-a p-0">
+                <div id="properties-map" style="width: 100%; height: 600px;"></div>
+            </div>
+        </div>
     {% else %}
     <div class="alert alert-warning">
         {% if not GOOGLE_MAPS_API_KEY %}
@@ -144,75 +168,78 @@
             <i class="bi bi-info-circle"></i> {% trans "No properties with location coordinates found." %}
         {% endif %}
     </div>
-    {% endif %}
-    {% endif %}
+        {% endif %}
+        {% endif %}
 
-    <!-- Properties Grid - Material Dashboard Style -->
-    <div class="row g-4 {% if view_mode == 'map' %}d-none{% endif %}">
-        {% for property in properties %}
-        <div class="col-md-4">
-            <div class="card property-card h-100 elevation-2">
-                {% if property.images.first %}
-                    <img src="{{ property.images.first.image.url }}" loading="lazy" 
-                         class="card-img-top" 
-                         alt="{{ property.title }}" 
-                         style="height: 250px; object-fit: cover; width: 100%;">
-                {% elif property.main_image %}
-                    <img src="{{ property.main_image.url }}" loading="lazy" 
-                         class="card-img-top" 
-                         alt="{{ property.title }}" 
-                         style="height: 250px; object-fit: cover; width: 100%;">
-                {% else %}
-                    <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" style="height: 250px; width: 100%;">
-                        <i class="bi bi-image text-white" style="font-size: 3rem;"></i>
-                    </div>
-                {% endif %}
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-start mb-2">
-                        <div class="d-flex gap-1 flex-wrap">
-                            <span class="badge bg-success">{{ property.get_sale_type_display }}</span>
-                            <span class="badge bg-info">{{ property.get_status_display }}</span>
-                            {% if property.is_verified %}
-                                <span class="verified-badge" title="{% trans 'Verified Property' %}">
-                                    <i class="bi bi-patch-check-fill"></i> {% trans "Verified" %}
-                                </span>
+        <!-- Properties Grid - EstateAgency Style -->
+        <div class="row {% if view_mode == 'map' %}d-none{% endif %}">
+            {% for property in properties %}
+            <div class="col-md-6 col-lg-4">
+                <div class="card-box-a card-shadow">
+                    <div class="img-box-a">
+                        {% with display_image=property.get_display_image %}
+                            {% if display_image %}
+                                <img src="{{ display_image.url }}" loading="lazy" 
+                                     alt="{{ property.title }}" 
+                                     class="img-a img-fluid">
+                            {% else %}
+                                <div class="img-a img-fluid bg-secondary d-flex align-items-center justify-content-center" style="height: 350px; min-height: 350px;">
+                                    <i class="bi bi-image text-white" style="font-size: 3rem;"></i>
+                                </div>
                             {% endif %}
+                        {% endwith %}
+                    </div>
+                    <div class="card-overlay">
+                        <div class="card-overlay-a-content">
+                            <div class="card-header-a">
+                                <h2 class="card-title-a">
+                                    <a href="{% url 'properties:property_detail' property.slug %}">{{ property.title|translate:CURRENT_LANGUAGE_CODE }}</a>
+                                </h2>
+                            </div>
+                            <div class="card-body-a">
+                                <div class="price-box d-flex">
+                                    <span class="price-a">{{ property.get_sale_type_display }} | {{ property.price|floatformat:0 }} ETB</span>
+                                </div>
+                                <a href="{% url 'properties:property_detail' property.slug %}" class="link-a">Click here to view
+                                    <span class="bi bi-chevron-right"></span>
+                                </a>
+                            </div>
+                            <div class="card-footer-a">
+                                <ul class="card-info d-flex justify-content-around">
+                                    {% if property.bedrooms > 0 %}
+                                    <li>
+                                        <h4 class="card-info-title">{{ property.bedrooms }}</h4>
+                                        <span>{% translate_text "Bedrooms" CURRENT_LANGUAGE_CODE %}</span>
+                                    </li>
+                                    {% endif %}
+                                    {% if property.bathrooms > 0 %}
+                                    <li>
+                                        <h4 class="card-info-title">{{ property.bathrooms }}</h4>
+                                        <span>{% translate_text "Bathrooms" CURRENT_LANGUAGE_CODE %}</span>
+                                    </li>
+                                    {% endif %}
+                                    <li>
+                                        <h4 class="card-info-title">{{ property.size }}</h4>
+                                        <span>m²</span>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
-                    <h5 class="card-title">{{ property.title }}</h5>
-                    <p class="last-updated small mb-2">
-                        <i class="bi bi-clock-history"></i> 
-                        {% trans "Updated" %} {{ property.updated_at|timesince }} {% trans "ago" %}
-                    </p>
-                    <p class="card-text text-muted small">{{ property.description|truncatewords:20 }}</p>
-                    <div class="property-details d-flex gap-3 mb-3">
-                        {% if property.bedrooms > 0 %}
-                            <span><i class="bi bi-door-open"></i> {{ property.bedrooms }} Beds</span>
-                        {% endif %}
-                        {% if property.bathrooms > 0 %}
-                            <span><i class="bi bi-droplet"></i> {{ property.bathrooms }} Baths</span>
-                        {% endif %}
-                        <span><i class="bi bi-rulers"></i> {{ property.size }} m²</span>
-                    </div>
-                    <p class="text-muted small mb-3">
-                        <i class="bi bi-geo-alt"></i> {{ property.location }}
-                    </p>
-                    <a href="{% url 'properties:property_detail' property.slug %}" class="btn btn-primary w-100">View Details</a>
                 </div>
             </div>
+            {% empty %}
+            <div class="col-12 text-center py-5">
+                <i class="bi bi-inbox text-muted" style="font-size: 4rem;"></i>
+                <p class="text-muted mt-3">No properties found matching your criteria.</p>
+                <a href="{% url 'properties:property_list' %}" class="btn btn-b">{% translate_text "View All Properties" CURRENT_LANGUAGE_CODE %}</a>
+            </div>
+            {% endfor %}
         </div>
-        {% empty %}
-        <div class="col-12 text-center py-5">
-            <i class="bi bi-inbox text-muted" style="font-size: 4rem;"></i>
-            <p class="text-muted mt-3">No properties found matching your criteria.</p>
-            <a href="{% url 'properties:property_list' %}" class="btn btn-primary">View All Properties</a>
-        </div>
-        {% endfor %}
-    </div>
 
-    <!-- Pagination -->
-    {% if properties.has_other_pages %}
-    <nav aria-label="Page navigation" class="mt-4">
+        <!-- Pagination -->
+        {% if properties.has_other_pages %}
+        <nav aria-label="Page navigation" class="pagination-a">
         <ul class="pagination justify-content-center">
             {% if properties.has_previous %}
                 <li class="page-item">
@@ -236,9 +263,11 @@
                 </li>
             {% endif %}
         </ul>
-    </nav>
-    {% endif %}
-</div>
+        </nav>
+        {% endif %}
+    </div>
+</section>
+<!--/ Property Grid End /-->
 
 {% if view_mode == 'map' and GOOGLE_MAPS_API_KEY and properties_with_coords %}
 {% block extra_js %}

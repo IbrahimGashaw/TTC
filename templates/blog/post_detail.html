@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load translation_tags %}
+{% load i18n %}
 
 {% block title %}{{ post.title }} - Andromeda Properties{% endblock %}
 
@@ -9,9 +11,9 @@
         <div class="col-md-8">
             <nav aria-label="breadcrumb" class="mb-4">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{% url 'properties:home' %}">Home</a></li>
-                    <li class="breadcrumb-item"><a href="{% url 'blog:blog_list' %}">Blog</a></li>
-                    <li class="breadcrumb-item active">{{ post.title|truncatewords:5 }}</li>
+                    <li class="breadcrumb-item"><a href="{% url 'properties:home' %}">{% translate_text "Home" CURRENT_LANGUAGE_CODE %}</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'blog:blog_list' %}">{% translate_text "Blog" CURRENT_LANGUAGE_CODE %}</a></li>
+                    <li class="breadcrumb-item active">{{ post.title|translate:CURRENT_LANGUAGE_CODE|truncatewords:5 }}</li>
                 </ol>
             </nav>
 
@@ -19,13 +21,13 @@
                 {% if post.featured_image %}
                     <img src="{{ post.featured_image.url }}" class="img-fluid rounded mb-4" alt="{{ post.title }}">
                 {% endif %}
-                <h1 class="display-5 fw-bold mb-3">{{ post.title }}</h1>
+                <h1 class="display-5 fw-bold mb-3">{{ post.title|translate:CURRENT_LANGUAGE_CODE }}</h1>
                 <p class="text-muted mb-4">
                     <i class="bi bi-calendar"></i> {{ post.created_at|date:"F d, Y" }} | 
                     <i class="bi bi-person"></i> {{ post.author.get_full_name|default:post.author.username }}
                 </p>
                 <div class="content">
-                    {{ post.content|linebreaks }}
+                    {{ post.content|translate:CURRENT_LANGUAGE_CODE|linebreaks }}
                 </div>
             </article>
         </div>

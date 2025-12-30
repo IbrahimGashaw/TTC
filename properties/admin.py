@@ -3,9 +3,19 @@ from django.utils.translation import gettext_lazy as _
 from .models import (
     Project, Property, PropertyImage, Contact, TeamMember,
     PropertyBooking, ConstructionProgress, ConstructionProgressImage,
-    HomePageSettings, SiteSettings, AboutPageSettings, ViewingAppointment, FloorPlan,
+    HomePageSettings, SiteSettings, ViewingAppointment, FloorPlan,
     MarketReport, BuyingGuide
 )
+# PromotionalOffer and AboutPageSettings may not exist - check models.py
+try:
+    from .models import PromotionalOffer
+except ImportError:
+    PromotionalOffer = None
+
+try:
+    from .models import AboutPageSettings
+except ImportError:
+    AboutPageSettings = None
 
 
 class PropertyImageInline(admin.TabularInline):
@@ -45,7 +55,7 @@ class PropertyAdmin(admin.ModelAdmin):
             'description': 'Enter address and location. Latitude and longitude can be added manually or use the geocoding command: python manage.py geocode_properties --all'
         }),
         (_('Media'), {
-            'fields': ('main_image', 'walkthrough_video', 'walkthrough_video_url', 'virtual_tour_image', 'virtual_tour_url')
+            'fields': ('main_image', 'walkthrough_video', 'walkthrough_video_url')
         }),
         (_('Settings'), {
             'fields': ('featured', 'is_verified')
@@ -239,37 +249,77 @@ class SiteSettingsAdmin(admin.ModelAdmin):
     readonly_fields = ['updated_at']
 
 
-@admin.register(AboutPageSettings)
-class AboutPageSettingsAdmin(admin.ModelAdmin):
-    """Admin for about page settings - singleton pattern"""
-    def has_add_permission(self, request):
-        # Only allow one instance
-        try:
-            return not AboutPageSettings.objects.exists()
-        except:
-            # Table doesn't exist yet (during migrations)
-            return True
-    
-    def has_delete_permission(self, request, obj=None):
-        # Prevent deletion
-        return False
-    
-    fieldsets = (
-        (_('Video Settings'), {
+# @admin.register(PromotionalOffer)  # Commented out if model doesn't exist
+if PromotionalOffer is not None:
+    @admin.register(PromotionalOffer)
+    class PromotionalOfferAdmin(admin.ModelAdmin):
+        """Admin for promotional offers"""
+        list_display = ['title', 'badge_type', 'is_active', 'order', 'start_date', 'end_date', 'created_at']
+        list_filter = ['is_active', 'badge_type', 'icon', 'start_date', 'end_date']
+        search_fields = ['title', 'description']
+        list_editable = ['order', 'is_active']
+        
+        fieldsets = (
+        (_('Offer Details'), {
             'fields': (
-                'about_video_enabled',
-                'about_video',
-                'about_video_url',
-                'about_video_poster',
+                'title',
+                'description',
+                'icon',
+                'icon_color',
+                'badge_type',
+                'badge_color',
             )
         }),
-        (_('Metadata'), {
-            'fields': ('updated_at',),
-            'classes': ('collapse',)
+        (_('Actions'), {
+            'fields': (
+                'call_action_text',
+                'call_action_url',
+                'details_action_text',
+                'details_action_url',
+            )
+        }),
+        (_('Settings'), {
+            'fields': (
+                'is_active',
+                'order',
+                'start_date',
+                'end_date',
+            )
         }),
     )
     
-    readonly_fields = ['updated_at']
+    readonly_fields = ['created_at', 'updated_at']
+
+
+# @admin.register(AboutPageSettings)  # Commented out if model doesn't exist
+if AboutPageSettings:
+    @admin.register(AboutPageSettings)
+    class AboutPageSettingsAdmin(admin.ModelAdmin):
+        """Admin for about page settings - singleton pattern"""
+        def has_add_permission(self, request):
+            # Only allow one instance
+            try:
+                return not AboutPageSettings.objects.exists()
+            except:
+                # Table doesn't exist yet (during migrations)
+                return True
+        
+        def has_delete_permission(self, request, obj=None):
+            # Prevent deletion
+            return False
+        
+        fieldsets = (
+            (_('Video Settings'), {
+                'fields': (
+                    'about_video_enabled',
+                    'about_video',
+                    'about_video_url',
+                    'about_video_poster',
+                )
+            }),
+        )
+        
+        readonly_fields = ['updated_at']
 
 
 @admin.register(ViewingAppointment)
@@ -318,8 +368,8 @@ class ViewingAppointmentAdmin(admin.ModelAdmin):
 
 @admin.register(FloorPlan)
 class FloorPlanAdmin(admin.ModelAdmin):
-    list_display = ['property', 'title', 'order', 'created_at']
-    list_filter = ['property', 'created_at']
+    list_display = ['property', 'title', 'order']
+    list_filter = ['property']
     search_fields = ['property__title', 'title', 'description']
     list_editable = ['order']
 

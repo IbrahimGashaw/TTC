@@ -99,8 +99,8 @@ document.addEventListener('DOMContentLoaded', function() {
         observer.observe(card);
     });
 
-    // Material Dashboard - Navbar scroll effect
-    const navbar = document.querySelector('.navbar-custom');
+    // EstateAgency - Navbar scroll effect
+    const navbar = document.querySelector('.navbar-estateagency');
     if (navbar) {
         window.addEventListener('scroll', function() {
             const currentScroll = window.pageYOffset;
@@ -272,4 +272,146 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log('Restoring preferred language:', storedLang);
         }
     })();
+
+    // Promotional Offers Carousel Slider
+    const offersContainer = document.getElementById('offersSliderContainer');
+    const offersToggleBtn = document.getElementById('offersToggleBtn');
+    const offersCarouselCard = document.getElementById('offersCarouselCard');
+    const offersCloseBtn = document.getElementById('offersCloseBtn');
+    const offersBackdrop = document.getElementById('offersBackdrop');
+    const offersCarousel = document.getElementById('offersCarousel');
+    const offerItems = document.querySelectorAll('.offer-item');
+    const offerIndicators = document.querySelectorAll('.offers-indicator');
+    const offersActionBtns = document.querySelectorAll('.offers-action-btn');
+    
+    let currentSlide = 0;
+    let slideInterval = null;
+    const SLIDE_DURATION = 5000; // 5 seconds per slide
+    
+    // Function to open carousel
+    function openCarousel() {
+        if (offersCarouselCard) {
+            offersCarouselCard.classList.add('show');
+            if (offersToggleBtn) {
+                offersToggleBtn.classList.add('hidden');
+            }
+            startCarousel();
+            updateActionButtons(currentSlide);
+        }
+    }
+    
+    // Function to close carousel
+    function closeCarousel() {
+        if (offersCarouselCard) {
+            offersCarouselCard.classList.remove('show');
+            if (offersToggleBtn) {
+                offersToggleBtn.classList.remove('hidden');
+            }
+            stopCarousel();
+        }
+    }
+    
+    // Toggle offers carousel
+    if (offersToggleBtn && offersCarouselCard) {
+        offersToggleBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            openCarousel();
+        });
+        
+        // Close button
+        if (offersCloseBtn) {
+            offersCloseBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                closeCarousel();
+            });
+        }
+    }
+    
+    // Carousel functionality
+    function showSlide(index) {
+        if (offerItems.length === 0) return;
+        
+        // Reset all slides
+        offerItems.forEach(item => item.classList.remove('active'));
+        offerIndicators.forEach(indicator => indicator.classList.remove('active'));
+        
+        // Show current slide
+        currentSlide = index % offerItems.length;
+        if (offerItems[currentSlide]) {
+            offerItems[currentSlide].classList.add('active');
+        }
+        if (offerIndicators[currentSlide]) {
+            offerIndicators[currentSlide].classList.add('active');
+        }
+        
+        // Update action buttons
+        updateActionButtons(currentSlide);
+    }
+    
+    function nextSlide() {
+        showSlide(currentSlide + 1);
+    }
+    
+    function startCarousel() {
+        stopCarousel(); // Clear any existing interval
+        if (offerItems.length > 1) {
+            slideInterval = setInterval(nextSlide, SLIDE_DURATION);
+        }
+    }
+    
+    function stopCarousel() {
+        if (slideInterval) {
+            clearInterval(slideInterval);
+            slideInterval = null;
+        }
+    }
+    
+    // Indicator clicks
+    offerIndicators.forEach((indicator, index) => {
+        indicator.addEventListener('click', function() {
+            stopCarousel();
+            showSlide(index);
+            startCarousel();
+        });
+    });
+    
+    // Update action buttons based on current slide
+    function updateActionButtons(slideIndex) {
+        const offersActions = document.getElementById('offersActions');
+        if (!offersActions) return;
+        
+        // Hide all action button groups
+        const actionGroups = offersActions.querySelectorAll('.offer-actions-content');
+        actionGroups.forEach(group => group.classList.add('d-none'));
+        
+        // Show current slide's action buttons
+        const currentActionGroup = offersActions.querySelector(`[data-offer-index="${slideIndex}"]`);
+        if (currentActionGroup) {
+            currentActionGroup.classList.remove('d-none');
+        }
+    }
+    
+    // Initialize carousel if offers are available
+    if (offerItems.length > 0) {
+        showSlide(0);
+        // Auto-start carousel after a delay
+        setTimeout(function() {
+            if (offersCarouselCard && offersCarouselCard.classList.contains('show')) {
+                startCarousel();
+            }
+        }, 1000);
+    }
+    
+    // Pause carousel on hover
+    if (offersCarouselCard) {
+        offersCarouselCard.addEventListener('mouseenter', function() {
+            stopCarousel();
+        });
+        
+        offersCarouselCard.addEventListener('mouseleave', function() {
+            if (offersCarouselCard.classList.contains('show')) {
+                startCarousel();
+            }
+        });
+    }
 });

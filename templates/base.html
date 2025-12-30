@@ -1,5 +1,6 @@
 {% load static %}
 {% load i18n %}
+{% load translation_tags %}
 {% get_current_language as CURRENT_LANG %}
 <!DOCTYPE html>
 <html lang="{{ CURRENT_LANG }}">
@@ -17,107 +18,104 @@
     <noscript><link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"></noscript>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    <!-- Google Translate Widget -->
-    <script type="text/javascript">
-        function googleTranslateElementInit() {
-            new google.translate.TranslateElement({
-                pageLanguage: 'en',
-                includedLanguages: 'en,am,ar,fr',
-                layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
-                autoDisplay: false
-            }, 'google_translate_element');
-        }
-    </script>
-    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <link rel="stylesheet" href="{% static 'css/estateagency.css' %}">
     {% block extra_css %}{% endblock %}
 </head>
 <body>
-    <!-- Navigation - Material Dashboard Style -->
-    <nav class="navbar navbar-expand-lg navbar-light navbar-custom fixed-top">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="{% url 'properties:home' %}">
-                <i class="bi bi-building-fill"></i> <span style="display: inline-block; line-height: 1.2;">ANDROMEDA<br>PROPERTIES</span>
+    <!-- Navigation - EstateAgency Style -->
+    <nav class="navbar navbar-expand-lg navbar-light navbar-estateagency fixed-top">
+        <div class="container-fluid px-2">
+            <a class="navbar-brand-estateagency" href="{% url 'properties:home' %}">
+                <i class="bi bi-building-fill"></i>
+                <span class="logo-text">
+                    <span class="logo-line1">ANDROMEDA</span>
+                    <span class="logo-line2">PROPERTIES</span>
+                </span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'properties:home' %}">Home</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="projectsDropdown" role="button" data-bs-toggle="dropdown">
-                            Projects
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="{% url 'properties:property_list' %}">Properties Standard List</a></li>
-                            <li><a class="dropdown-item" href="{% url 'properties:property_list' %}?view=map">Properties With Map</a></li>
-                            <li><a class="dropdown-item" href="{% url 'properties:project_list' %}">Construction Update</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'properties:about' %}">About</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'blog:blog_list' %}">Blog</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="resourcesDropdown" role="button" data-bs-toggle="dropdown">
-                            {% trans "Resources" %}
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="{% url 'properties:market_report_list' %}">{% trans "Market Reports" %}</a></li>
-                            <li><a class="dropdown-item" href="{% url 'properties:buying_guide_list' %}">{% trans "Buying Guides" %}</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="teamDropdown" role="button" data-bs-toggle="dropdown">
-                            Our Team
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="{% url 'properties:team' %}">Sales Officers</a></li>
-                            <li><a class="dropdown-item" href="{% url 'properties:team' %}">Sales Agents</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'properties:contact' %}">Contact</a>
-                    </li>
-                    <li class="nav-item">
+                <div class="navbar-nav-wrapper w-100 d-flex align-items-center">
+                    <ul class="navbar-nav navbar-nav-estateagency flex-grow-1">
+                                <li class="nav-item">
+                                    <a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}" href="{% url 'properties:home' %}">{% translate_text "Home" CURRENT_LANGUAGE_CODE %}</a>
+                                </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="projectsDropdown" role="button" data-bs-toggle="dropdown">
+                                {% translate_text "Projects" CURRENT_LANGUAGE_CODE %}
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="{% url 'properties:property_list' %}">{% translate_text "Properties Standard List" CURRENT_LANGUAGE_CODE %}</a></li>
+                                <li><a class="dropdown-item" href="{% url 'properties:property_list' %}?view=map">{% translate_text "Properties With Map" CURRENT_LANGUAGE_CODE %}</a></li>
+                                <li><a class="dropdown-item" href="{% url 'properties:project_list' %}">{% translate_text "Construction Update" CURRENT_LANGUAGE_CODE %}</a></li>
+                            </ul>
+                        </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'properties:about' %}">{% translate_text "About" CURRENT_LANGUAGE_CODE %}</a>
+                                </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'blog:blog_list' %}">{% translate_text "Blog" CURRENT_LANGUAGE_CODE %}</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="resourcesDropdown" role="button" data-bs-toggle="dropdown">
+                                {% translate_text "Resources" CURRENT_LANGUAGE_CODE %}
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="{% url 'properties:market_report_list' %}">{% translate_text "Market Reports" CURRENT_LANGUAGE_CODE %}</a></li>
+                                <li><a class="dropdown-item" href="{% url 'properties:buying_guide_list' %}">{% translate_text "Buying Guides" CURRENT_LANGUAGE_CODE %}</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="teamDropdown" role="button" data-bs-toggle="dropdown">
+                                {% translate_text "Our Team" CURRENT_LANGUAGE_CODE %}
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="{% url 'properties:team' %}">{% translate_text "Sales Officers" CURRENT_LANGUAGE_CODE %}</a></li>
+                                <li><a class="dropdown-item" href="{% url 'properties:team' %}">{% translate_text "Sales Agents" CURRENT_LANGUAGE_CODE %}</a></li>
+                            </ul>
+                        </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'properties:contact' %}">{% translate_text "Contact" CURRENT_LANGUAGE_CODE %}</a>
+                                </li>
                         {% if user.is_staff %}
-                        <a class="nav-link" href="{% url 'admin:index' %}">Admin</a>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'admin:index' %}">{% translate_text "Admin" CURRENT_LANGUAGE_CODE %}</a>
+                        </li>
                         {% endif %}
-                    </li>
-                </ul>
-                <div class="d-flex align-items-center">
-                    <!-- Google Translate Widget -->
-                    <div id="google_translate_element" class="me-3"></div>
+                    </ul>
+                    <div class="navbar-actions d-flex align-items-center ms-3">
                     <!-- Language Switcher -->
-                    <form action="{% url 'custom_set_language' %}" method="post" class="me-3" id="language-form">
-                        {% csrf_token %}
-                        {% get_current_language as CURRENT_LANGUAGE_CODE %}
-                        {% get_available_languages as LANGUAGES %}
-                        {% comment %}Always pass path without language prefix - Django will add correct prefix{% endcomment %}
-                        <input name="next" type="hidden" id="language-next" value="" />
-                        <select name="language" id="language-select" class="form-select form-select-sm" onchange="document.getElementById('language-form').submit();">
-                            {% for lang_code, lang_name in LANGUAGES %}
-                                <option value="{{ lang_code }}" {% if lang_code == CURRENT_LANGUAGE_CODE %}selected{% endif %}>
-                                    {{ lang_name }}
-                                </option>
-                            {% endfor %}
-                        </select>
-                    </form>
+                    <div class="language-switcher-wrapper">
+                        <form action="{% url 'custom_set_language' %}" method="post" id="language-form" class="language-form">
+                            {% csrf_token %}
+                            {% get_current_language as CURRENT_LANGUAGE_CODE %}
+                            {% get_available_languages as LANGUAGES %}
+                            <input name="next" type="hidden" id="language-next" value="" />
+                            <div class="language-select-wrapper">
+                                <i class="bi bi-globe me-2"></i>
+                                <select name="language" id="language-select" class="form-select form-select-sm language-select" onchange="document.getElementById('language-form').submit();">
+                                    {% for lang_code, lang_name in LANGUAGES %}
+                                        <option value="{{ lang_code }}" {% if lang_code == CURRENT_LANGUAGE_CODE %}selected{% endif %}>
+                                            {{ lang_name }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </form>
+                    </div>
                     {% if user.is_authenticated %}
-                        <span class="text-secondary me-3">Welcome, {{ user.username }}</span>
-                        <a href="{% url 'properties:my_bookings' %}" class="btn btn-outline-primary btn-sm me-2">My Bookings</a>
+                        <span class="text-secondary me-3">{% translate_text "Welcome" CURRENT_LANGUAGE_CODE %}, {{ user.username }}</span>
+                        <a href="{% url 'properties:my_bookings' %}" class="btn btn-outline-primary btn-sm me-2">{% translate_text "My Bookings" CURRENT_LANGUAGE_CODE %}</a>
                         <form method="post" action="{% url 'accounts:logout' %}" class="d-inline">
                             {% csrf_token %}
-                            <button type="submit" class="btn btn-outline-primary">Logout</button>
+                            <button type="submit" class="btn btn-outline-primary">{% translate_text "Logout" CURRENT_LANGUAGE_CODE %}</button>
                         </form>
                     {% else %}
-                        <a href="{% url 'accounts:login' %}" class="btn btn-outline-primary me-2">Login</a>
-                        <a href="{% url 'accounts:register' %}" class="btn btn-primary">Register</a>
+                        <a href="{% url 'accounts:login' %}" class="btn btn-outline-primary me-2">{% translate_text "Login" CURRENT_LANGUAGE_CODE %}</a>
+                        <a href="{% url 'accounts:register' %}" class="btn btn-primary">{% translate_text "Register" CURRENT_LANGUAGE_CODE %}</a>
                     {% endif %}
+                    </div>
                 </div>
             </div>
         </div>
@@ -141,40 +139,160 @@
         {% block content %}{% endblock %}
     </main>
 
-    <!-- Footer - Material Dashboard Style -->
-    <footer class="text-light py-5 mt-5">
+    <!-- Footer - EstateAgency Style -->
+    <footer class="footer-estateagency">
         <div class="container">
             <div class="row">
-                <div class="col-md-4 mb-4">
-                    <h5>Andromeda Properties / Andromeda Real Estate</h5>
-                    <p>Andromeda Properties / Andromeda Real Estate becoming the best real estate developer in Addis Ababa, Ethiopia. Andromeda Properties / Andromeda Real Estate is one of the top real estate high quality developers in Addis Ababa, Ethiopia.</p>
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <h5>Andromeda Properties</h5>
+                    <p>Andromeda Properties is becoming the best real estate developer in Addis Ababa, Ethiopia. We are one of the top real estate high quality developers in Addis Ababa, Ethiopia.</p>
+                    <div class="d-flex gap-3 mt-3">
+                        <a href="#" class="text-light"><i class="bi bi-facebook fs-5"></i></a>
+                        <a href="#" class="text-light"><i class="bi bi-youtube fs-5"></i></a>
+                        <a href="#" class="text-light"><i class="bi bi-instagram fs-5"></i></a>
+                        <a href="#" class="text-light"><i class="bi bi-linkedin fs-5"></i></a>
+                        <a href="#" class="text-light"><i class="bi bi-telegram fs-5"></i></a>
+                    </div>
                 </div>
-                <div class="col-md-4 mb-4">
-                    <h5>CONTACT</h5>
-                    <p>
-                        <i class="bi bi-telephone"></i> Hotline - 6033<br>
-                        <i class="bi bi-phone"></i> +251975666699<br>
-                        <i class="bi bi-envelope"></i> info@andromedaproperties.com<br>
-                        <i class="bi bi-geo-alt"></i> Sarbet to Kera Road, Woldemaryam Building
-                    </p>
-                </div>
-                <div class="col-md-4 mb-4">
-                    <h5>QUICK LINKS</h5>
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h5>{% translate_text "Quick Links" CURRENT_LANGUAGE_CODE %}</h5>
                     <ul class="list-unstyled">
-                        <li><a href="#" class="text-light text-decoration-none"><i class="bi bi-facebook"></i> Facebook</a></li>
-                        <li><a href="#" class="text-light text-decoration-none"><i class="bi bi-youtube"></i> YouTube</a></li>
-                        <li><a href="#" class="text-light text-decoration-none"><i class="bi bi-instagram"></i> Instagram</a></li>
-                        <li><a href="#" class="text-light text-decoration-none"><i class="bi bi-linkedin"></i> LinkedIn</a></li>
-                        <li><a href="#" class="text-light text-decoration-none"><i class="bi bi-telegram"></i> Telegram</a></li>
+                        <li class="mb-2"><a href="{% url 'properties:home' %}">{% translate_text "Home" CURRENT_LANGUAGE_CODE %}</a></li>
+                        <li class="mb-2"><a href="{% url 'properties:property_list' %}">{% translate_text "Properties" CURRENT_LANGUAGE_CODE %}</a></li>
+                        <li class="mb-2"><a href="{% url 'properties:about' %}">{% translate_text "About Us" CURRENT_LANGUAGE_CODE %}</a></li>
+                        <li class="mb-2"><a href="{% url 'properties:contact' %}">{% translate_text "Contact" CURRENT_LANGUAGE_CODE %}</a></li>
+                        <li class="mb-2"><a href="{% url 'blog:blog_list' %}">{% translate_text "Blog" CURRENT_LANGUAGE_CODE %}</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <h5>{% translate_text "Resources" CURRENT_LANGUAGE_CODE %}</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="{% url 'properties:market_report_list' %}">{% translate_text "Market Reports" CURRENT_LANGUAGE_CODE %}</a></li>
+                        <li class="mb-2"><a href="{% url 'properties:buying_guide_list' %}">{% translate_text "Buying Guides" CURRENT_LANGUAGE_CODE %}</a></li>
+                        <li class="mb-2"><a href="{% url 'properties:project_list' %}">{% translate_text "Projects" CURRENT_LANGUAGE_CODE %}</a></li>
+                        <li class="mb-2"><a href="{% url 'properties:team' %}">{% translate_text "Our Team" CURRENT_LANGUAGE_CODE %}</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <h5>{% translate_text "Contact Us" CURRENT_LANGUAGE_CODE %}</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <i class="bi bi-telephone me-2"></i> Hotline - 6033
+                        </li>
+                        <li class="mb-2">
+                            <i class="bi bi-phone me-2"></i> +251913677468
+                        </li>
+                        <li class="mb-2">
+                            <i class="bi bi-envelope me-2"></i> info@andromedaproperties.com
+                        </li>
+                        <li class="mb-2">
+                            <i class="bi bi-geo-alt me-2"></i> Sarbet to Kera Road, Woldemaryam Building
+                        </li>
                     </ul>
                 </div>
             </div>
-            <hr class="bg-light">
-            <div class="text-center">
-                <p>&copy; 2025 Andromeda Properties. All rights reserved.</p>
+            <div class="footer-bottom">
+                <p class="mb-0">&copy; 2025 Andromeda Properties. All rights reserved.</p>
             </div>
         </div>
     </footer>
+
+    <!-- Promotional Offers Floating Slider -->
+    {% if promotional_offers %}
+        <div class="offers-slider-container" id="offersSliderContainer">
+            <!-- Floating Offers Button -->
+            <button class="offers-toggle-btn" id="offersToggleBtn" aria-label="{% trans 'View Offers' %}">
+                <div class="offers-icon-wrapper">
+                    <i class="bi bi-stars"></i>
+                </div>
+                <span class="offers-btn-text">{% trans 'Offers' %}</span>
+            </button>
+            
+            <!-- Offers Carousel Card -->
+            <div class="offers-carousel-card" id="offersCarouselCard">
+                <!-- Header -->
+                <div class="offers-header">
+                    <div class="offers-header-left">
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-gift-fill offers-confetti-icon"></i>
+                        <span class="offers-header-title">{% trans 'Limited Time Offers' %}</span>
+                    </div>
+                    <button class="offers-close-btn" id="offersCloseBtn" aria-label="{% trans 'Close' %}">
+                        <i class="bi bi-chevron-right"></i>
+                    </button>
+                </div>
+                
+                <!-- Offers Carousel -->
+                <div class="offers-carousel" id="offersCarousel">
+                    {% for offer in promotional_offers %}
+                        <div class="offer-item {% if forloop.first %}active{% endif %}">
+                            <div class="offer-content">
+                                <div class="offer-icon-wrapper bg-{{ offer.icon_color }}">
+                                    {% if offer.icon == 'target' %}
+                                        <i class="bi bi-bullseye"></i>
+                                    {% elif offer.icon == 'money' %}
+                                        <i class="bi bi-bag-fill"></i>
+                                    {% elif offer.icon == 'gift' %}
+                                        <i class="bi bi-gift-fill"></i>
+                                    {% elif offer.icon == 'star' %}
+                                        <i class="bi bi-star-fill"></i>
+                                    {% elif offer.icon == 'tag' %}
+                                        <i class="bi bi-tag-fill"></i>
+                                    {% endif %}
+                                </div>
+                                <div class="offer-text">
+                                    <h4 class="offer-title">{{ offer.title }}</h4>
+                                    <p class="offer-description">{{ offer.description }}</p>
+                                </div>
+                                <span class="offer-badge badge bg-{{ offer.badge_color }}">
+                                    {% if offer.badge_type == 'hot_deal' %}{% trans 'Hot Deal' %}
+                                    {% elif offer.badge_type == 'new' %}{% trans 'New' %}
+                                    {% elif offer.badge_type == 'limited' %}{% trans 'Limited' %}
+                                    {% elif offer.badge_type == 'sale' %}{% trans 'Sale' %}
+                                    {% endif %}
+                                </span>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                
+                <!-- Action Buttons -->
+                <div class="offers-actions" id="offersActions">
+                    {% for offer in promotional_offers %}
+                        <div class="offer-actions-content {% if not forloop.first %}d-none{% endif %}" data-offer-index="{{ forloop.counter0 }}">
+                            {% if offer.call_action_url %}
+                                <a href="{{ offer.get_call_url }}" class="btn btn-primary offers-action-btn" data-action-type="call">
+                                    <i class="bi bi-telephone-fill"></i> {{ offer.call_action_text }}
+                                </a>
+                            {% endif %}
+                            {% if offer.details_action_url %}
+                                <a href="{{ offer.details_action_url }}" class="btn btn-outline-primary offers-action-btn" data-action-type="details">
+                                    <i class="bi bi-chat-dots"></i> {{ offer.details_action_text }}
+                                </a>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+                
+                <!-- Carousel Indicators -->
+                {% if promotional_offers|length > 1 %}
+                    <div class="offers-indicators">
+                        {% for offer in promotional_offers %}
+                            <button class="offers-indicator {% if forloop.first %}active{% endif %}" 
+                                    data-slide="{{ forloop.counter0 }}" 
+                                    aria-label="{% trans 'Go to offer' %} {{ forloop.counter }}"></button>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                
+                <!-- Footer -->
+                <div class="offers-footer">
+                    <i class="bi bi-clock"></i>
+                    <small>{% trans 'Limited time offers available' %}</small>
+                </div>
+            </div>
+        </div>
+    {% endif %}
 
     <!-- WhatsApp Floating Button -->
     {% load property_tags %}
@@ -194,6 +312,19 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{% static 'js/main.js' %}"></script>
+    <script>
+        // Set the current page URL for language switching
+        document.addEventListener('DOMContentLoaded', function() {
+            const languageNextInput = document.getElementById('language-next');
+            if (languageNextInput) {
+                // Get current path without language prefix
+                const currentPath = window.location.pathname;
+                // Remove language prefix if present (e.g., /en/, /am/)
+                const pathWithoutLang = currentPath.replace(/^\/(en|am|ar|fr)\//, '/');
+                languageNextInput.value = pathWithoutLang || '/';
+            }
+        });
+    </script>
     {% block extra_js %}{% endblock %}
 </body>
 </html>

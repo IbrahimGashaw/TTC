@@ -1,0 +1,1005 @@
+/* EstateAgency-Inspired Modern Real Estate Template Styles */
+
+/* ============================================
+   Color Scheme - EstateAgency Inspired
+   ============================================ */
+:root {
+    --primary-color: #2c3e50;
+    --secondary-color: #3498db;
+    --accent-color: #e74c3c;
+    --success-color: #27ae60;
+    --dark-color: #1a252f;
+    --light-color: #ecf0f1;
+    --text-dark: #2c3e50;
+    --text-light: #7f8c8d;
+    --border-color: #e0e0e0;
+    --shadow-sm: 0 2px 4px rgba(0,0,0,0.1);
+    --shadow-md: 0 4px 8px rgba(0,0,0,0.15);
+    --shadow-lg: 0 8px 16px rgba(0,0,0,0.2);
+}
+
+/* ============================================
+   Typography
+   ============================================ */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: var(--text-dark);
+    line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 1rem;
+}
+
+/* ============================================
+   Navigation - EstateAgency Style
+   ============================================ */
+.navbar-estateagency {
+    background: #fff !important;
+    box-shadow: var(--shadow-sm);
+    padding: 1rem 0;
+    transition: all 0.3s ease;
+}
+
+.navbar-estateagency.scrolled {
+    box-shadow: var(--shadow-md);
+    padding: 0.5rem 0;
+}
+
+.navbar-brand-estateagency {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--primary-color) !important;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding-left: 0 !important;
+    margin-left: 0 !important;
+    flex-shrink: 0;
+}
+
+.navbar-brand-estateagency i {
+    font-size: 1.5rem;
+    color: var(--secondary-color);
+}
+
+.navbar-brand-estateagency .logo-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+    font-size: 1.1rem;
+}
+
+.navbar-brand-estateagency .logo-line1,
+.navbar-brand-estateagency .logo-line2 {
+    display: block;
+    font-size: 1.1rem;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar-estateagency .container,
+.navbar-estateagency .container-fluid {
+    padding-left: 0 !important;
+    padding-right: 15px;
+    margin-left: 0 !important;
+}
+
+.navbar-estateagency {
+    padding-left: 0 !important;
+    margin-left: 0 !important;
+}
+
+.navbar-estateagency .container {
+    padding-left: 0 !important;
+    padding-right: 15px;
+}
+
+.navbar-estateagency {
+    padding-left: 0 !important;
+}
+
+.navbar-nav-wrapper {
+    padding-left: 0;
+}
+
+.navbar-nav-estateagency {
+    padding-left: 0;
+}
+
+.navbar-nav-wrapper {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.navbar-nav-estateagency {
+    display: flex;
+    flex-grow: 1;
+    justify-content: flex-start;
+    gap: 0.75rem;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.navbar-nav-estateagency .nav-item {
+    flex: 0 0 auto;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.navbar-nav-estateagency .nav-link {
+    color: var(--text-dark) !important;
+    font-weight: 500;
+    padding: 0.5rem 0.5rem !important;
+    transition: color 0.3s ease;
+    position: relative;
+    white-space: nowrap;
+    margin: 0 !important;
+    display: block;
+}
+
+/* Override Bootstrap defaults that add spacing */
+.navbar-nav-estateagency.navbar-nav .nav-item {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.navbar-nav-estateagency.navbar-nav .nav-link {
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+}
+
+.navbar-actions {
+    flex-shrink: 0;
+    margin-left: 2rem;
+}
+
+/* Language Switcher Styles */
+.language-switcher-wrapper {
+    display: flex;
+    align-items: center;
+}
+
+.language-form {
+    margin: 0;
+}
+
+.language-select-wrapper {
+    display: flex;
+    align-items: center;
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    padding: 0.25rem 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.language-select-wrapper:hover {
+    background: #e9ecef;
+    border-color: var(--secondary-color);
+}
+
+.language-select-wrapper i {
+    color: var(--secondary-color);
+    font-size: 1rem;
+}
+
+.language-select {
+    border: none !important;
+    background: transparent !important;
+    padding: 0.25rem 0.5rem !important;
+    font-size: 0.875rem !important;
+    color: var(--text-dark) !important;
+    cursor: pointer;
+    min-width: 100px;
+}
+
+.language-select:focus {
+    box-shadow: none !important;
+    border: none !important;
+    outline: none !important;
+}
+
+.language-select option {
+    padding: 0.5rem;
+}
+
+@media (max-width: 991px) {
+    .navbar-nav-wrapper {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .navbar-nav-estateagency {
+        flex-direction: column;
+        width: 100%;
+        justify-content: flex-start;
+    }
+    
+    .navbar-actions {
+        margin-left: 0;
+        margin-top: 1rem;
+        width: 100%;
+    }
+}
+
+.navbar-nav-estateagency .nav-link:hover,
+.navbar-nav-estateagency .nav-link.active {
+    color: var(--secondary-color) !important;
+}
+
+.navbar-nav-estateagency .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0.5rem;
+    right: 0.5rem;
+    height: 2px;
+    background: var(--secondary-color);
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+
+.navbar-nav-estateagency .nav-link:hover::after,
+.navbar-nav-estateagency .nav-link.active::after {
+    transform: scaleX(1);
+}
+
+/* ============================================
+   Hero Section - EstateAgency Style
+   ============================================ */
+.hero-estateagency {
+    position: relative;
+    min-height: 600px;
+    display: flex;
+    align-items: center;
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--dark-color) 100%);
+    overflow: hidden;
+}
+
+.hero-estateagency::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 1;
+}
+
+.hero-estateagency video,
+.hero-estateagency .hero-bg-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    z-index: 0;
+}
+
+.hero-content-estateagency {
+    position: relative;
+    z-index: 2;
+    color: #fff;
+    text-align: center;
+    padding: 3rem 0;
+}
+
+.hero-content-estateagency h1 {
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.hero-content-estateagency h2 {
+    font-size: 2rem;
+    font-weight: 400;
+    color: #fff;
+    margin-bottom: 1.5rem;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+}
+
+.hero-content-estateagency p {
+    font-size: 1.25rem;
+    margin-bottom: 2rem;
+    color: rgba(255,255,255,0.9);
+}
+
+.btn-hero-estateagency {
+    background: var(--secondary-color);
+    color: #fff;
+    padding: 1rem 2.5rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-md);
+}
+
+.btn-hero-estateagency:hover {
+    background: #2980b9;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+    color: #fff;
+}
+
+/* ============================================
+   Search Form - EstateAgency Style
+   ============================================ */
+.search-form-estateagency {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: var(--shadow-lg);
+    margin-top: -80px;
+    position: relative;
+    z-index: 10;
+}
+
+.search-form-estateagency .form-control,
+.search-form-estateagency .form-select {
+    border: 2px solid var(--border-color);
+    border-radius: 5px;
+    padding: 0.75rem 1rem;
+    transition: all 0.3s ease;
+}
+
+.search-form-estateagency .form-control:focus,
+.search-form-estateagency .form-select:focus {
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+}
+
+.search-form-estateagency .btn-search {
+    background: var(--secondary-color);
+    color: #fff;
+    padding: 0.75rem 2rem;
+    border: none;
+    border-radius: 5px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+.search-form-estateagency .btn-search:hover {
+    background: #2980b9;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+/* ============================================
+   Property Cards - EstateAgency Style
+   ============================================ */
+.property-card-estateagency {
+    border: none;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.3s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.property-card-estateagency:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+}
+
+.property-card-estateagency .card-img-wrapper {
+    position: relative;
+    overflow: hidden;
+    height: 250px;
+}
+
+.property-card-estateagency .card-img-top {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.property-card-estateagency:hover .card-img-top {
+    transform: scale(1.1);
+}
+
+.property-card-estateagency .property-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: var(--accent-color);
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    z-index: 2;
+}
+
+.property-card-estateagency .property-price {
+    position: absolute;
+    bottom: 15px;
+    left: 15px;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 0.75rem 1.25rem;
+    border-radius: 5px;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    z-index: 2;
+}
+
+.property-card-estateagency .card-body {
+    padding: 1.5rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.property-card-estateagency .card-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 0.75rem;
+}
+
+.property-card-estateagency .property-location {
+    color: var(--text-light);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.property-card-estateagency .property-features {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.property-card-estateagency .property-feature {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-light);
+    font-size: 0.9rem;
+}
+
+.property-card-estateagency .card-footer {
+    background: transparent;
+    border: none;
+    padding: 0;
+    margin-top: auto;
+}
+
+.property-card-estateagency .btn-view-details {
+    width: 100%;
+    background: var(--secondary-color);
+    color: #fff;
+    border: none;
+    padding: 0.75rem;
+    border-radius: 5px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.property-card-estateagency .btn-view-details:hover {
+    background: #2980b9;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    color: #fff;
+}
+
+/* ============================================
+   Section Headings - EstateAgency Style
+   ============================================ */
+.section-heading-estateagency {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.section-heading-estateagency h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 1rem;
+    position: relative;
+    display: inline-block;
+}
+
+.section-heading-estateagency h2::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 4px;
+    background: var(--secondary-color);
+    border-radius: 2px;
+}
+
+.section-heading-estateagency p {
+    color: var(--text-light);
+    font-size: 1.1rem;
+    margin-top: 1.5rem;
+}
+
+/* ============================================
+   Footer - EstateAgency Style
+   ============================================ */
+.footer-estateagency {
+    background: var(--dark-color);
+    color: #fff;
+    padding: 4rem 0 2rem;
+    margin-top: 4rem;
+}
+
+.footer-estateagency h5 {
+    color: #fff;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    font-size: 1.25rem;
+}
+
+.footer-estateagency p,
+.footer-estateagency a {
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-estateagency a:hover {
+    color: var(--secondary-color);
+}
+
+.footer-estateagency .footer-bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin-top: 3rem;
+    padding-top: 2rem;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* ============================================
+   Buttons - EstateAgency Style
+   ============================================ */
+.btn-estateagency-primary {
+    background: var(--secondary-color);
+    color: #fff;
+    border: none;
+    padding: 0.75rem 2rem;
+    border-radius: 5px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-estateagency-primary:hover {
+    background: #2980b9;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    color: #fff;
+}
+
+.btn-estateagency-outline {
+    background: transparent;
+    color: var(--secondary-color);
+    border: 2px solid var(--secondary-color);
+    padding: 0.75rem 2rem;
+    border-radius: 5px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-estateagency-outline:hover {
+    background: var(--secondary-color);
+    color: #fff;
+    transform: translateY(-2px);
+}
+
+/* ============================================
+   Utilities
+   ============================================ */
+.section-padding {
+    padding: 5rem 0;
+}
+
+.bg-light-section {
+    background: #f8f9fa;
+}
+
+/* ============================================
+   Statistics Section
+   ============================================ */
+.stats-section-estateagency {
+    background: var(--primary-color);
+    color: #fff;
+    padding: 4rem 0;
+}
+
+.stats-section-estateagency h3 {
+    font-size: 3rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 0.5rem;
+}
+
+.stats-section-estateagency p {
+    font-size: 1.25rem;
+    color: rgba(255, 255, 255, 0.9);
+    margin: 0;
+}
+
+/* ============================================
+   Intro Single Section (Breadcrumb Header)
+   ============================================ */
+.intro-single {
+    padding: 3rem 0;
+    background: #f8f9fa;
+}
+
+.title-single-box {
+    margin-bottom: 0;
+}
+
+.title-single {
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 0.5rem;
+}
+
+.color-text-a {
+    color: var(--text-light);
+    font-size: 1rem;
+}
+
+.breadcrumb-box {
+    padding-top: 0.5rem;
+}
+
+.breadcrumb {
+    background: transparent;
+    padding: 0;
+    margin: 0;
+}
+
+.breadcrumb-item a {
+    color: var(--text-light);
+    text-decoration: none;
+}
+
+.breadcrumb-item.active {
+    color: var(--text-dark);
+}
+
+/* ============================================
+   Property Grid - EstateAgency Style
+   ============================================ */
+.property-grid {
+    padding: 3rem 0;
+}
+
+.card-box-a {
+    position: relative;
+    margin-bottom: 2rem;
+    overflow: hidden;
+    border-radius: 0;
+    transition: all 0.3s ease;
+}
+
+.card-shadow {
+    box-shadow: var(--shadow-sm);
+}
+
+.card-box-a:hover {
+    box-shadow: var(--shadow-lg);
+}
+
+.card-box-a .img-box-a {
+    position: relative;
+    overflow: hidden;
+    height: 300px;
+}
+
+.card-box-a .img-a {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.card-box-a:hover .img-a {
+    transform: scale(1.1);
+}
+
+.card-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(44, 62, 80, 0.8);
+    opacity: 0;
+    transition: all 0.5s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.card-box-a:hover .card-overlay {
+    opacity: 1;
+}
+
+.card-overlay-a-content {
+    padding: 2rem;
+    text-align: center;
+    color: #fff;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.card-header-a {
+    margin-bottom: 1.5rem;
+}
+
+.card-title-a {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 0;
+}
+
+.card-title-a a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.card-body-a {
+    margin-bottom: 1.5rem;
+}
+
+.price-box {
+    justify-content: center;
+    margin-bottom: 1rem;
+}
+
+.price-a {
+    color: #fff;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.link-a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: color 0.3s ease;
+}
+
+.link-a:hover {
+    color: var(--secondary-color);
+}
+
+.card-footer-a {
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    padding-top: 1.5rem;
+    margin-top: auto;
+}
+
+.card-info {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.card-info li {
+    text-align: center;
+}
+
+.card-info-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 0.25rem;
+}
+
+.card-info span {
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+/* ============================================
+   Pagination - EstateAgency Style
+   ============================================ */
+.pagination-a {
+    margin-top: 3rem;
+}
+
+.pagination-a .pagination {
+    justify-content: center;
+    margin: 0;
+}
+
+.pagination-a .page-item {
+    margin: 0 0.25rem;
+}
+
+.pagination-a .page-link {
+    color: var(--text-dark);
+    border: 1px solid var(--border-color);
+    padding: 0.5rem 1rem;
+    border-radius: 0;
+    transition: all 0.3s ease;
+}
+
+.pagination-a .page-link:hover {
+    background: var(--secondary-color);
+    color: #fff;
+    border-color: var(--secondary-color);
+}
+
+.pagination-a .page-item.active .page-link {
+    background: var(--secondary-color);
+    color: #fff;
+    border-color: var(--secondary-color);
+}
+
+/* ============================================
+   Property Detail Page Styles
+   ============================================ */
+.property-single {
+    padding: 3rem 0;
+}
+
+.property-single .section-header {
+    margin-bottom: 2rem;
+}
+
+.property-single .property-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 1rem;
+}
+
+.property-single .property-price {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--secondary-color);
+    margin-bottom: 1rem;
+}
+
+.property-single .property-location {
+    color: var(--text-light);
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+}
+
+.property-single .property-details-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.property-single .property-details-list li {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+}
+
+.property-single .property-details-list li:last-child {
+    border-bottom: none;
+}
+
+.property-single .property-details-label {
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.property-single .property-details-value {
+    color: var(--text-light);
+}
+
+/* ============================================
+   Buttons - EstateAgency Style (btn-b, btn-b-n)
+   ============================================ */
+.btn-b,
+.btn-b-n {
+    background: var(--secondary-color);
+    color: #fff;
+    border: none;
+    padding: 0.75rem 2rem;
+    border-radius: 0;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-b:hover,
+.btn-b-n:hover {
+    background: #2980b9;
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.btn-b-n {
+    background: transparent;
+    color: var(--text-dark);
+    border: 2px solid var(--border-color);
+}
+
+.btn-b-n:hover {
+    background: var(--secondary-color);
+    color: #fff;
+    border-color: var(--secondary-color);
+}
+
+.btn-b-n.active {
+    background: var(--secondary-color);
+    color: #fff;
+    border-color: var(--secondary-color);
+}
+
+/* ============================================
+   Responsive
+   ============================================ */
+@media (max-width: 768px) {
+    .hero-content-estateagency h1 {
+        font-size: 2.5rem;
+    }
+    
+    .hero-content-estateagency h2 {
+        font-size: 1.5rem;
+    }
+    
+    .search-form-estateagency {
+        margin-top: -40px;
+        padding: 1.5rem;
+    }
+    
+    .section-heading-estateagency h2 {
+        font-size: 2rem;
+    }
+    
+    .stats-section-estateagency h3 {
+        font-size: 2.5rem;
+    }
+    
+    .card-box-a .img-box-a {
+        height: 250px;
+    }
+    
+    .card-overlay-a-content {
+        padding: 1.5rem;
+    }
+    
+    .card-title-a {
+        font-size: 1.25rem;
+    }
+    
+    .property-single .property-title {
+        font-size: 2rem;
+    }
+}
+

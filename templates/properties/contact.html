@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load translation_tags %}
+{% load i18n %}
 
 {% block title %}Contact Us - Andromeda Properties{% endblock %}
 
@@ -7,8 +9,8 @@
 <div class="container mt-5 pt-4">
     <div class="row mb-5">
         <div class="col-12 text-center">
-            <h1 class="display-4 fw-bold mb-4">Contact Us</h1>
-            <p class="lead text-muted">In need of support? Get in touch!</p>
+            <h1 class="display-4 fw-bold mb-4">{% translate_text "Contact Us" CURRENT_LANGUAGE_CODE %}</h1>
+            <p class="lead text-muted">{% translate_text "In need of support? Get in touch!" CURRENT_LANGUAGE_CODE %}</p>
         </div>
     </div>
 
@@ -16,19 +18,19 @@
         <div class="col-md-8 mb-4">
             <div class="card shadow-sm">
                 <div class="card-body p-4">
-                    <h3 class="mb-4">Send us a message</h3>
+                    <h3 class="mb-4">{% translate_text "Send us a message" CURRENT_LANGUAGE_CODE %}</h3>
                     <form method="post">
                         {% csrf_token %}
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label class="form-label required">Name</label>
+                                <label class="form-label required">{% translate_text "Name" CURRENT_LANGUAGE_CODE %}</label>
                                 {{ form.name }}
                                 {% if form.name.errors %}
                                     <div class="invalid-feedback d-block">{{ form.name.errors|first }}</div>
                                 {% endif %}
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label class="form-label">Last Name</label>
+                                <label class="form-label">{% translate_text "Last Name" CURRENT_LANGUAGE_CODE %}</label>
                                 {{ form.last_name }}
                                 {% if form.last_name.errors %}
                                     <div class="invalid-feedback d-block">{{ form.last_name.errors|first }}</div>
@@ -36,14 +38,14 @@
                             </div>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label required">Email</label>
+                            <label class="form-label required">{% translate_text "Email" CURRENT_LANGUAGE_CODE %}</label>
                             {{ form.email }}
                             {% if form.email.errors %}
                                 <div class="invalid-feedback d-block">{{ form.email.errors|first }}</div>
                             {% endif %}
                         </div>
                         <div class="mb-3">
-                            <label class="form-label required">Message</label>
+                            <label class="form-label required">{% translate_text "Message" CURRENT_LANGUAGE_CODE %}</label>
                             {{ form.message }}
                             {% if form.message.errors %}
                                 <div class="invalid-feedback d-block">{{ form.message.errors|first }}</div>
@@ -52,11 +54,11 @@
                         <div class="mb-3 form-check">
                             <input type="checkbox" class="form-check-input" id="gdpr" name="gdpr" required>
                             <label class="form-check-label" for="gdpr">
-                                I consent to the GDPR Terms
+                                {% translate_text "I consent to the GDPR Terms" CURRENT_LANGUAGE_CODE %}
                             </label>
                         </div>
                         <button type="submit" class="btn btn-primary btn-lg">
-                            <i class="bi bi-send"></i> Send Email
+                            <i class="bi bi-send"></i> {% translate_text "Send Email" CURRENT_LANGUAGE_CODE %}
                         </button>
                     </form>
                 </div>
@@ -66,7 +68,7 @@
         <div class="col-md-4">
             <div class="card shadow-sm">
                 <div class="card-body">
-                    <h4 class="mb-4">Contact Information</h4>
+                    <h4 class="mb-4">{% translate_text "Contact Information" CURRENT_LANGUAGE_CODE %}</h4>
                     <div class="mb-3">
                         <p class="mb-1"><strong>Hotline</strong></p>
                         <p class="mb-0"><i class="bi bi-telephone"></i> 6033</p>
@@ -76,15 +78,15 @@
                         <p class="mb-0"><i class="bi bi-phone"></i> +251975666699</p>
                     </div>
                     <div class="mb-3">
-                        <p class="mb-1"><strong>Email</strong></p>
+                        <p class="mb-1"><strong>{% translate_text "Email" CURRENT_LANGUAGE_CODE %}</strong></p>
                         <p class="mb-0"><i class="bi bi-envelope"></i> info@andromedaproperties.com</p>
                     </div>
                     <div class="mb-3">
-                        <p class="mb-1"><strong>Address</strong></p>
+                        <p class="mb-1"><strong>{% translate_text "Address" CURRENT_LANGUAGE_CODE %}</strong></p>
                         <p class="mb-0"><i class="bi bi-geo-alt"></i> Sarbet to Kera Road, Woldemaryam Building</p>
                     </div>
                     <hr>
-                    <h5 class="mb-3">Follow Us</h5>
+                    <h5 class="mb-3">{% translate_text "Follow Us" CURRENT_LANGUAGE_CODE %}</h5>
                     <div class="d-flex gap-3">
                         <a href="#" class="text-primary"><i class="bi bi-facebook" style="font-size: 1.5rem;"></i></a>
                         <a href="#" class="text-danger"><i class="bi bi-youtube" style="font-size: 1.5rem;"></i></a>

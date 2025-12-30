@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load i18n %}
+{% load translation_tags %}
 
 {% block title %}{% trans "Book Property" %} - {{ property.title }}{% endblock %}
 
@@ -16,18 +17,18 @@
                     <div class="mb-4">
                         <h4>{{ property.title }}</h4>
                         <p class="text-secondary">{{ property.location }}</p>
-                        <p><strong>{% trans "Price" %}:</strong> 
+                        <p><strong>{% translate_text "Price" CURRENT_LANGUAGE_CODE %}:</strong> 
                             {% if property.price %}
                                 {{ property.price|floatformat:2 }} ETB
                             {% else %}
-                                {% trans "Contact for price" %}
+                                {% translate_text "Contact for price" CURRENT_LANGUAGE_CODE %}
                             {% endif %}
                         </p>
                     </div>
 
                     {% if active_bookings %}
                         <div class="alert alert-warning">
-                            <strong>{% trans "Note" %}:</strong> {% trans "This property has active bookings during the following periods:" %}
+                            <strong>{% translate_text "Note" CURRENT_LANGUAGE_CODE %}:</strong> {% translate_text "This property has active bookings during the following periods:" CURRENT_LANGUAGE_CODE %}
                             <ul class="mb-0 mt-2">
                                 {% for booking in active_bookings %}
                                     <li>{{ booking.start_date|date:"M d, Y" }} - {{ booking.end_date|date:"M d, Y" }}</li>
@@ -40,49 +41,49 @@
                         {% csrf_token %}
                         <div class="row g-3">
                             <div class="col-md-6">
-                                <label class="form-label required">{% trans "Full Name" %}</label>
+                                <label class="form-label required">{% translate_text "Full Name" CURRENT_LANGUAGE_CODE %}</label>
                                 {{ form.full_name }}
                                 {% if form.full_name.errors %}
                                     <div class="invalid-feedback d-block">{{ form.full_name.errors|first }}</div>
                                 {% endif %}
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label required">{% trans "Email" %}</label>
+                                <label class="form-label required">{% translate_text "Email" CURRENT_LANGUAGE_CODE %}</label>
                                 {{ form.email }}
                                 {% if form.email.errors %}
                                     <div class="invalid-feedback d-block">{{ form.email.errors|first }}</div>
                                 {% endif %}
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label required">{% trans "Phone" %}</label>
+                                <label class="form-label required">{% translate_text "Phone" CURRENT_LANGUAGE_CODE %}</label>
                                 {{ form.phone }}
                                 {% if form.phone.errors %}
                                     <div class="invalid-feedback d-block">{{ form.phone.errors|first }}</div>
                                 {% endif %}
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label">{% trans "ID Number" %}</label>
+                                <label class="form-label">{% translate_text "ID Number" CURRENT_LANGUAGE_CODE %}</label>
                                 {{ form.id_number }}
                                 {% if form.id_number.errors %}
                                     <div class="invalid-feedback d-block">{{ form.id_number.errors|first }}</div>
                                 {% endif %}
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label required">{% trans "Start Date" %}</label>
+                                <label class="form-label required">{% translate_text "Start Date" CURRENT_LANGUAGE_CODE %}</label>
                                 {{ form.start_date }}
                                 {% if form.start_date.errors %}
                                     <div class="invalid-feedback d-block">{{ form.start_date.errors|first }}</div>
                                 {% endif %}
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label required">{% trans "End Date" %}</label>
+                                <label class="form-label required">{% translate_text "End Date" CURRENT_LANGUAGE_CODE %}</label>
                                 {{ form.end_date }}
                                 {% if form.end_date.errors %}
                                     <div class="invalid-feedback d-block">{{ form.end_date.errors|first }}</div>
                                 {% endif %}
                             </div>
                             <div class="col-12">
-                                <label class="form-label">{% trans "Additional Notes" %}</label>
+                                <label class="form-label">{% translate_text "Additional Notes" CURRENT_LANGUAGE_CODE %}</label>
                                 {{ form.notes }}
                                 {% if form.notes.errors %}
                                     <div class="invalid-feedback d-block">{{ form.notes.errors|first }}</div>
@@ -91,15 +92,15 @@
                         </div>
                         {% if form.non_field_errors %}
                             <div class="alert alert-danger mt-3 elevation-2">
-                                <strong>{% trans "Error" %}:</strong>
+                                <strong>{% translate_text "Error" CURRENT_LANGUAGE_CODE %}:</strong>
                                 {% for error in form.non_field_errors %}
                                     <div>{{ error }}</div>
                                 {% endfor %}
                             </div>
                         {% endif %}
                         <div class="mt-4">
-                            <button type="submit" class="btn btn-primary">{% trans "Submit Booking Request" %}</button>
-                            <a href="{% url 'properties:property_detail' property.slug %}" class="btn btn-outline-secondary">{% trans "Cancel" %}</a>
+                            <button type="submit" class="btn btn-primary">{% translate_text "Submit Booking Request" CURRENT_LANGUAGE_CODE %}</button>
+                            <a href="{% url 'properties:property_detail' property.slug %}" class="btn btn-outline-secondary">{% translate_text "Cancel" CURRENT_LANGUAGE_CODE %}</a>
                         </div>
                     </form>
                 </div>

@@ -2,6 +2,7 @@
 {% load static %}
 {% load i18n %}
 {% load content_filters %}
+{% load translation_tags %}
 
 {% block title %}{{ report.title }} - {% trans "Market Reports" %} - Andromeda Properties{% endblock %}
 
@@ -15,7 +16,7 @@
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{% url 'properties:home' %}">{% trans "Home" %}</a></li>
                         <li class="breadcrumb-item"><a href="{% url 'properties:market_report_list' %}">{% trans "Market Reports" %}</a></li>
-                        <li class="breadcrumb-item active">{{ report.title }}</li>
+                        <li class="breadcrumb-item active">{{ report.title|translate:CURRENT_LANGUAGE_CODE }}</li>
                     </ol>
                 </nav>
 
@@ -28,13 +29,13 @@
                         {% if report.category %}
                             <span class="badge bg-primary mb-3">{{ report.category }}</span>
                         {% endif %}
-                        <h1 class="display-5 fw-bold mb-3">{{ report.title }}</h1>
+                        <h1 class="display-5 fw-bold mb-3">{{ report.title|translate:CURRENT_LANGUAGE_CODE }}</h1>
                         <div class="d-flex gap-4 text-muted mb-4">
                             <span><i class="bi bi-calendar"></i> {{ report.publication_date|date:"F d, Y" }}</span>
                             <span><i class="bi bi-eye"></i> {{ report.view_count }} {% trans "views" %}</span>
                         </div>
                         {% if report.excerpt %}
-                            <p class="lead text-muted">{{ report.excerpt }}</p>
+                            <p class="lead text-muted">{{ report.excerpt|translate:CURRENT_LANGUAGE_CODE }}</p>
                         {% endif %}
                     </div>
                 </div>
@@ -43,7 +44,7 @@
                 <div class="card mb-4 shadow-sm">
                     <div class="card-body">
                         <div class="content">
-                            {{ report.content|sanitize_html }}
+                            {{ report.content|translate:CURRENT_LANGUAGE_CODE|sanitize_html }}
                         </div>
                     </div>
                 </div>

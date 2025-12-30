@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load translation_tags %}
+{% load i18n %}
 
 {% block title %}Register - Andromeda Properties{% endblock %}
 
@@ -13,35 +15,35 @@
                         <div class="icon-circle mx-auto mb-3">
                             <i class="bi bi-person-plus-fill" style="font-size: 2rem;"></i>
                         </div>
-                        <h2 class="fw-bold text-dark">Create an account</h2>
-                        <p class="text-secondary">Sign up to access exclusive features</p>
+                        <h2 class="fw-bold text-dark">{% translate_text "Create an account" CURRENT_LANGUAGE_CODE %}</h2>
+                        <p class="text-secondary">{% translate_text "Sign up to access exclusive features" CURRENT_LANGUAGE_CODE %}</p>
                     </div>
                     <form method="post">
                         {% csrf_token %}
                         <div class="mb-3">
-                            <label class="form-label required">Username</label>
+                            <label class="form-label required">{% translate_text "Username" CURRENT_LANGUAGE_CODE %}</label>
                             <input type="text" name="username" class="form-control" required autofocus>
                             <small class="form-text">Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.</small>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label required">Password</label>
+                            <label class="form-label required">{% translate_text "Password" CURRENT_LANGUAGE_CODE %}</label>
                             <input type="password" name="password1" class="form-control" required>
                             <small class="form-text">Your password must contain at least 8 characters.</small>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label required">Password confirmation</label>
+                            <label class="form-label required">{% translate_text "Password confirmation" CURRENT_LANGUAGE_CODE %}</label>
                             <input type="password" name="password2" class="form-control" required>
                             <small class="form-text">Enter the same password as before, for verification.</small>
                         </div>
                         <div class="mb-3 form-check">
                             <input type="checkbox" class="form-check-input" id="terms" required>
                             <label class="form-check-label" for="terms">
-                                I agree with terms & conditions
+                                {% translate_text "I agree with terms & conditions" CURRENT_LANGUAGE_CODE %}
                             </label>
                         </div>
                         {% if form.errors %}
                             <div class="alert alert-danger elevation-2">
-                                <strong>Please correct the following errors:</strong>
+                                <strong>{% translate_text "Please correct the following errors:" CURRENT_LANGUAGE_CODE %}</strong>
                                 <ul class="mb-0 mt-2">
                                     {% for field, errors in form.errors.items %}
                                         {% for error in errors %}
@@ -51,11 +53,11 @@
                                 </ul>
                             </div>
                         {% endif %}
-                        <button type="submit" class="btn btn-primary w-100 mb-3">Register</button>
+                        <button type="submit" class="btn btn-primary w-100 mb-3">{% translate_text "Register" CURRENT_LANGUAGE_CODE %}</button>
                     </form>
                     <hr>
                     <div class="text-center">
-                        <p class="mb-0">Already have an account? <a href="{% url 'accounts:login' %}" class="text-decoration-none">Back to login</a></p>
+                        <p class="mb-0">{% translate_text "Already have an account?" CURRENT_LANGUAGE_CODE %} <a href="{% url 'accounts:login' %}" class="text-decoration-none">{% translate_text "Back to login" CURRENT_LANGUAGE_CODE %}</a></p>
                     </div>
                 </div>
             </div>

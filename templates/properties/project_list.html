@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load translation_tags %}
+{% load i18n %}
 
 {% block title %}Projects - Andromeda Properties{% endblock %}
 
@@ -7,8 +9,8 @@
 <div class="container mt-5 pt-4">
     <div class="row mb-4">
         <div class="col-12">
-            <h1 class="display-5 fw-bold">Our Projects</h1>
-            <p class="text-muted">Explore our real estate projects in Ethiopia</p>
+            <h1 class="display-5 fw-bold">{% translate_text "Our Projects" CURRENT_LANGUAGE_CODE %}</h1>
+            <p class="text-muted">{% translate_text "Explore our real estate projects in Ethiopia" CURRENT_LANGUAGE_CODE %}</p>
         </div>
     </div>
 
@@ -31,22 +33,22 @@
                         <i class="bi bi-building text-white" style="font-size: 3rem;"></i>
                     </div>
                 {% endif %}<div class="property-card-content" style="padding: 0 0.75rem 0.5rem 0.75rem !important; margin: 0 !important; margin-top: -2px !important; padding-top: 0 !important; line-height: normal; position: relative; top: 0; border-top: none !important;">
-                    <h5 class="card-title" style="margin-top: 0 !important; margin-bottom: 0.5rem !important; padding-top: 0.5rem !important; display: block;">{{ project.name }}</h5>
+                    <h5 class="card-title" style="margin-top: 0 !important; margin-bottom: 0.5rem !important; padding-top: 0.5rem !important; display: block;">{{ project.name|translate:CURRENT_LANGUAGE_CODE }}</h5>
                     <p class="text-muted">
                         <i class="bi bi-geo-alt"></i> {{ project.location }}
                     </p>
-                    <p class="text-muted">{{ project.property_count }} listing{{ project.property_count|pluralize }}</p>
+                    <p class="text-muted">{{ project.property_count }} {% translate_text "listing" CURRENT_LANGUAGE_CODE %}{{ project.property_count|pluralize }}</p>
                     {% if project.description %}
-                        <p class="card-text">{{ project.description|truncatewords:20 }}</p>
+                        <p class="card-text">{{ project.description|translate:CURRENT_LANGUAGE_CODE|truncatewords:20 }}</p>
                     {% endif %}
-                    <a href="{% url 'properties:project_detail' project.slug %}" class="btn btn-primary">View Project</a>
+                    <a href="{% url 'properties:project_detail' project.slug %}" class="btn btn-primary">{% translate_text "View Project" CURRENT_LANGUAGE_CODE %}</a>
                 </div>
             </div>
         </div>
         {% empty %}
         <div class="col-12 text-center py-5">
             <i class="bi bi-inbox text-muted" style="font-size: 4rem;"></i>
-            <p class="text-muted mt-3">No projects available at the moment.</p>
+            <p class="text-muted mt-3">{% translate_text "No projects available at the moment." CURRENT_LANGUAGE_CODE %}</p>
         </div>
         {% endfor %}
     </div>

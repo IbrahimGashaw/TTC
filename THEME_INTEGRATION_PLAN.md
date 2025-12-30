@@ -246,3 +246,8 @@ static/
 
 **Ready to proceed?** Let me know if you have the theme files, and I can start the integration process!
 
+
+
+
+
+

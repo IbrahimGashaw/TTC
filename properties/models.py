@@ -100,21 +100,6 @@ class Property(models.Model):
         verbose_name=_('Video URL')
     )
     
-    # Virtual Tour
-    virtual_tour_image = models.ImageField(
-        upload_to='properties/virtual_tours/',
-        blank=True,
-        null=True,
-        help_text=_('360-degree panoramic image for virtual tour (equirectangular format recommended)'),
-        verbose_name=_('Virtual Tour Image')
-    )
-    virtual_tour_url = models.URLField(
-        blank=True,
-        null=True,
-        help_text=_('External virtual tour URL (e.g., Matterport, Kuula, etc.)'),
-        verbose_name=_('Virtual Tour URL')
-    )
-    
     # Additional info
     featured = models.BooleanField(default=False)
     is_verified = models.BooleanField(
@@ -214,110 +199,75 @@ class TeamMember(models.Model):
         ordering = ['name']
 
     def __str__(self):
-        return f"{self.name} - {self.get_role_display()}"
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse('properties:agent_detail', kwargs={'pk': self.pk})
 
 
 class PropertyBooking(models.Model):
-    """Model for booking/holding properties with approval workflow"""
     STATUS_CHOICES = [
-        ('pending', _('Pending Approval')),
+        ('pending', _('Pending')),
         ('approved', _('Approved')),
         ('rejected', _('Rejected')),
-        ('expired', _('Expired')),
         ('completed', _('Completed')),
+        ('cancelled', _('Cancelled')),
     ]
 
-    property = models.ForeignKey(Property, on_delete=models.CASCADE, related_name='bookings', verbose_name=_('Property'))
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='property_bookings', verbose_name=_('User'))
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending', verbose_name=_('Status'))
-    
-    # Booking period
-    start_date = models.DateTimeField(verbose_name=_('Start Date'))
-    end_date = models.DateTimeField(verbose_name=_('End Date'))
-    
-    # Customer information
-    full_name = models.CharField(max_length=200, verbose_name=_('Full Name'))
-    email = models.EmailField(verbose_name=_('Email'))
-    phone = models.CharField(max_length=20, verbose_name=_('Phone'))
-    id_number = models.CharField(max_length=50, blank=True, verbose_name=_('ID Number'))
-    
-    # Additional information
-    notes = models.TextField(blank=True, verbose_name=_('Notes'))
-    admin_notes = models.TextField(blank=True, verbose_name=_('Admin Notes'))
-    
-    # Approval tracking
-    approved_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, 
-                                    related_name='approved_bookings', verbose_name=_('Approved By'))
-    approved_at = models.DateTimeField(null=True, blank=True, verbose_name=_('Approved At'))
-    
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Created At'))
-    updated_at = models.DateTimeField(auto_now=True, verbose_name=_('Updated At'))
+    property = models.ForeignKey(Property, on_delete=models.CASCADE, related_name='bookings')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='property_bookings', null=True, blank=True)
+    full_name = models.CharField(max_length=200)
+    email = models.EmailField()
+    phone = models.CharField(max_length=20)
+    id_number = models.CharField(max_length=50, blank=True)
+    start_date = models.DateField()
+    end_date = models.DateField()
+    notes = models.TextField(blank=True)
+    admin_notes = models.TextField(blank=True)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    approved_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='approved_bookings')
+    approved_at = models.DateTimeField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         ordering = ['-created_at']
-        verbose_name = _('Property Booking')
-        verbose_name_plural = _('Property Bookings')
 
     def __str__(self):
         return f"{self.property.title} - {self.full_name} ({self.get_status_display()})"
 
-    def is_active(self):
-        """Check if booking is currently active"""
-        from django.utils import timezone
-        return (self.status == 'approved' and 
-                self.start_date <= timezone.now() <= self.end_date)
-
-    def is_expired(self):
-        """Check if booking has expired"""
-        from django.utils import timezone
-        return self.end_date < timezone.now() and self.status == 'approved'
-
 
 class FloorPlan(models.Model):
-    """Floor plans for properties"""
-    property = models.ForeignKey(
-        Property,
-        on_delete=models.CASCADE,
-        related_name='floor_plans',
-        verbose_name=_('Property')
-    )
-    image = models.ImageField(
-        upload_to='properties/floor_plans/',
-        verbose_name=_('Floor Plan Image')
-    )
-    title = models.CharField(
-        max_length=200,
-        blank=True,
-        help_text=_('e.g., "Ground Floor", "First Floor", "Unit Layout"'),
-        verbose_name=_('Title')
-    )
-    description = models.TextField(
-        blank=True,
-        help_text=_('Description of this floor plan'),
-        verbose_name=_('Description')
-    )
-    order = models.IntegerField(
-        default=0,
-        help_text=_('Display order (lower numbers appear first)'),
-        verbose_name=_('Order')
-    )
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Created At'))
-    
+    property = models.ForeignKey(Property, on_delete=models.CASCADE, related_name='floor_plans')
+    title = models.CharField(max_length=200)
+    image = models.ImageField(upload_to='properties/floor_plans/')
+    description = models.TextField(blank=True)
+    order = models.IntegerField(default=0)
+
     class Meta:
-        ordering = ['order', 'created_at']
-        verbose_name = _('Floor Plan')
-        verbose_name_plural = _('Floor Plans')
-    
+        ordering = ['order']
+
     def __str__(self):
-        if self.title:
-            return f"{self.property.title} - {self.title}"
-        return f"{self.property.title} - Floor Plan {self.order + 1}"
+        return f"{self.property.title} - {self.title}"
 
 
 class MarketReport(models.Model):
-    """Market reports and analysis for SEO and content marketing"""
+    CATEGORY_CHOICES = [
+        ('market_analysis', _('Market Analysis')),
+        ('price_trends', _('Price Trends')),
+        ('location_insights', _('Location Insights')),
+        ('investment_advice', _('Investment Advice')),
+        ('general', _('General')),
+    ]
+
     title = models.CharField(max_length=200, verbose_name=_('Title'))
     slug = models.SlugField(unique=True, verbose_name=_('Slug'))
+    category = models.CharField(
+        max_length=50,
+        choices=CATEGORY_CHOICES,
+        default='general',
+        verbose_name=_('Category')
+    )
     excerpt = models.TextField(
         max_length=500,
         blank=True,
@@ -330,19 +280,6 @@ class MarketReport(models.Model):
         blank=True,
         null=True,
         verbose_name=_('Featured Image')
-    )
-    pdf_file = models.FileField(
-        upload_to='market_reports/pdfs/',
-        blank=True,
-        null=True,
-        help_text=_('Optional PDF download'),
-        verbose_name=_('PDF File')
-    )
-    category = models.CharField(
-        max_length=100,
-        blank=True,
-        help_text=_('e.g., "Q1 2025", "Annual Report", "Market Analysis"'),
-        verbose_name=_('Category')
     )
     tags = models.CharField(
         max_length=300,
@@ -376,16 +313,14 @@ class MarketReport(models.Model):
 
 
 class BuyingGuide(models.Model):
-    """Buying guides for SEO and content marketing"""
     CATEGORY_CHOICES = [
-        ('first_time_buyer', _('First-Time Buyer')),
+        ('tips', _('Buying Tips')),
+        ('financing', _('Financing')),
+        ('legal', _('Legal Advice')),
         ('investment', _('Investment Guide')),
-        ('financing', _('Financing Guide')),
-        ('legal', _('Legal Guide')),
-        ('tips', _('Tips & Advice')),
-        ('other', _('Other')),
+        ('general', _('General')),
     ]
-    
+
     title = models.CharField(max_length=200, verbose_name=_('Title'))
     slug = models.SlugField(unique=True, verbose_name=_('Slug'))
     category = models.CharField(
@@ -444,24 +379,12 @@ class ConstructionProgress(models.Model):
                                 verbose_name=_('Project'))
     title = models.CharField(max_length=200, verbose_name=_('Title'))
     description = models.TextField(verbose_name=_('Description'))
-    
-    # Progress tracking
     progress_percentage = models.IntegerField(
         validators=[MinValueValidator(0), MaxValueValidator(100)],
-        verbose_name=_('Progress Percentage'),
-        help_text=_('Progress from 0 to 100%')
+        verbose_name=_('Progress Percentage')
     )
-    
-    # Date information
     update_date = models.DateField(verbose_name=_('Update Date'))
-    
-    # Images
-    image = models.ImageField(upload_to='construction_progress/', blank=True, null=True, 
-                              verbose_name=_('Image'))
-    
-    # Status
     is_published = models.BooleanField(default=True, verbose_name=_('Published'))
-    
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Created At'))
     updated_at = models.DateTimeField(auto_now=True, verbose_name=_('Updated At'))
 
@@ -475,25 +398,21 @@ class ConstructionProgress(models.Model):
 
 
 class ConstructionProgressImage(models.Model):
-    """Additional images for construction progress updates"""
-    progress = models.ForeignKey(ConstructionProgress, on_delete=models.CASCADE, 
-                                 related_name='images', verbose_name=_('Progress Update'))
-    image = models.ImageField(upload_to='construction_progress/images/', verbose_name=_('Image'))
-    caption = models.CharField(max_length=200, blank=True, verbose_name=_('Caption'))
-    order = models.IntegerField(default=0, verbose_name=_('Order'))
+    progress = models.ForeignKey(ConstructionProgress, on_delete=models.CASCADE, related_name='images')
+    image = models.ImageField(upload_to='construction_progress/')
+    caption = models.CharField(max_length=200, blank=True)
+    order = models.IntegerField(default=0)
 
     class Meta:
         ordering = ['order']
-        verbose_name = _('Progress Image')
-        verbose_name_plural = _('Progress Images')
 
     def __str__(self):
-        return f"{self.progress.title} - Image {self.order + 1}"
+        return f"{self.progress.title} - Image {self.order}"
 
 
 class HomePageSettings(models.Model):
-    """Singleton model for homepage settings including hero video"""
-    # Hero Section Video
+    """Singleton model for homepage settings"""
+    # Hero Video
     hero_video = models.FileField(
         upload_to='videos/homepage/',
         blank=True,
@@ -670,60 +589,6 @@ class SiteSettings(models.Model):
         return f"https://wa.me/{phone}?text={encoded_msg}"
 
 
-class AboutPageSettings(models.Model):
-    """Singleton model for about page settings including video"""
-    # Video Settings
-    about_video = models.FileField(
-        upload_to='videos/about/',
-        blank=True,
-        null=True,
-        help_text=_('Video file for about page (MP4 recommended)'),
-        verbose_name=_('About Page Video')
-    )
-    about_video_url = models.URLField(
-        blank=True,
-        null=True,
-        help_text=_('External video URL (YouTube, Vimeo, etc.)'),
-        verbose_name=_('Video URL')
-    )
-    about_video_poster = models.ImageField(
-        upload_to='images/about/',
-        blank=True,
-        null=True,
-        help_text=_('Poster image shown before video loads'),
-        verbose_name=_('Video Poster Image')
-    )
-    about_video_enabled = models.BooleanField(
-        default=True,
-        help_text=_('Enable/disable video display'),
-        verbose_name=_('Video Enabled')
-    )
-    
-    updated_at = models.DateTimeField(auto_now=True, verbose_name=_('Updated At'))
-    
-    class Meta:
-        verbose_name = _('About Page Settings')
-        verbose_name_plural = _('About Page Settings')
-    
-    def __str__(self):
-        return 'About Page Settings'
-    
-    def save(self, *args, **kwargs):
-        # Ensure only one instance exists (singleton pattern)
-        self.pk = 1
-        super().save(*args, **kwargs)
-    
-    def delete(self, *args, **kwargs):
-        # Prevent deletion - just reset to defaults
-        pass
-    
-    @classmethod
-    def load(cls):
-        """Get or create the singleton instance"""
-        obj, created = cls.objects.get_or_create(pk=1)
-        return obj
-
-
 class ViewingAppointment(models.Model):
     """Model for property viewing appointments (quick lead capture)"""
     STATUS_CHOICES = [
@@ -785,3 +650,206 @@ class ViewingAppointment(models.Model):
     def __str__(self):
         return f"{self.property.title} - {self.full_name} ({self.get_status_display()})"
 
+
+class PromotionalOffer(models.Model):
+    """Model for promotional offers displayed in floating carousel"""
+    BADGE_TYPE_CHOICES = [
+        ('hot_deal', _('Hot Deal')),
+        ('new', _('New')),
+        ('limited', _('Limited')),
+        ('sale', _('Sale')),
+    ]
+    
+    ICON_CHOICES = [
+        ('target', _('Target')),
+        ('money', _('Money')),
+        ('gift', _('Gift')),
+        ('star', _('Star')),
+        ('tag', _('Tag')),
+    ]
+    
+    ICON_COLOR_CHOICES = [
+        ('primary', _('Primary')),
+        ('success', _('Success')),
+        ('danger', _('Danger')),
+        ('warning', _('Warning')),
+        ('info', _('Info')),
+    ]
+    
+    BADGE_COLOR_CHOICES = [
+        ('primary', _('Primary')),
+        ('success', _('Success')),
+        ('danger', _('Danger')),
+        ('warning', _('Warning')),
+        ('info', _('Info')),
+    ]
+    
+    title = models.CharField(max_length=200, verbose_name=_('Title'))
+    description = models.TextField(verbose_name=_('Description'))
+    icon = models.CharField(
+        max_length=20,
+        choices=ICON_CHOICES,
+        default='star',
+        verbose_name=_('Icon')
+    )
+    icon_color = models.CharField(
+        max_length=20,
+        choices=ICON_COLOR_CHOICES,
+        default='primary',
+        verbose_name=_('Icon Color')
+    )
+    badge_type = models.CharField(
+        max_length=20,
+        choices=BADGE_TYPE_CHOICES,
+        default='new',
+        verbose_name=_('Badge Type')
+    )
+    badge_color = models.CharField(
+        max_length=20,
+        choices=BADGE_COLOR_CHOICES,
+        default='danger',
+        verbose_name=_('Badge Color')
+    )
+    
+    # Actions
+    call_action_text = models.CharField(
+        max_length=100,
+        blank=True,
+        help_text=_('Text for call action button (e.g., "Call Now")'),
+        verbose_name=_('Call Action Text')
+    )
+    call_action_url = models.CharField(
+        max_length=200,
+        blank=True,
+        help_text=_('Phone number or URL for call action (e.g., "tel:+251912345678" or URL)'),
+        verbose_name=_('Call Action URL')
+    )
+    details_action_text = models.CharField(
+        max_length=100,
+        blank=True,
+        help_text=_('Text for details action button (e.g., "View Details")'),
+        verbose_name=_('Details Action Text')
+    )
+    details_action_url = models.URLField(
+        blank=True,
+        null=True,
+        help_text=_('URL for details action (e.g., property detail page)'),
+        verbose_name=_('Details Action URL')
+    )
+    
+    # Scheduling
+    is_active = models.BooleanField(default=True, verbose_name=_('Active'))
+    order = models.IntegerField(
+        default=0,
+        help_text=_('Display order (lower numbers appear first)'),
+        verbose_name=_('Order')
+    )
+    start_date = models.DateField(
+        blank=True,
+        null=True,
+        help_text=_('Start date for the offer (leave blank for immediate start)'),
+        verbose_name=_('Start Date')
+    )
+    end_date = models.DateField(
+        blank=True,
+        null=True,
+        help_text=_('End date for the offer (leave blank for no expiration)'),
+        verbose_name=_('End Date')
+    )
+    
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Created At'))
+    updated_at = models.DateTimeField(auto_now=True, verbose_name=_('Updated At'))
+    
+    class Meta:
+        ordering = ['order', '-created_at']
+        verbose_name = _('Promotional Offer')
+        verbose_name_plural = _('Promotional Offers')
+    
+    def __str__(self):
+        return self.title
+    
+    def is_valid(self):
+        """Check if offer is currently valid based on dates"""
+        from django.utils import timezone
+        today = timezone.localdate()
+        
+        if not self.is_active:
+            return False
+        
+        if self.start_date and self.start_date > today:
+            return False
+        
+        if self.end_date and self.end_date < today:
+            return False
+        
+        return True
+    
+    def get_call_url(self):
+        """Get the call URL, adding tel: prefix if it's a phone number"""
+        if not self.call_action_url:
+            return None
+        
+        # If it starts with tel: or http:// or https://, return as is
+        if self.call_action_url.startswith(('tel:', 'http://', 'https://')):
+            return self.call_action_url
+        
+        # If it looks like a phone number, add tel: prefix
+        if self.call_action_url.replace('+', '').replace('-', '').replace(' ', '').isdigit():
+            return f"tel:{self.call_action_url}"
+        
+        # Otherwise, assume it's a URL and add https://
+        return f"https://{self.call_action_url}"
+
+
+class AboutPageSettings(models.Model):
+    """Singleton model for about page video settings"""
+    # Video Settings
+    about_video_enabled = models.BooleanField(
+        default=True,
+        help_text=_('Enable/disable video on about page'),
+        verbose_name=_('Video Enabled')
+    )
+    about_video = models.FileField(
+        upload_to='videos/about/',
+        blank=True,
+        null=True,
+        help_text=_('Video file for about page (MP4 recommended)'),
+        verbose_name=_('About Video')
+    )
+    about_video_url = models.URLField(
+        blank=True,
+        null=True,
+        help_text=_('YouTube or Vimeo video URL (alternative to uploaded video)'),
+        verbose_name=_('Video URL')
+    )
+    about_video_poster = models.ImageField(
+        upload_to='images/about/',
+        blank=True,
+        null=True,
+        help_text=_('Poster image shown before video loads'),
+        verbose_name=_('Video Poster Image')
+    )
+    
+    updated_at = models.DateTimeField(auto_now=True, verbose_name=_('Updated At'))
+    
+    class Meta:
+        verbose_name = _('About Page Settings')
+        verbose_name_plural = _('About Page Settings')
+    
+    def __str__(self):
+        return 'About Page Settings'
+    
+    def save(self, *args, **kwargs):
+        # Ensure only one instance exists (singleton pattern)
+        self.pk = 1
+        super().save(*args, **kwargs)
+    
+    def delete(self, *args, **kwargs):
+        # Prevent deletion
+        pass
+    
+    @classmethod
+    def load(cls):
+        """Get or create the singleton instance"""
+        obj, created = cls.objects.get_or_create(pk=1)
+        return obj

@@ -2,51 +2,89 @@
 {% load static %}
 {% load i18n %}
 {% load content_filters %}
+{% load translation_tags %}
 
 {% block title %}{{ property.title }} - Andromeda Properties{% endblock %}
 
 {% block content %}
-<div class="container mt-5 pt-4">
-    <div class="row">
-        <div class="col-md-8">
-            <!-- Property Images -->
-            <div class="card mb-4 shadow-sm">
-                {% if property.images.first %}
-                    {% with main_img=property.images.first.image %}
-                        <img src="{{ main_img.url }}" 
-                             class="card-img-top" 
-                             alt="{{ property.title }}" 
-                             style="height: 500px; object-fit: cover; width: 100%;">
-                    {% endwith %}
-                {% elif property.main_image %}
-                    <img src="{{ property.main_image.url }}" 
-                         class="card-img-top" 
-                         alt="{{ property.title }}" 
-                         style="height: 500px; object-fit: cover; width: 100%;">
-                {% else %}
-                    <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" style="height: 500px; width: 100%;">
-                        <i class="bi bi-image text-white" style="font-size: 4rem;"></i>
-                    </div>
-                {% endif %}
-                {% if property.images.all %}
-                <div class="card-body">
-                    <div class="row g-2">
-                        {% for image in property.images.all %}
-                        <div class="col-md-3">
-                            <img src="{{ image.image.url }}" class="img-thumbnail" alt="{{ image.alt_text }}" style="height: 100px; object-fit: cover; width: 100%;">
-                        </div>
-                        {% endfor %}
-                    </div>
+<!-- Intro Single - EstateAgency Style -->
+<section class="intro-single">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-lg-8">
+                <div class="title-single-box">
+                    <h1 class="title-single">{{ property.title|translate:CURRENT_LANGUAGE_CODE }}</h1>
+                    <span class="color-text-a">
+                        <i class="bi bi-geo-alt"></i> {{ property.location }}, {{ property.address }}
+                    </span>
                 </div>
-                {% endif %}
+            </div>
+            <div class="col-md-12 col-lg-4">
+                <nav aria-label="breadcrumb" class="breadcrumb-box d-flex justify-content-lg-end">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="{% url 'properties:home' %}">Home</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="{% url 'properties:property_list' %}">Properties</a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">
+                            {{ property.title|truncatewords:5 }}
+                        </li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+<!--/ Intro Single End /-->
+
+<section class="property-single">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <!-- Property Images -->
+                <div class="card-box-a card-shadow mb-4">
+                    <div class="img-box-a">
+                        {% if property.images.first %}
+                            {% with main_img=property.images.first.image %}
+                                <img src="{{ main_img.url }}" 
+                                     alt="{{ property.title }}" 
+                                     class="img-a img-fluid">
+                            {% endwith %}
+                        {% elif property.main_image %}
+                            <img src="{{ property.main_image.url }}" 
+                                 alt="{{ property.title }}" 
+                                 class="img-a img-fluid">
+                        {% else %}
+                            <div class="img-a img-fluid bg-secondary d-flex align-items-center justify-content-center" style="height: 500px;">
+                                <i class="bi bi-image text-white" style="font-size: 4rem;"></i>
+                            </div>
+                        {% endif %}
+                    </div>
+                    {% if property.images.all|length > 1 %}
+                    <div class="card-overlay">
+                        <div class="card-overlay-a-content">
+                            <div class="card-body-a">
+                                <div class="row g-2">
+                                    {% for image in property.images.all|slice:":4" %}
+                                    <div class="col-6">
+                                        <img src="{{ image.image.url }}" class="img-thumbnail" alt="{{ image.alt_text }}" style="height: 100px; object-fit: cover; width: 100%;">
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
             </div>
 
-            <!-- Video Walkthrough -->
-            {% if property.walkthrough_video or property.walkthrough_video_url %}
-            <div class="card mb-4 shadow-sm">
-                <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0"><i class="bi bi-play-circle"></i> {% trans "Video Walkthrough" %}</h5>
-                </div>
+                <!-- Video Walkthrough -->
+                {% if property.walkthrough_video or property.walkthrough_video_url %}
+                <div class="card-box-a card-shadow mb-4">
+                    <div class="card-header-a">
+                        <h5 class="mb-0"><i class="bi bi-play-circle"></i> {% trans "Video Walkthrough" %}</h5>
+                    </div>
                 <div class="card-body">
                     {% if property.walkthrough_video_url %}
                         <!-- YouTube/Vimeo Embed -->
@@ -87,39 +125,41 @@
                                 {% trans "Your browser does not support the video tag." %}
                             </video>
                         </div>
-                    {% endif %}
-                </div>
-            </div>
-            {% endif %}
-
-            <!-- Virtual Tour -->
-            {% if property.virtual_tour_image or property.virtual_tour_url %}
-            <div class="card mb-4 shadow-sm">
-                <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0"><i class="bi bi-camera-video"></i> {% trans "Virtual Tour" %}</h5>
-                </div>
-                {% if property.virtual_tour_url %}
-                    <!-- External Virtual Tour (Matterport, Kuula, etc.) -->
-                    <div class="ratio ratio-16x9">
-                        <iframe src="{{ property.virtual_tour_url }}" 
-                                frameborder="0" 
-                                allow="fullscreen; vr" 
-                                allowfullscreen
-                                style="width: 100%; height: 100%;"></iframe>
+                        {% endif %}
                     </div>
-                {% elif property.virtual_tour_image %}
-                    <!-- 360-Degree Panoramic Image using Pannellum -->
-                    <div id="virtual-tour-viewer" style="width: 100%; height: 500px;"></div>
-                {% endif %}
-            </div>
-            {% endif %}
-
-            <!-- Floor Plans -->
-            {% if property.floor_plans.all %}
-            <div class="card mb-4 shadow-sm">
-                <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0"><i class="bi bi-diagram-3"></i> {% trans "Floor Plans" %}</h5>
                 </div>
+                {% endif %}
+
+                <!-- Virtual Tour / 3D Walkthrough -->
+                {% if property.virtual_tour_image or property.virtual_tour_url %}
+                <div class="card-box-a card-shadow mb-4">
+                    <div class="card-header-a">
+                        <h5 class="mb-0"><i class="bi bi-camera-video"></i> {% trans "Virtual Tour / 3D Walkthrough" %}</h5>
+                    </div>
+                    <div class="card-body-a">
+                        {% if property.virtual_tour_url %}
+                            <!-- External Virtual Tour (Matterport, Kuula, etc.) -->
+                            <div class="ratio ratio-16x9">
+                                <iframe src="{{ property.virtual_tour_url }}" 
+                                        frameborder="0" 
+                                        allow="fullscreen; vr" 
+                                        allowfullscreen
+                                        style="width: 100%; height: 100%;"></iframe>
+                            </div>
+                        {% elif property.virtual_tour_image %}
+                            <!-- 360-Degree Panoramic Image using Pannellum -->
+                            <div id="virtual-tour-viewer" style="width: 100%; height: 500px;"></div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Floor Plans -->
+                {% if property.floor_plans.all %}
+                <div class="card-box-a card-shadow mb-4">
+                    <div class="card-header-a">
+                        <h5 class="mb-0"><i class="bi bi-diagram-3"></i> {% trans "Floor Plans" %}</h5>
+                    </div>
                 <div class="card-body">
                     <div class="row g-3">
                         {% for floor_plan in property.floor_plans.all %}
@@ -152,7 +192,7 @@
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h5 class="modal-title">
-                                            {% if floor_plan.title %}{{ floor_plan.title }}{% else %}{% trans "Floor Plan" %}{% endif %}
+                                            {% if floor_plan.title %}{{ floor_plan.title|translate:CURRENT_LANGUAGE_CODE }}{% else %}{% translate_text "Floor Plan" CURRENT_LANGUAGE_CODE %}{% endif %}
                                         </h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                     </div>
@@ -170,36 +210,36 @@
                             </div>
                         </div>
                         {% endfor %}
+                        </div>
                     </div>
                 </div>
-            </div>
-            {% endif %}
+                {% endif %}
 
-            <!-- Interactive Map with Amenities -->
-            {% if property.latitude and property.longitude %}
-            <div class="card mb-4 shadow-sm">
-                <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0"><i class="bi bi-geo-alt-fill"></i> {% trans "Location & Nearby Amenities" %}</h5>
-                </div>
+                <!-- Interactive Map with Amenities -->
+                {% if property.latitude and property.longitude %}
+                <div class="card-box-a card-shadow mb-4">
+                    <div class="card-header-a">
+                        <h5 class="mb-0"><i class="bi bi-geo-alt-fill"></i> {% translate_text "Location & Nearby Amenities" CURRENT_LANGUAGE_CODE %}</h5>
+                    </div>
                 <div class="card-body p-0">
                     <div id="property-map" style="height: 400px; width: 100%;"></div>
                     <div class="p-3">
                         <p class="mb-0">
                             <i class="bi bi-geo-alt"></i> 
-                            <strong>{% trans "Address" %}:</strong> {{ property.address }}, {{ property.location }}
+                            <strong>{% translate_text "Address" CURRENT_LANGUAGE_CODE %}:</strong> {{ property.address }}, {{ property.location }}
                         </p>
+                        </div>
                     </div>
                 </div>
-            </div>
-            {% endif %}
+                {% endif %}
 
-            <!-- Property Details -->
-            <div class="card mb-4 shadow-sm">
-                <div class="card-body">
+                <!-- Property Details -->
+                <div class="card-box-a card-shadow mb-4">
+                    <div class="card-body-a">
                     <div class="d-flex justify-content-between align-items-start mb-3">
                         <div>
                             <div class="d-flex align-items-center gap-2 mb-2">
-                                <h1 class="h3 mb-0">{{ property.title }}</h1>
+                                <h1 class="h3 mb-0">{{ property.title|translate:CURRENT_LANGUAGE_CODE }}</h1>
                                 {% if property.is_verified %}
                                     <span class="verified-badge" title="{% trans 'Verified Property' %}">
                                         <i class="bi bi-patch-check-fill"></i> {% trans "Verified" %}
@@ -218,37 +258,36 @@
                             <span class="badge bg-success fs-6">{{ property.get_sale_type_display }}</span>
                             <span class="badge bg-info fs-6">{{ property.get_status_display }}</span>
                         </div>
+                        <div class="property-price mt-3">
+                            <span class="price-a">{{ property.price|floatformat:0 }} ETB</span>
+                        </div>
                     </div>
                     <hr>
-                    <div class="row mb-3">
+                    <div class="property-details-list mb-4">
                         {% if property.bedrooms > 0 %}
-                        <div class="col-md-3 text-center mb-3">
-                            <i class="bi bi-door-open text-primary" style="font-size: 2rem;"></i>
-                            <p class="mb-0"><strong>{{ property.bedrooms }}</strong></p>
-                            <p class="text-muted small mb-0">Bedrooms</p>
-                        </div>
+                        <li>
+                            <span class="property-details-label"><i class="bi bi-door-open"></i> Bedrooms</span>
+                            <span class="property-details-value">{{ property.bedrooms }}</span>
+                        </li>
                         {% endif %}
                         {% if property.bathrooms > 0 %}
-                        <div class="col-md-3 text-center mb-3">
-                            <i class="bi bi-droplet text-primary" style="font-size: 2rem;"></i>
-                            <p class="mb-0"><strong>{{ property.bathrooms }}</strong></p>
-                            <p class="text-muted small mb-0">Bathrooms</p>
-                        </div>
+                        <li>
+                            <span class="property-details-label"><i class="bi bi-droplet"></i> Bathrooms</span>
+                            <span class="property-details-value">{{ property.bathrooms }}</span>
+                        </li>
                         {% endif %}
-                        <div class="col-md-3 text-center mb-3">
-                            <i class="bi bi-rulers text-primary" style="font-size: 2rem;"></i>
-                            <p class="mb-0"><strong>{{ property.size }} m²</strong></p>
-                            <p class="text-muted small mb-0">Size</p>
-                        </div>
-                        <div class="col-md-3 text-center mb-3">
-                            <i class="bi bi-building text-primary" style="font-size: 2rem;"></i>
-                            <p class="mb-0"><strong>{{ property.get_property_type_display }}</strong></p>
-                            <p class="text-muted small mb-0">Type</p>
-                        </div>
+                        <li>
+                            <span class="property-details-label"><i class="bi bi-rulers"></i> Size</span>
+                            <span class="property-details-value">{{ property.size }} m²</span>
+                        </li>
+                        <li>
+                            <span class="property-details-label"><i class="bi bi-building"></i> Type</span>
+                            <span class="property-details-value">{{ property.get_property_type_display }}</span>
+                        </li>
                     </div>
                     <hr>
                     <h5 class="mb-3">{% trans "Description" %}</h5>
-                    <p>{{ property.description|linebreaks }}</p>
+                    <p>{{ property.description|translate:CURRENT_LANGUAGE_CODE|linebreaks }}</p>
                     {% if property.project %}
                     <hr>
                     <p class="mb-0">
@@ -260,7 +299,7 @@
                     <hr>
                     <div class="d-flex flex-column gap-2">
                         <a href="{% url 'properties:book_viewing' property.slug %}" class="btn btn-primary btn-lg">
-                            <i class="bi bi-calendar-event"></i> {% trans "Book a Viewing" %}
+                            <i class="bi bi-calendar-event"></i> {% translate_text "Book a Viewing" CURRENT_LANGUAGE_CODE %}
                         </a>
                         {% load property_tags %}
                         {% if site_settings.whatsapp_enabled and site_settings.whatsapp_number %}
@@ -270,60 +309,60 @@
                                    target="_blank" 
                                    rel="noopener noreferrer"
                                    class="btn btn-success btn-lg">
-                                    <i class="bi bi-whatsapp"></i> {% trans "Chat on WhatsApp" %}
+                                    <i class="bi bi-whatsapp"></i> {% translate_text "Chat on WhatsApp" CURRENT_LANGUAGE_CODE %}
                                 </a>
                             {% endif %}
                         {% endif %}
                         {% if user.is_authenticated %}
                             <a href="{% url 'properties:book_property' property.slug %}" class="btn btn-outline-primary">
-                                <i class="bi bi-calendar-check"></i> {% trans "Book This Property" %}
+                                <i class="bi bi-calendar-check"></i> {% translate_text "Book This Property" CURRENT_LANGUAGE_CODE %}
                             </a>
                         {% endif %}
                     </div>
-                    {% endif %}
+                        {% endif %}
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="col-md-4">
-            <!-- Contact Form -->
-            <div class="card mb-4 shadow-sm sticky-top" style="top: 100px;">
-                <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0"><i class="bi bi-envelope"></i> Contact Me</h5>
-                </div>
+            <div class="col-lg-4">
+                <!-- Contact Form -->
+                <div class="card-box-a card-shadow sticky-top" style="top: 100px;">
+                    <div class="card-header-a">
+                        <h5 class="mb-0"><i class="bi bi-envelope"></i> {% translate_text "Contact Me" CURRENT_LANGUAGE_CODE %}</h5>
+                    </div>
                 <div class="card-body">
                     <form method="post">
                         {% csrf_token %}
                         <div class="mb-3">
-                            <label class="form-label required">Name</label>
+                            <label class="form-label required">{% translate_text "Name" CURRENT_LANGUAGE_CODE %}</label>
                             {{ form.name }}
                             {% if form.name.errors %}
                                 <div class="invalid-feedback d-block">{{ form.name.errors|first }}</div>
                             {% endif %}
                         </div>
                         <div class="mb-3">
-                            <label class="form-label required">Email</label>
+                            <label class="form-label required">{% translate_text "Email" CURRENT_LANGUAGE_CODE %}</label>
                             {{ form.email }}
                             {% if form.email.errors %}
                                 <div class="invalid-feedback d-block">{{ form.email.errors|first }}</div>
                             {% endif %}
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Phone</label>
+                            <label class="form-label">{% translate_text "Phone" CURRENT_LANGUAGE_CODE %}</label>
                             {{ form.phone }}
                             {% if form.phone.errors %}
                                 <div class="invalid-feedback d-block">{{ form.phone.errors|first }}</div>
                             {% endif %}
                         </div>
                         <div class="mb-3">
-                            <label class="form-label required">Message</label>
+                            <label class="form-label required">{% translate_text "Message" CURRENT_LANGUAGE_CODE %}</label>
                             {{ form.message }}
                             {% if form.message.errors %}
                                 <div class="invalid-feedback d-block">{{ form.message.errors|first }}</div>
                             {% endif %}
                         </div>
-                        <button type="submit" class="btn btn-primary w-100">
-                            <i class="bi bi-send"></i> Send Inquiry
+                        <button type="submit" class="btn btn-b w-100">
+                            <i class="bi bi-send"></i> {% translate_text "Send Inquiry" CURRENT_LANGUAGE_CODE %}
                         </button>
                     </form>
                     <hr>
@@ -332,46 +371,82 @@
                         <p class="mb-0"><i class="bi bi-phone"></i> +251975666699</p>
                     </div>
                 </div>
+                </div>
             </div>
         </div>
     </div>
 
     <!-- Related Properties -->
     {% if related_properties %}
-    <div class="row mt-4">
-        <div class="col-12">
-            <h3 class="mb-4">Related Properties</h3>
-            <div class="row g-4">
-                {% for related in related_properties %}
-                <div class="col-md-4">
-                    <div class="card property-card h-100 shadow-sm">
-                        {% with display_image=related.get_display_image %}
-                            {% if display_image %}
-                                <img src="{{ display_image.url }}" class="card-img-top" alt="{{ related.title }}" style="height: 200px; object-fit: cover; width: 100%;">
-                            {% else %}
-                                <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" style="height: 200px; width: 100%;">
-                                    <i class="bi bi-image text-white"></i>
+    <div class="property-grid">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="section-header">
+                        <h3 class="title-a">Related Properties</h3>
+                    </div>
+                    <div class="row">
+                        {% for related in related_properties %}
+                        <div class="col-md-6 col-lg-4">
+                            <div class="card-box-a card-shadow">
+                                {% with display_image=related.get_display_image %}
+                                    <div class="img-box-a">
+                                        {% if display_image %}
+                                            <img src="{{ display_image.url }}" alt="{{ related.title }}" class="img-a img-fluid">
+                                        {% else %}
+                                            <div class="img-a img-fluid bg-secondary d-flex align-items-center justify-content-center" style="height: 250px;">
+                                                <i class="bi bi-image text-white"></i>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                {% endwith %}
+                                <div class="card-overlay">
+                                    <div class="card-overlay-a-content">
+                                        <div class="card-header-a">
+                                            <h2 class="card-title-a">
+                                                <a href="{% url 'properties:property_detail' related.slug %}">{{ related.title }}</a>
+                                            </h2>
+                                        </div>
+                                        <div class="card-body-a">
+                                            <div class="price-box d-flex">
+                                                <span class="price-a">{{ related.price|floatformat:0 }} ETB</span>
+                                            </div>
+                                            <a href="{% url 'properties:property_detail' related.slug %}" class="link-a">Click here to view
+                                                <span class="bi bi-chevron-right"></span>
+                                            </a>
+                                        </div>
+                                        <div class="card-footer-a">
+                                            <ul class="card-info d-flex justify-content-around">
+                                                {% if related.bedrooms > 0 %}
+                                                <li>
+                                                    <h4 class="card-info-title">{{ related.bedrooms }}</h4>
+                                                    <span>Bedrooms</span>
+                                                </li>
+                                                {% endif %}
+                                                {% if related.bathrooms > 0 %}
+                                                <li>
+                                                    <h4 class="card-info-title">{{ related.bathrooms }}</h4>
+                                                    <span>Bathrooms</span>
+                                                </li>
+                                                {% endif %}
+                                                <li>
+                                                    <h4 class="card-info-title">{{ related.size }}</h4>
+                                                    <span>m²</span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
                                 </div>
-                            {% endif %}
-                        {% endwith %}
-                        <div class="card-body">
-                            <h6 class="card-title">{{ related.title }}</h6>
-                            <p class="text-muted small mb-2">{{ related.location }}</p>
-                            <div class="property-details d-flex gap-2 small mb-2">
-                                {% if related.bedrooms > 0 %}<span>{{ related.bedrooms }} Beds</span>{% endif %}
-                                {% if related.bathrooms > 0 %}<span>{{ related.bathrooms }} Baths</span>{% endif %}
-                                <span>{{ related.size }} m²</span>
                             </div>
-                            <a href="{% url 'properties:property_detail' related.slug %}" class="btn btn-sm btn-outline-primary w-100">View Details</a>
                         </div>
+                        {% endfor %}
                     </div>
                 </div>
-                {% endfor %}
             </div>
         </div>
     </div>
     {% endif %}
-</div>
+</section>
 {% endblock %}
 
 {% block extra_css %}

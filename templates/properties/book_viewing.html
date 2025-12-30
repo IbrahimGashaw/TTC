@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load i18n %}
+{% load translation_tags %}
 
 {% block title %}{% trans "Book a Viewing" %} - {{ property.title }} - Andromeda Properties{% endblock %}
 
@@ -36,7 +37,7 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="{{ form.full_name.id_for_label }}" class="form-label required">
-                                    {% trans "Full Name" %}
+                                    {% translate_text "Full Name" CURRENT_LANGUAGE_CODE %}
                                 </label>
                                 {{ form.full_name }}
                                 {% if form.full_name.errors %}
@@ -46,7 +47,7 @@
                             
                             <div class="col-md-6 mb-3">
                                 <label for="{{ form.email.id_for_label }}" class="form-label required">
-                                    {% trans "Email" %}
+                                    {% translate_text "Email" CURRENT_LANGUAGE_CODE %}
                                 </label>
                                 {{ form.email }}
                                 {% if form.email.errors %}
@@ -58,7 +59,7 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="{{ form.phone.id_for_label }}" class="form-label required">
-                                    {% trans "Phone Number" %}
+                                    {% translate_text "Phone Number" CURRENT_LANGUAGE_CODE %}
                                 </label>
                                 {{ form.phone }}
                                 {% if form.phone.errors %}
@@ -68,7 +69,7 @@
                             
                             <div class="col-md-6 mb-3">
                                 <label for="{{ form.whatsapp_number.id_for_label }}" class="form-label">
-                                    {% trans "WhatsApp Number (Optional)" %}
+                                    {% translate_text "WhatsApp Number (Optional)" CURRENT_LANGUAGE_CODE %}
                                 </label>
                                 {{ form.whatsapp_number }}
                                 {% if form.whatsapp_number.errors %}
@@ -80,7 +81,7 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="{{ form.preferred_date.id_for_label }}" class="form-label required">
-                                    {% trans "Preferred Date" %}
+                                    {% translate_text "Preferred Date" CURRENT_LANGUAGE_CODE %}
                                 </label>
                                 {{ form.preferred_date }}
                                 {% if form.preferred_date.errors %}
@@ -90,7 +91,7 @@
                             
                             <div class="col-md-6 mb-3">
                                 <label for="{{ form.preferred_time.id_for_label }}" class="form-label required">
-                                    {% trans "Preferred Time" %}
+                                    {% translate_text "Preferred Time" CURRENT_LANGUAGE_CODE %}
                                 </label>
                                 {{ form.preferred_time }}
                                 {% if form.preferred_time.errors %}
@@ -101,7 +102,7 @@
 
                         <div class="mb-3">
                             <label for="{{ form.notes.id_for_label }}" class="form-label">
-                                {% trans "Additional Notes" %}
+                                {% translate_text "Additional Notes" CURRENT_LANGUAGE_CODE %}
                             </label>
                             {{ form.notes }}
                             {% if form.notes.errors %}
@@ -111,10 +112,10 @@
 
                         <div class="d-grid gap-2">
                             <button type="submit" class="btn btn-primary btn-lg">
-                                <i class="bi bi-calendar-check"></i> {% trans "Submit Viewing Request" %}
+                                <i class="bi bi-calendar-check"></i> {% translate_text "Submit Viewing Request" CURRENT_LANGUAGE_CODE %}
                             </button>
                             <a href="{% url 'properties:property_detail' property.slug %}" class="btn btn-outline-secondary">
-                                {% trans "Cancel" %}
+                                {% translate_text "Cancel" CURRENT_LANGUAGE_CODE %}
                             </a>
                         </div>
                     </form>
@@ -123,14 +124,14 @@
                     {% if site_settings.whatsapp_enabled and site_settings.whatsapp_number %}
                         <hr>
                         <div class="text-center">
-                            <p class="text-muted mb-2">{% trans "Or contact us directly" %}</p>
+                            <p class="text-muted mb-2">{% translate_text "Or contact us directly" CURRENT_LANGUAGE_CODE %}</p>
                             {% whatsapp_url property.title as whatsapp_url %}
                             {% if whatsapp_url %}
                                 <a href="{{ whatsapp_url }}" 
                                    target="_blank" 
                                    rel="noopener noreferrer"
                                    class="btn btn-success">
-                                    <i class="bi bi-whatsapp"></i> {% trans "Chat on WhatsApp" %}
+                                    <i class="bi bi-whatsapp"></i> {% translate_text "Chat on WhatsApp" CURRENT_LANGUAGE_CODE %}
                                 </a>
                             {% endif %}
                         </div>

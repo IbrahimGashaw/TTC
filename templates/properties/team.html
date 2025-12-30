@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load i18n %}
+{% load translation_tags %}
 
 {% block title %}{% trans "Our Team" %} - Andromeda Properties{% endblock %}
 
@@ -16,7 +17,7 @@
     {% if sales_officers %}
     <div class="row mb-5">
         <div class="col-12">
-            <h2 class="mb-4">Sales Officers</h2>
+            <h2 class="mb-4">{% translate_text "Sales Officers" CURRENT_LANGUAGE_CODE %}</h2>
         </div>
         {% for member in sales_officers %}
         <div class="col-md-3 mb-4">
@@ -87,7 +88,7 @@
     {% if sales_agents %}
     <div class="row mb-5">
         <div class="col-12">
-            <h2 class="mb-4">Sales Agents</h2>
+            <h2 class="mb-4">{% translate_text "Sales Agents" CURRENT_LANGUAGE_CODE %}</h2>
         </div>
         {% for member in sales_agents %}
         <div class="col-md-3 mb-4">

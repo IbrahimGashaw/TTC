@@ -1,12 +1,13 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load i18n %}
+{% load translation_tags %}
 
-{% block title %}{% trans "My Bookings" %}{% endblock %}
+{% block title %}{% translate_text "My Bookings" CURRENT_LANGUAGE_CODE %}{% endblock %}
 
 {% block content %}
 <div class="container mt-5 pt-4">
-    <h1 class="mb-4">{% trans "My Bookings" %}</h1>
+    <h1 class="mb-4">{% translate_text "My Bookings" CURRENT_LANGUAGE_CODE %}</h1>
     
     {% if bookings %}
         <div class="row g-4">
@@ -24,16 +25,16 @@
                             <i class="bi bi-geo-alt"></i> {{ booking.property.location }}
                         </p>
                         <p class="mb-2">
-                            <strong>{% trans "Period" %}:</strong> 
+                            <strong>{% translate_text "Period" CURRENT_LANGUAGE_CODE %}:</strong> 
                             {{ booking.start_date|date:"M d, Y" }} - {{ booking.end_date|date:"M d, Y" }}
                         </p>
                         <p class="mb-2">
-                            <strong>{% trans "Contact" %}:</strong> {{ booking.email }} | {{ booking.phone }}
+                            <strong>{% translate_text "Contact" CURRENT_LANGUAGE_CODE %}:</strong> {{ booking.email }} | {{ booking.phone }}
                         </p>
                         <p class="text-muted small mb-3">
-                            {% trans "Created" %}: {{ booking.created_at|date:"M d, Y H:i" }}
+                            {% translate_text "Created" CURRENT_LANGUAGE_CODE %}: {{ booking.created_at|date:"M d, Y H:i" }}
                         </p>
-                        <a href="{% url 'properties:booking_detail' booking.id %}" class="btn btn-primary btn-sm">{% trans "View Details" %}</a>
+                        <a href="{% url 'properties:booking_detail' booking.id %}" class="btn btn-primary btn-sm">{% translate_text "View Details" CURRENT_LANGUAGE_CODE %}</a>
                     </div>
                 </div>
             </div>
@@ -43,8 +44,8 @@
         <div class="card elevation-2">
             <div class="card-body text-center py-5">
                 <i class="bi bi-calendar-x" style="font-size: 3rem; color: #ccc;"></i>
-                <p class="text-muted mt-3">{% trans "You don't have any bookings yet." %}</p>
-                <a href="{% url 'properties:property_list' %}" class="btn btn-primary">{% trans "Browse Properties" %}</a>
+                <p class="text-muted mt-3">{% translate_text "You don't have any bookings yet." CURRENT_LANGUAGE_CODE %}</p>
+                <a href="{% url 'properties:property_list' %}" class="btn btn-primary">{% translate_text "Browse Properties" CURRENT_LANGUAGE_CODE %}</a>
             </div>
         </div>
     {% endif %}

@@ -32,8 +32,6 @@ GOOGLE_MAPS_API_KEY = os.environ.get('GOOGLE_MAPS_API_KEY', '')
 
 INSTALLED_APPS = [
     'jazzmin',  # Must be before django.contrib.admin
-    'material',  # Material Design components for frontend forms
-    'material.admin',  # Material Design admin (optional, jazzmin takes precedence)
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -125,15 +123,120 @@ USE_TZ = True
 # Supported languages
 LANGUAGES = [
     ('en', 'English'),
-    ('am', 'አማርኛ'),  # Amharic
+    ('am', 'አማርኛ'),  # Amharic - official working language, ~29.3% of population
     ('ar', 'العربية'),  # Arabic
-    ('fr', 'Français'),  # French
+    ('om', 'Oromoo'),  # Oromo - most widely spoken native language, ~33.8% of population
+    ('so', 'Soomaali'),  # Somali - ~6.25% of Ethiopian population
+    ('ti', 'ትግርኛ'),  # Tigrinya - ~5.86% of Ethiopian population
 ]
+
+# Extra language info for languages not in Django's default list
+# Must include all required keys that Django expects
+EXTRA_LANG_INFO = {
+    'am': {
+        'bidi': False,
+        'code': 'am',
+        'name': 'Amharic',
+        'name_local': 'አማርኛ',
+    },
+    'om': {
+        'bidi': False,
+        'code': 'om',
+        'name': 'Oromo',
+        'name_local': 'Oromoo',
+    },
+    'so': {
+        'bidi': False,
+        'code': 'so',
+        'name': 'Somali',
+        'name_local': 'Soomaali',
+    },
+    'ti': {
+        'bidi': False,
+        'code': 'ti',
+        'name': 'Tigrinya',
+        'name_local': 'ትግርኛ',
+    },
+}
+
+# Add extra language info to Django's language info
+# This must be done before Django processes URLs
+import django.conf.locale
+from django.utils.translation import gettext_lazy as _
+
+# Merge our custom language info with Django's default
+# We need to ensure these are in LANG_INFO before i18n_patterns is called
+for lang_code, lang_info in EXTRA_LANG_INFO.items():
+    django.conf.locale.LANG_INFO[lang_code] = lang_info
+
+# Also patch check_for_language to recognize our custom languages
+# This ensures i18n_patterns will accept these language codes
+from django.utils.translation import check_for_language as original_check_for_language
+def patched_check_for_language(lang_code):
+    """Patched version that recognizes our custom language codes"""
+    if lang_code in EXTRA_LANG_INFO:
+        return True
+    return original_check_for_language(lang_code)
+
+# Monkey patch check_for_language
+import django.utils.translation
+django.utils.translation.check_for_language = patched_check_for_language
+
+# Also patch get_supported_language_variant to recognize our custom languages
+# This is used by get_language_from_path which is critical for URL routing
+from django.utils.translation.trans_real import get_supported_language_variant as original_get_supported_language_variant
+import functools
+
+@functools.lru_cache(maxsize=1000)
+def patched_get_supported_language_variant(lang_code, strict=False):
+    """Patched version that recognizes our custom language codes"""
+    # First check if it's one of our custom languages
+    if lang_code in EXTRA_LANG_INFO:
+        # Verify it's in settings.LANGUAGES
+        lang_codes = [code for code, name in LANGUAGES]
+        if lang_code in lang_codes:
+            return lang_code
+    # Fall back to original implementation
+    return original_get_supported_language_variant(lang_code, strict=strict)
+
+# Monkey patch get_supported_language_variant
+import django.utils.translation.trans_real
+django.utils.translation.trans_real.get_supported_language_variant = patched_get_supported_language_variant
 
 LOCALE_PATHS = [
     BASE_DIR / 'locale',
 ]
 
+# Cache configuration for translation service
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'translation-cache',
+    }
+}
+
+# Logging configuration
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'properties.translation_service': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'properties.templatetags.translation_tags': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+    },
+}
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
@@ -158,6 +261,23 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 LOGIN_URL = 'accounts:login'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
+
+# Email Configuration
+# For development: emails will be printed to console
+# For production: configure SMTP settings
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # Prints to console
+# EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'  # Saves to files
+# EMAIL_FILE_PATH = BASE_DIR / 'sent_emails'  # For file backend
+
+# Production SMTP settings (uncomment and configure for production)
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.gmail.com'  # or your SMTP server
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+# EMAIL_HOST_USER = 'your-email@gmail.com'
+# EMAIL_HOST_PASSWORD = 'your-app-password'
+# DEFAULT_FROM_EMAIL = 'your-email@gmail.com'
+# SERVER_EMAIL = 'your-email@gmail.com'
 
 # Django Jazzmin Configuration
 JAZZMIN_SETTINGS = {
@@ -340,27 +460,6 @@ JAZZMIN_UI_TWEAKS = {
     }
 }
 
-# Django Material Configuration
-# Note: django-material has been merged into django-viewflow, but still works
-# Material admin will work alongside jazzmin (jazzmin takes precedence for admin UI)
-MATERIAL_ADMIN_SITE = {
-    'HEADER': 'Andromeda Properties Admin',  # Admin site header
-    'TITLE': 'Andromeda Admin Portal',  # Admin site title
-    'FAVICON_PATH': 'images/andromeda-logo.svg',  # Admin site favicon
-    'MAIN_BG_COLOR': '#1976d2',  # Main background color
-    'MAIN_HOVER_COLOR': '#1565c0',  # Main hover color
-    'PROFILE_PICTURE': None,  # Profile picture (None for default)
-    'PROFILE_BG': None,  # Profile background
-    'LOGIN_LOGO': None,  # Login logo (None for default)
-    'LOGOUT_BG': None,  # Logout background
-    'SHOW_THEMES': True,  # Show theme switcher
-    'TRAY_REVERSE': True,  # Reverse tray position
-    'NAVBAR_REVERSE': False,  # Reverse navbar position
-    'SHOW_COUNTS': True,  # Show model counts
-}
-
-# Material Frontend Settings (for frontend forms)
-MATERIAL_FRONTEND_AUTOREGISTER = True  # Auto-register Material Design components
 
 # Load local settings if available (for development overrides)
 try:

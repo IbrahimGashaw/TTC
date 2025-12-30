@@ -14,6 +14,11 @@ from .models import (
     Project, Property, Contact, TeamMember, PropertyBooking, ConstructionProgress,
     HomePageSettings, SiteSettings, ViewingAppointment, MarketReport, BuyingGuide
 )
+# PromotionalOffer may not exist
+try:
+    from .models import PromotionalOffer
+except ImportError:
+    PromotionalOffer = None
 from .forms import ContactForm, PropertyInquiryForm, PropertySearchForm, PropertyBookingForm, ViewingAppointmentForm
 
 
@@ -21,10 +26,24 @@ def home(request):
     featured_properties = Property.objects.filter(featured=True, status__in=['active', 'new_offer'])[:6]
     latest_properties = Property.objects.filter(status__in=['active', 'new_offer'])[:6]
     projects = Project.objects.all()[:15]
+    team_members = TeamMember.objects.all()[:6]  # Get team members for agents section
     
     # Get homepage settings (singleton)
     homepage_settings = HomePageSettings.load()
     site_settings = SiteSettings.load()
+    
+    # Get active promotional offers - use context processor's logic for consistency
+    # Note: promotional_offers is also provided by context processor, but we include it here
+    # to ensure it's available even if context processor fails
+    promotional_offers = []
+    if PromotionalOffer is not None:
+        try:
+            active_offers = PromotionalOffer.objects.filter(is_active=True)
+            # Filter offers that are currently valid (considering dates) - same logic as context processor
+            promotional_offers = [offer for offer in active_offers if offer.is_valid()][:5]  # Limit to 5 offers
+        except Exception as e:
+            # If there's an error, fall back to context processor's value (if available)
+            promotional_offers = []
     
     # Statistics (you can make these dynamic later)
     stats = {
@@ -40,6 +59,8 @@ def home(request):
         'stats': stats,
         'homepage_settings': homepage_settings,
         'site_settings': site_settings,
+        'promotional_offers': promotional_offers,
+        'team_members': team_members,  # Added for agents section
     }
     return render(request, 'properties/home.html', context)
 
@@ -143,8 +164,13 @@ def project_detail(request, slug):
 
 
 def about(request):
-    from .models import AboutPageSettings
-    about_settings = AboutPageSettings.load()
+    # AboutPageSettings may not exist
+    about_settings = None
+    try:
+        from .models import AboutPageSettings
+        about_settings = AboutPageSettings.load()
+    except ImportError:
+        pass
     
     # Statistics (you can make these dynamic later)
     stats = {
@@ -430,8 +456,8 @@ def custom_set_language(request):
             path_without_lang = next_url
             query_string = ''
     
-    # Get all non-English language prefixes
-    lang_prefixes = ['am', 'ar', 'fr']
+    # Get all non-English language prefixes from settings
+    lang_prefixes = [lang[0] for lang in settings.LANGUAGES if lang[0] != 'en']
     
     # Remove any existing language prefix from the path
     original_path = path_without_lang

@@ -1,8 +1,9 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load i18n %}
+{% load translation_tags %}
 
-{% block title %}{% trans "Booking Details" %}{% endblock %}
+{% block title %}{% translate_text "Booking Details" CURRENT_LANGUAGE_CODE %}{% endblock %}
 
 {% block content %}
 <div class="container mt-5 pt-4">
@@ -10,7 +11,7 @@
         <div class="col-md-8 mx-auto">
             <div class="card elevation-4">
                 <div class="card-header">
-                    <h2 class="mb-0">{% trans "Booking Details" %}</h2>
+                    <h2 class="mb-0">{% translate_text "Booking Details" CURRENT_LANGUAGE_CODE %}</h2>
                 </div>
                 <div class="card-body">
                     <div class="mb-4">
@@ -20,56 +21,56 @@
 
                     <div class="row g-3 mb-4">
                         <div class="col-md-6">
-                            <strong>{% trans "Status" %}:</strong>
+                            <strong>{% translate_text "Status" CURRENT_LANGUAGE_CODE %}:</strong>
                             <span class="badge bg-{% if booking.status == 'approved' %}success{% elif booking.status == 'rejected' %}danger{% else %}warning{% endif %}">
                                 {{ booking.get_status_display }}
                             </span>
                         </div>
                         <div class="col-md-6">
-                            <strong>{% trans "Booking Period" %}:</strong><br>
+                            <strong>{% translate_text "Booking Period" CURRENT_LANGUAGE_CODE %}:</strong><br>
                             {{ booking.start_date|date:"M d, Y H:i" }} - {{ booking.end_date|date:"M d, Y H:i" }}
                         </div>
                         <div class="col-md-6">
-                            <strong>{% trans "Full Name" %}:</strong><br>
+                            <strong>{% translate_text "Full Name" CURRENT_LANGUAGE_CODE %}:</strong><br>
                             {{ booking.full_name }}
                         </div>
                         <div class="col-md-6">
-                            <strong>{% trans "Email" %}:</strong><br>
+                            <strong>{% translate_text "Email" CURRENT_LANGUAGE_CODE %}:</strong><br>
                             {{ booking.email }}
                         </div>
                         <div class="col-md-6">
-                            <strong>{% trans "Phone" %}:</strong><br>
+                            <strong>{% translate_text "Phone" CURRENT_LANGUAGE_CODE %}:</strong><br>
                             {{ booking.phone }}
                         </div>
                         {% if booking.id_number %}
                         <div class="col-md-6">
-                            <strong>{% trans "ID Number" %}:</strong><br>
+                            <strong>{% translate_text "ID Number" CURRENT_LANGUAGE_CODE %}:</strong><br>
                             {{ booking.id_number }}
                         </div>
                         {% endif %}
                         {% if booking.notes %}
                         <div class="col-12">
-                            <strong>{% trans "Notes" %}:</strong><br>
+                            <strong>{% translate_text "Notes" CURRENT_LANGUAGE_CODE %}:</strong><br>
                             {{ booking.notes }}
                         </div>
                         {% endif %}
                         {% if booking.admin_notes %}
                         <div class="col-12">
-                            <strong>{% trans "Admin Notes" %}:</strong><br>
+                            <strong>{% translate_text "Admin Notes" CURRENT_LANGUAGE_CODE %}:</strong><br>
                             <em>{{ booking.admin_notes }}</em>
                         </div>
                         {% endif %}
                         {% if booking.approved_by %}
                         <div class="col-12">
-                            <strong>{% trans "Approved By" %}:</strong> {{ booking.approved_by.get_full_name|default:booking.approved_by.username }}<br>
-                            <strong>{% trans "Approved At" %}:</strong> {{ booking.approved_at|date:"M d, Y H:i" }}
+                            <strong>{% translate_text "Approved By" CURRENT_LANGUAGE_CODE %}:</strong> {{ booking.approved_by.get_full_name|default:booking.approved_by.username }}<br>
+                            <strong>{% translate_text "Approved At" CURRENT_LANGUAGE_CODE %}:</strong> {{ booking.approved_at|date:"M d, Y H:i" }}
                         </div>
                         {% endif %}
                     </div>
 
                     <div class="mt-4">
-                        <a href="{% url 'properties:my_bookings' %}" class="btn btn-primary">{% trans "Back to My Bookings" %}</a>
-                        <a href="{% url 'properties:property_detail' booking.property.slug %}" class="btn btn-outline-secondary">{% trans "View Property" %}</a>
+                        <a href="{% url 'properties:my_bookings' %}" class="btn btn-primary">{% translate_text "Back to My Bookings" CURRENT_LANGUAGE_CODE %}</a>
+                        <a href="{% url 'properties:property_detail' booking.property.slug %}" class="btn btn-outline-secondary">{% translate_text "View Property" CURRENT_LANGUAGE_CODE %}</a>
                     </div>
                 </div>
             </div>

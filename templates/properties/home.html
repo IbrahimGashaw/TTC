@@ -1,12 +1,13 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load i18n %}
+{% load translation_tags %}
 
 {% block title %}Andromeda Properties - Real Estate in Ethiopia{% endblock %}
 
 {% block content %}
-<!-- Hero Section with video background -->
-<section class="hero-section text-white text-center">
+<!-- Hero Section - EstateAgency Style -->
+<section class="hero-estateagency">
     {% if homepage_settings.hero_video_enabled %}
         {% with video_url=homepage_settings.get_video_url video_is_static=homepage_settings.get_video_is_static poster_url=homepage_settings.get_poster_url poster_is_static=homepage_settings.get_poster_is_static %}
             {% if video_url %}
@@ -26,50 +27,38 @@
                 </video>
             {% else %}
                 <!-- Fallback to poster image if no video -->
-                <div class="hero-video-placeholder" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-size: cover; background-position: center; z-index: -1; 
-                    {% if poster_is_static %}
-                        background-image: url('{% static poster_url %}');
-                    {% else %}
-                        background-image: url('{{ poster_url }}');
-                    {% endif %}
-                "></div>
+                <div class="hero-bg-image" style="background-image: url('{% if poster_is_static %}{% static poster_url %}{% else %}{{ poster_url }}{% endif %}');"></div>
             {% endif %}
         {% endwith %}
     {% else %}
         <!-- Video disabled - show poster image -->
         {% with poster_url=homepage_settings.get_poster_url poster_is_static=homepage_settings.get_poster_is_static %}
-            <div class="hero-video-placeholder" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-size: cover; background-position: center; z-index: -1;
-                {% if poster_is_static %}
-                    background-image: url('{% static poster_url %}');
-                {% else %}
-                    background-image: url('{{ poster_url }}');
-                {% endif %}
-            "></div>
+            <div class="hero-bg-image" style="background-image: url('{% if poster_is_static %}{% static poster_url %}{% else %}{{ poster_url }}{% endif %}');"></div>
         {% endwith %}
     {% endif %}
-    <div class="hero-overlay"></div>
-    <div class="container hero-content">
-        <h1 class="fw-bold mb-3">{{ homepage_settings.hero_title|default:"MAKE YOUR NEXT MOVE WITH US" }}</h1>
-        <h2 class="mb-3">{{ homepage_settings.hero_subtitle|default:"ANDROMEDA PROPERTIES" }}</h2>
-        {% if homepage_settings.hero_description %}
-            <p class="lead mb-4">{{ homepage_settings.hero_description }}</p>
-        {% endif %}
-        <a href="{% url 'properties:property_list' %}" class="btn btn-primary btn-lg">{{ homepage_settings.hero_button_text|default:"Explore Properties" }}</a>
+    <div class="container">
+        <div class="hero-content-estateagency">
+            <h1>{% if homepage_settings.hero_title %}{{ homepage_settings.hero_title|translate:CURRENT_LANGUAGE_CODE }}{% else %}{% translate_text "MAKE YOUR NEXT MOVE WITH US" CURRENT_LANGUAGE_CODE %}{% endif %}</h1>
+            <h2>{% if homepage_settings.hero_subtitle %}{{ homepage_settings.hero_subtitle|translate:CURRENT_LANGUAGE_CODE }}{% else %}{% translate_text "ANDROMEDA PROPERTIES" CURRENT_LANGUAGE_CODE %}{% endif %}</h2>
+            {% if homepage_settings.hero_description %}
+                <p>{{ homepage_settings.hero_description|translate:CURRENT_LANGUAGE_CODE }}</p>
+            {% endif %}
+            <a href="{% url 'properties:property_list' %}" class="btn btn-hero-estateagency">{% if homepage_settings.hero_button_text %}{{ homepage_settings.hero_button_text|translate:CURRENT_LANGUAGE_CODE }}{% else %}{% translate_text "Explore Properties" CURRENT_LANGUAGE_CODE %}{% endif %}</a>
+        </div>
     </div>
 </section>
 
-<!-- Search Section - Material Dashboard Style -->
+<!-- Search Section - EstateAgency Style -->
 <section class="py-5">
     <div class="container">
-        <div class="card mb-4 elevation-2">
-            <div class="card-body">
-                <form method="get" action="{% url 'properties:property_list' %}" class="row g-4">
+        <div class="search-form-estateagency">
+            <form method="get" action="{% url 'properties:property_list' %}" class="row g-3">
             <div class="col-md-3">
                 <div class="form-field-wrapper">
                     <label for="home_location" class="form-label">
                         <i class="bi bi-geo-alt"></i> {% trans "Location" %}
                     </label>
-                    <input type="text" id="home_location" name="location" class="form-control" placeholder="{% trans 'Search by location' %}" value="{{ request.GET.location }}">
+                    <input type="text" id="home_location" name="location" class="form-control" placeholder="{% translate_text 'Search by location' CURRENT_LANGUAGE_CODE %}" value="{{ request.GET.location }}">
                 </div>
             </div>
             <div class="col-md-2">
@@ -89,20 +78,20 @@
             <div class="col-md-2">
                 <div class="form-field-wrapper">
                     <label for="home_bedrooms" class="form-label">
-                        <i class="bi bi-door-open"></i> {% trans "Bedrooms" %}
+                        <i class="bi bi-door-open"></i> {% translate_text "Bedrooms" CURRENT_LANGUAGE_CODE %}
                     </label>
-                    <input type="number" id="home_bedrooms" name="bedrooms" class="form-control" placeholder="{% trans 'Bedrooms' %}" value="{{ request.GET.bedrooms }}" min="0">
+                    <input type="number" id="home_bedrooms" name="bedrooms" class="form-control" placeholder="{% translate_text 'Bedrooms' CURRENT_LANGUAGE_CODE %}" value="{{ request.GET.bedrooms }}" min="0">
                 </div>
             </div>
             <div class="col-md-2">
                 <div class="form-field-wrapper">
                     <label for="home_status" class="form-label">
-                        <i class="bi bi-info-circle"></i> {% trans "Status" %}
+                        <i class="bi bi-info-circle"></i> {% translate_text "Status" CURRENT_LANGUAGE_CODE %}
                     </label>
-                    <select id="home_status" name="status" class="form-select" title="{% trans 'Status' %}">
-                        <option value="">{% trans "All Status" %}</option>
-                        <option value="active" {% if request.GET.status == 'active' %}selected{% endif %}>{% trans "Active" %}</option>
-                        <option value="new_offer" {% if request.GET.status == 'new_offer' %}selected{% endif %}>{% trans "New Offer" %}</option>
+                    <select id="home_status" name="status" class="form-select" title="{% translate_text 'Status' CURRENT_LANGUAGE_CODE %}">
+                        <option value="">{% translate_text "All Status" CURRENT_LANGUAGE_CODE %}</option>
+                        <option value="active" {% if request.GET.status == 'active' %}selected{% endif %}>{% translate_text "Active" CURRENT_LANGUAGE_CODE %}</option>
+                        <option value="new_offer" {% if request.GET.status == 'new_offer' %}selected{% endif %}>{% translate_text "New Offer" CURRENT_LANGUAGE_CODE %}</option>
                     </select>
                 </div>
             </div>
@@ -111,161 +100,147 @@
                     <div class="col-md-3">
                         <div class="form-field-wrapper">
                             <label for="home_min_price" class="form-label">
-                                <i class="bi bi-currency-dollar"></i> {% trans "Min Price (ETB)" %}
+                                <i class="bi bi-currency-dollar"></i> {% translate_text "Min Price (ETB)" CURRENT_LANGUAGE_CODE %}
                             </label>
-                            <input type="number" id="home_min_price" name="min_price" class="form-control" placeholder="{% trans 'Min' %}" value="{{ request.GET.min_price }}" min="0" step="1000">
+                            <input type="number" id="home_min_price" name="min_price" class="form-control" placeholder="{% translate_text 'Min' CURRENT_LANGUAGE_CODE %}" value="{{ request.GET.min_price }}" min="0" step="1000">
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="form-field-wrapper">
                             <label for="home_max_price" class="form-label">
-                                <i class="bi bi-currency-dollar"></i> {% trans "Max Price (ETB)" %}
+                                <i class="bi bi-currency-dollar"></i> {% translate_text "Max Price (ETB)" CURRENT_LANGUAGE_CODE %}
                             </label>
-                            <input type="number" id="home_max_price" name="max_price" class="form-control" placeholder="{% trans 'Max' %}" value="{{ request.GET.max_price }}" min="0" step="1000">
+                            <input type="number" id="home_max_price" name="max_price" class="form-control" placeholder="{% translate_text 'Max' CURRENT_LANGUAGE_CODE %}" value="{{ request.GET.max_price }}" min="0" step="1000">
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="form-field-wrapper">
                             <label for="home_sale_type" class="form-label">
-                                <i class="bi bi-tag"></i> {% trans "Sale Type" %}
+                                <i class="bi bi-tag"></i> {% translate_text "Sale Type" CURRENT_LANGUAGE_CODE %}
                             </label>
                             <select id="home_sale_type" name="sale_type" class="form-select">
-                                <option value="">{% trans "All" %}</option>
-                                <option value="for_sale" {% if request.GET.sale_type == 'for_sale' %}selected{% endif %}>{% trans "For Sale" %}</option>
-                                <option value="for_rent" {% if request.GET.sale_type == 'for_rent' %}selected{% endif %}>{% trans "For Rent" %}</option>
+                                <option value="">{% translate_text "All" CURRENT_LANGUAGE_CODE %}</option>
+                                <option value="for_sale" {% if request.GET.sale_type == 'for_sale' %}selected{% endif %}>{% translate_text "For Sale" CURRENT_LANGUAGE_CODE %}</option>
+                                <option value="for_rent" {% if request.GET.sale_type == 'for_rent' %}selected{% endif %}>{% translate_text "For Rent" CURRENT_LANGUAGE_CODE %}</option>
                             </select>
                         </div>
                     </div>
                     <!-- Desktop search button - at the end of all fields -->
                     <div class="col-md-3 d-none d-md-flex align-items-end">
-                        <button type="submit" class="btn btn-primary w-100">
-                            <i class="bi bi-search"></i> {% trans "Search" %}
+                        <button type="submit" class="btn btn-search w-100">
+                            <i class="bi bi-search me-2"></i> {% translate_text "Search" CURRENT_LANGUAGE_CODE %}
                         </button>
                     </div>
                 </div>
             </div>
             <!-- Mobile search button - appears at bottom, hidden on desktop -->
             <div class="col-12 d-md-none mt-3 mb-0">
-                <button type="submit" class="btn btn-primary w-100 btn-lg">
-                    <i class="bi bi-search"></i> {% trans "Search" %}
+                <button type="submit" class="btn btn-search w-100">
+                    <i class="bi bi-search me-2"></i> {% trans "Search" %}
                 </button>
             </div>
-                </form>
-            </div>
+        </form>
         </div>
     </div>
 </section>
 
-<!-- Latest Properties - Material Dashboard Style -->
-<section class="py-5">
+<!-- Latest Properties - EstateAgency Style -->
+<section class="section-padding">
     <div class="container">
-        <div class="text-center mb-5">
-            <h2 class="display-5 fw-bold text-dark">Our Latest Properties</h2>
-            <p class="lead text-secondary">Discover the latest real estate in Ethiopia on Andromeda Properties</p>
+        <div class="section-heading-estateagency">
+            <h2>Our Latest Properties</h2>
+            <p>{% translate_text "Discover the latest real estate in Ethiopia on Andromeda Properties" CURRENT_LANGUAGE_CODE %}</p>
         </div>
         <div class="row g-4">
             {% for property in latest_properties %}
-            <div class="col-md-4">
-                <div class="card property-card elevation-2">
-                    {% if property.images.first %}
-                        {% with img=property.images.first.image %}
-                            <img src="{{ img.url }}" loading="lazy" 
-                                 class="card-img-top" 
-                                 alt="{{ property.title }}" 
-                                 style="height: 250px; object-fit: cover; width: 100%; display: block; margin: 0 !important; margin-bottom: 0 !important; padding: 0 !important; vertical-align: bottom; line-height: 0;"
-                                 onerror="console.error('Image failed:', this.src); this.onerror=null; this.src=''; this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                            <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" style="height: 250px; width: 100%; display: none; margin: 0 !important; padding: 0 !important; line-height: 0;">
+            <div class="col-lg-4 col-md-6">
+                <div class="card property-card-estateagency">
+                    <div class="card-img-wrapper">
+                        {% if property.images.first %}
+                            {% with img=property.images.first.image %}
+                                <img src="{{ img.url }}" loading="lazy" class="card-img-top" alt="{{ property.title }}">
+                            {% endwith %}
+                        {% elif property.main_image %}
+                            <img src="{{ property.main_image.url }}" class="card-img-top" alt="{{ property.title }}">
+                        {% else %}
+                            <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" style="height: 100%;">
                                 <i class="bi bi-image text-white" style="font-size: 3rem;"></i>
                             </div>
-                        {% endwith %}
-                    {% elif property.main_image %}
-                        <img src="{{ property.main_image.url }}" 
-                             class="card-img-top" 
-                             alt="{{ property.title }}" 
-                             style="height: 250px; object-fit: cover; width: 100%; display: block; margin: 0 !important; margin-bottom: 0 !important; padding: 0 !important; vertical-align: bottom; line-height: 0;"
-                             onerror="console.error('Image failed:', this.src); this.onerror=null; this.src=''; this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                        <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" style="height: 250px; width: 100%; display: none; margin: 0 !important; padding: 0 !important; line-height: 0;">
-                            <i class="bi bi-image text-white" style="font-size: 3rem;"></i>
-                        </div>
-                    {% else %}
-                        <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" style="height: 250px; width: 100%; margin: 0 !important; padding: 0 !important; line-height: 0;">
-                            <i class="bi bi-image text-white" style="font-size: 3rem;"></i>
-                        </div>
-                    {% endif %}
-                    <div class="property-card-content" style="padding: 0 0.75rem 0.5rem 0.75rem !important; margin: 0 !important; margin-top: 0 !important; padding-top: 0 !important; line-height: normal;">
-                        <div class="d-flex justify-content-between align-items-start mb-2" style="margin-top: 0 !important; padding-top: 0 !important; margin-bottom: 0.5rem !important;">
-                            <div class="d-flex gap-1 flex-wrap">
-                                <span class="badge bg-success">{{ property.get_sale_type_display }}</span>
-                                <span class="badge bg-info">{{ property.get_status_display }}</span>
-                                {% if property.is_verified %}
-                                    <span class="verified-badge" title="{% trans 'Verified Property' %}">
-                                        <i class="bi bi-patch-check-fill"></i> {% trans "Verified" %}
-                                    </span>
-                                {% endif %}
-                            </div>
-                        </div>
-                        <h5 class="card-title" style="margin-top: 0; margin-bottom: 0.5rem;">{{ property.title }}</h5>
-                        <p class="last-updated small mb-2" style="margin-top: 0;">
-                            <i class="bi bi-clock-history"></i> 
-                            {% trans "Updated" %} {{ property.updated_at|timesince }} {% trans "ago" %}
-                        </p>
-                        {% if property.description %}
-                        <p class="card-text text-muted small" style="margin: 0.25rem 0 0.5rem 0; line-height: 1.4;">{{ property.description|truncatewords:15 }}</p>
                         {% endif %}
-                        <div class="property-details d-flex gap-3 mb-3" style="margin-top: 0;">
-                            {% if property.bedrooms > 0 %}
-                                <span><i class="bi bi-door-open"></i> {{ property.bedrooms }} Beds</span>
-                            {% endif %}
-                            {% if property.bathrooms > 0 %}
-                                <span><i class="bi bi-droplet"></i> {{ property.bathrooms }} Baths</span>
-                            {% endif %}
-                            <span><i class="bi bi-rulers"></i> {{ property.size }} m²</span>
-                        </div>
-                        <p class="text-muted small mb-3" style="margin-top: 0;">
+                        {% if property.status == 'new_offer' %}
+                            <span class="property-badge">New Offer</span>
+                        {% endif %}
+                        {% if property.price %}
+                            <div class="property-price">ETB {{ property.price|floatformat:0 }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ property.title|translate:CURRENT_LANGUAGE_CODE }}</h5>
+                        <p class="property-location">
                             <i class="bi bi-geo-alt"></i> {{ property.location }}
                         </p>
-                        <a href="{% url 'properties:property_detail' property.slug %}" class="btn btn-primary w-100" style="margin-top: 0.5rem;">View Details</a>
+                        <div class="property-features">
+                            {% if property.bedrooms > 0 %}
+                                <div class="property-feature">
+                                    <i class="bi bi-door-open"></i>
+                                    <span>{{ property.bedrooms }} Beds</span>
+                                </div>
+                            {% endif %}
+                            {% if property.bathrooms > 0 %}
+                                <div class="property-feature">
+                                    <i class="bi bi-droplet"></i>
+                                    <span>{{ property.bathrooms }} Baths</span>
+                                </div>
+                            {% endif %}
+                            <div class="property-feature">
+                                <i class="bi bi-rulers"></i>
+                                <span>{{ property.size }} m²</span>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <a href="{% url 'properties:property_detail' property.slug %}" class="btn btn-view-details">{% translate_text "View Details" CURRENT_LANGUAGE_CODE %}</a>
+                        </div>
                     </div>
                 </div>
             </div>
             {% empty %}
             <div class="col-12 text-center">
-                <p class="text-muted">No properties available at the moment.</p>
+                <p class="text-muted">{% translate_text "No properties available at the moment." CURRENT_LANGUAGE_CODE %}</p>
             </div>
             {% endfor %}
         </div>
-        <div class="text-center mt-4">
-            <a href="{% url 'properties:property_list' %}" class="btn btn-primary btn-lg">Load More Listings</a>
+        <div class="text-center mt-5">
+            <a href="{% url 'properties:property_list' %}" class="btn btn-estateagency-primary btn-lg">{% translate_text "View All Properties" CURRENT_LANGUAGE_CODE %}</a>
         </div>
     </div>
 </section>
 
-<!-- Statistics Section -->
-<section class="py-5 bg-primary text-white">
+<!-- Statistics Section - EstateAgency Style -->
+<section class="stats-section-estateagency">
     <div class="container">
         <div class="row text-center">
-            <div class="col-md-4 mb-4">
-                <h3 class="display-4 fw-bold">{{ stats.customers }}+</h3>
-                <p class="lead">Customers</p>
+            <div class="col-lg-4 col-md-4 mb-4">
+                <h3>{{ stats.customers }}+</h3>
+                <p>{% translate_text "Customers" CURRENT_LANGUAGE_CODE %}</p>
             </div>
-            <div class="col-md-4 mb-4">
-                <h3 class="display-4 fw-bold">{{ stats.years_experience }}+</h3>
-                <p class="lead">Years Of Experience</p>
+            <div class="col-lg-4 col-md-4 mb-4">
+                <h3>{{ stats.years_experience }}+</h3>
+                <p>{% translate_text "Years Of Experience" CURRENT_LANGUAGE_CODE %}</p>
             </div>
-            <div class="col-md-4 mb-4">
-                <h3 class="display-4 fw-bold">{{ stats.delivered_projects }}+</h3>
-                <p class="lead">Delivered Projects</p>
+            <div class="col-lg-4 col-md-4 mb-4">
+                <h3>{{ stats.delivered_projects }}+</h3>
+                <p>{% translate_text "Delivered Projects" CURRENT_LANGUAGE_CODE %}</p>
             </div>
         </div>
     </div>
 </section>
 
-<!-- Projects Section - Material Dashboard Style -->
-<section class="py-5">
+<!-- Projects Section - EstateAgency Style -->
+<section class="section-padding">
     <div class="container">
-        <div class="text-center mb-5">
-            <h2 class="display-5 fw-bold text-dark">Our Project Listings</h2>
-            <p class="lead text-secondary">Easily explore Real Estate in Ethiopia with our List Category feature</p>
+        <div class="section-heading-estateagency">
+            <h2>Our Project Listings</h2>
+            <p>Easily explore Real Estate in Ethiopia with our List Category feature</p>
         </div>
         <div class="row g-3">
             {% for project in projects %}
@@ -303,19 +278,19 @@
     </div>
 </section>
 
-<!-- Why Choose Us Section - Material Dashboard Style -->
-<section class="py-5">
+<!-- Why Choose Us Section - EstateAgency Style -->
+<section class="section-padding bg-light-section">
     <div class="container">
-        <div class="text-center mb-5">
-            <h2 class="display-5 fw-bold text-dark">Why You Choose Us</h2>
+        <div class="section-heading-estateagency">
+            <h2>Why You Choose Us</h2>
         </div>
         <div class="row g-4">
-            <div class="col-md-4">
-                <div class="card elevation-2 h-100 text-center">
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card property-card-estateagency h-100 text-center">
                     <div class="card-body">
                         <div class="mb-3">
-                            <div class="icon-circle mx-auto">
-                                <i class="bi bi-geo-alt-fill" style="font-size: 2rem;"></i>
+                            <div class="icon-circle mx-auto" style="width: 80px; height: 80px; background: var(--secondary-color); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                <i class="bi bi-geo-alt-fill text-white" style="font-size: 2rem;"></i>
                             </div>
                         </div>
                         <h4 class="mt-3 fw-bold text-dark">Location</h4>
@@ -323,12 +298,12 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="card elevation-2 h-100 text-center">
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card property-card-estateagency h-100 text-center">
                     <div class="card-body">
                         <div class="mb-3">
-                            <div class="icon-circle mx-auto">
-                                <i class="bi bi-currency-dollar" style="font-size: 2rem;"></i>
+                            <div class="icon-circle mx-auto" style="width: 80px; height: 80px; background: var(--secondary-color); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                <i class="bi bi-currency-dollar text-white" style="font-size: 2rem;"></i>
                             </div>
                         </div>
                         <h4 class="mt-3 fw-bold text-dark">Affordable</h4>
@@ -336,12 +311,12 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="card elevation-2 h-100 text-center">
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card property-card-estateagency h-100 text-center">
                     <div class="card-body">
                         <div class="mb-3">
-                            <div class="icon-circle mx-auto">
-                                <i class="bi bi-award" style="font-size: 2rem;"></i>
+                            <div class="icon-circle mx-auto" style="width: 80px; height: 80px; background: var(--secondary-color); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                <i class="bi bi-award text-white" style="font-size: 2rem;"></i>
                             </div>
                         </div>
                         <h4 class="mt-3 fw-bold text-dark">Quality</h4>
@@ -349,12 +324,12 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="card elevation-2 h-100 text-center">
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card property-card-estateagency h-100 text-center">
                     <div class="card-body">
                         <div class="mb-3">
-                            <div class="icon-circle mx-auto">
-                                <i class="bi bi-shield-check" style="font-size: 2rem;"></i>
+                            <div class="icon-circle mx-auto" style="width: 80px; height: 80px; background: var(--secondary-color); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                <i class="bi bi-shield-check text-white" style="font-size: 2rem;"></i>
                             </div>
                         </div>
                         <h4 class="mt-3 fw-bold text-dark">Safety & Security</h4>
@@ -362,12 +337,12 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="card elevation-2 h-100 text-center">
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card property-card-estateagency h-100 text-center">
                     <div class="card-body">
                         <div class="mb-3">
-                            <div class="icon-circle mx-auto">
-                                <i class="bi bi-graph-up-arrow" style="font-size: 2rem;"></i>
+                            <div class="icon-circle mx-auto" style="width: 80px; height: 80px; background: var(--secondary-color); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                <i class="bi bi-graph-up-arrow text-white" style="font-size: 2rem;"></i>
                             </div>
                         </div>
                         <h4 class="mt-3 fw-bold text-dark">Investment</h4>
@@ -375,12 +350,12 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="card elevation-2 h-100 text-center">
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card property-card-estateagency h-100 text-center">
                     <div class="card-body">
                         <div class="mb-3">
-                            <div class="icon-circle mx-auto">
-                                <i class="bi bi-star" style="font-size: 2rem;"></i>
+                            <div class="icon-circle mx-auto" style="width: 80px; height: 80px; background: var(--secondary-color); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                <i class="bi bi-star text-white" style="font-size: 2rem;"></i>
                             </div>
                         </div>
                         <h4 class="mt-3 fw-bold text-dark">Amenity</h4>
@@ -391,5 +366,119 @@
         </div>
     </div>
 </section>
+
+<!-- Testimonials Section - EstateAgency Style -->
+<section class="section-padding">
+    <div class="container">
+        <div class="section-heading-estateagency">
+            <h2>Testimonials</h2>
+            <p>What our clients say about us</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-lg-4 col-md-6">
+                <div class="card property-card-estateagency h-100 text-center">
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <i class="bi bi-quote" style="font-size: 3rem; color: var(--secondary-color);"></i>
+                        </div>
+                        <p class="text-secondary mb-3">"Andromeda Properties made finding my dream home effortless. Their team was professional, knowledgeable, and always available to answer my questions."</p>
+                        <h5 class="fw-bold text-dark">John Doe</h5>
+                        <p class="text-muted small">Property Buyer</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="card property-card-estateagency h-100 text-center">
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <i class="bi bi-quote" style="font-size: 3rem; color: var(--secondary-color);"></i>
+                        </div>
+                        <p class="text-secondary mb-3">"Excellent service and great properties. The investment opportunities they showed me have been outstanding. Highly recommended!"</p>
+                        <h5 class="fw-bold text-dark">Sarah Smith</h5>
+                        <p class="text-muted small">Real Estate Investor</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="card property-card-estateagency h-100 text-center">
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <i class="bi bi-quote" style="font-size: 3rem; color: var(--secondary-color);"></i>
+                        </div>
+                        <p class="text-secondary mb-3">"From start to finish, the entire process was smooth and transparent. Andromeda Properties truly cares about their clients' success."</p>
+                        <h5 class="fw-bold text-dark">Michael Johnson</h5>
+                        <p class="text-muted small">Commercial Property Owner</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Agents/Team Section - EstateAgency Style -->
+{% if team_members %}
+<section class="section-padding bg-light-section">
+    <div class="container">
+        <div class="section-heading-estateagency">
+            <h2>Our Expert Team</h2>
+            <p>Meet our professional real estate agents</p>
+        </div>
+        <div class="row g-4">
+            {% for member in team_members %}
+            <div class="col-lg-4 col-md-6">
+                <div class="card property-card-estateagency h-100 text-center">
+                    <div class="card-body">
+                        {% if member.image %}
+                        <div class="mb-3">
+                            <img src="{{ member.image.url }}" alt="{{ member.name }}" class="rounded-circle mx-auto" style="width: 150px; height: 150px; object-fit: cover;">
+                        </div>
+                        {% else %}
+                        <div class="mb-3">
+                            <div class="rounded-circle mx-auto bg-secondary d-flex align-items-center justify-content-center" style="width: 150px; height: 150px;">
+                                <i class="bi bi-person text-white" style="font-size: 4rem;"></i>
+                            </div>
+                        </div>
+                        {% endif %}
+                        <h5 class="fw-bold text-dark">{{ member.name }}</h5>
+                        <p class="text-primary mb-2">{{ member.get_role_display }}</p>
+                        {% if member.is_verified %}
+                        <p class="small mb-2">
+                            <i class="bi bi-patch-check-fill text-success"></i> Verified Agent
+                        </p>
+                        {% endif %}
+                        {% if member.years_experience > 0 %}
+                        <p class="text-muted small mb-2">{{ member.years_experience }} Years Experience</p>
+                        {% endif %}
+                        {% if member.bio %}
+                        <p class="text-secondary small mb-3">{{ member.bio|truncatewords:20 }}</p>
+                        {% endif %}
+                        <div class="d-flex justify-content-center gap-2">
+                            {% if member.email %}
+                            <a href="mailto:{{ member.email }}" class="btn btn-sm btn-outline-primary">
+                                <i class="bi bi-envelope"></i>
+                            </a>
+                            {% endif %}
+                            {% if member.phone %}
+                            <a href="tel:{{ member.phone }}" class="btn btn-sm btn-outline-primary">
+                                <i class="bi bi-telephone"></i>
+                            </a>
+                            {% endif %}
+                            {% if member.whatsapp_number %}
+                            <a href="https://wa.me/{{ member.whatsapp_number|slice:'1:' }}" target="_blank" class="btn btn-sm btn-outline-success">
+                                <i class="bi bi-whatsapp"></i>
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="text-center mt-5">
+            <a href="{% url 'properties:team' %}" class="btn btn-estateagency-primary btn-lg">{% translate_text "View All Agents" CURRENT_LANGUAGE_CODE %}</a>
+        </div>
+    </div>
+</section>
+{% endif %}
 {% endblock %}
 
