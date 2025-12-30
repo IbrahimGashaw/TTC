@@ -33,6 +33,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }, true);
     });
+    // Initialize Chatbot
+    initializeChatbot();
+
     // Initialize tooltips
     var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
     var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
@@ -414,4 +417,159 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+
+    // Initialize Chatbot
+    initializeChatbot();
 });
+
+// Chatbot functionality
+function initializeChatbot() {
+    const chatbotToggleBtn = document.getElementById('chatbotToggleBtn');
+    const chatbotCloseBtn = document.getElementById('chatbotCloseBtn');
+    const chatbotModal = document.getElementById('chatbotModal');
+    const chatbotForm = document.getElementById('chatbotForm');
+    const chatbotInput = document.getElementById('chatbotInput');
+    const chatbotMessages = document.getElementById('chatbotMessages');
+    const chatbotQuickBtns = document.querySelectorAll('.chatbot-quick-btn');
+    const chatbotNotificationBadge = document.getElementById('chatbotNotificationBadge');
+
+    if (!chatbotToggleBtn || !chatbotModal) return;
+
+    // Toggle chatbot modal
+    chatbotToggleBtn.addEventListener('click', function() {
+        chatbotModal.classList.add('active');
+        chatbotInput.focus();
+        // Hide notification badge when opened
+        if (chatbotNotificationBadge) {
+            chatbotNotificationBadge.style.display = 'none';
+        }
+    });
+
+    // Close chatbot modal
+    chatbotCloseBtn.addEventListener('click', function() {
+        chatbotModal.classList.remove('active');
+    });
+
+    // Close when clicking outside
+    chatbotModal.addEventListener('click', function(e) {
+        if (e.target === chatbotModal) {
+            chatbotModal.classList.remove('active');
+        }
+    });
+
+    // Handle form submission
+    chatbotForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const message = chatbotInput.value.trim();
+        if (message) {
+            addUserMessage(message);
+            chatbotInput.value = '';
+            // Simulate bot response (you can replace this with actual API call)
+            setTimeout(function() {
+                addBotMessage(getBotResponse(message));
+            }, 1000);
+        }
+    });
+
+    // Handle quick action buttons
+    chatbotQuickBtns.forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            const message = this.getAttribute('data-message');
+            if (message) {
+                addUserMessage(message);
+                setTimeout(function() {
+                    addBotMessage(getBotResponse(message));
+                }, 1000);
+            }
+        });
+    });
+
+    // Add user message
+    function addUserMessage(text) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'chatbot-message chatbot-message-user';
+        messageDiv.innerHTML = `
+            <div class="chatbot-message-avatar">
+                <i class="bi bi-person-circle"></i>
+            </div>
+            <div class="chatbot-message-content">
+                <div class="chatbot-message-bubble">
+                    <p>${escapeHtml(text)}</p>
+                </div>
+                <small class="chatbot-message-time">${getCurrentTime()}</small>
+            </div>
+        `;
+        chatbotMessages.appendChild(messageDiv);
+        scrollToBottom();
+    }
+
+    // Add bot message
+    function addBotMessage(text) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'chatbot-message chatbot-message-bot';
+        messageDiv.innerHTML = `
+            <div class="chatbot-message-avatar">
+                <i class="bi bi-person-circle"></i>
+            </div>
+            <div class="chatbot-message-content">
+                <div class="chatbot-message-bubble">
+                    <p>${escapeHtml(text)}</p>
+                </div>
+                <small class="chatbot-message-time">${getCurrentTime()}</small>
+            </div>
+        `;
+        chatbotMessages.appendChild(messageDiv);
+        scrollToBottom();
+    }
+
+    // Get bot response (simple rule-based, can be replaced with API)
+    function getBotResponse(userMessage) {
+        const message = userMessage.toLowerCase();
+        
+        // Property viewing
+        if (message.includes('view') || message.includes('property') || message.includes('house') || message.includes('apartment')) {
+            return 'I can help you find the perfect property! You can browse our properties list or book a viewing appointment. Would you like me to show you how?';
+        }
+        
+        // Booking
+        if (message.includes('book') || message.includes('booking') || message.includes('appointment') || message.includes('viewing')) {
+            return 'Great! You can book a viewing appointment directly from any property page. Just click the "Book a Viewing" button. Would you like to see our available properties?';
+        }
+        
+        // Services
+        if (message.includes('service') || message.includes('what do you do') || message.includes('help')) {
+            return 'We are Andromeda Properties, one of the top real estate developers in Addis Ababa, Ethiopia. We offer high-quality properties, construction updates, market reports, and expert guidance. How can I assist you today?';
+        }
+        
+        // Contact
+        if (message.includes('contact') || message.includes('phone') || message.includes('email') || message.includes('address')) {
+            return 'You can reach us at:\n• Hotline: 6033\n• Phone: +251913677468\n• Email: info@andromedaproperties.com\n• Address: Kolfie Keranio, Woreda 07, Apple Plaza Building\nOr use the WhatsApp button for instant messaging!';
+        }
+        
+        // Greeting
+        if (message.includes('hello') || message.includes('hi') || message.includes('hey') || message.includes('good morning') || message.includes('good afternoon') || message.includes('good evening')) {
+            return 'Hello! Welcome to Andromeda Properties. I\'m here to help you find your dream property or answer any questions. What would you like to know?';
+        }
+        
+        // Default response
+        return 'Thank you for your message! I\'m here to help you with property inquiries, bookings, or any questions about our services. Feel free to ask me anything!';
+    }
+
+    // Scroll to bottom of messages
+    function scrollToBottom() {
+        chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+    }
+
+    // Get current time
+    function getCurrentTime() {
+        const now = new Date();
+        return now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    }
+
+    // Escape HTML to prevent XSS
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+}

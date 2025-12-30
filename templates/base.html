@@ -294,6 +294,74 @@
         </div>
     {% endif %}
 
+    <!-- Chatbot Floating Button -->
+    <button class="chatbot-toggle-btn" id="chatbotToggleBtn" aria-label="{% translate_text 'Open Chat' CURRENT_LANGUAGE_CODE %}" title="{% translate_text 'Chat with us' CURRENT_LANGUAGE_CODE %}">
+        <i class="bi bi-chat-dots-fill"></i>
+        <span class="chatbot-notification-badge" id="chatbotNotificationBadge" style="display: none;">1</span>
+    </button>
+
+    <!-- Chatbot Modal -->
+    <div class="chatbot-modal" id="chatbotModal">
+        <div class="chatbot-container">
+            <!-- Chatbot Header -->
+            <div class="chatbot-header">
+                <div class="chatbot-header-info">
+                    <div class="chatbot-avatar">
+                        <i class="bi bi-person-circle"></i>
+                    </div>
+                    <div class="chatbot-header-text">
+                        <h6 class="chatbot-name">{% translate_text "Andromeda Support" CURRENT_LANGUAGE_CODE %}</h6>
+                        <small class="chatbot-status">{% translate_text "Online" CURRENT_LANGUAGE_CODE %}</small>
+                    </div>
+                </div>
+                <button class="chatbot-close-btn" id="chatbotCloseBtn" aria-label="{% translate_text 'Close Chat' CURRENT_LANGUAGE_CODE %}">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
+
+            <!-- Chatbot Messages Area -->
+            <div class="chatbot-messages" id="chatbotMessages">
+                <div class="chatbot-message chatbot-message-bot">
+                    <div class="chatbot-message-avatar">
+                        <i class="bi bi-person-circle"></i>
+                    </div>
+                    <div class="chatbot-message-content">
+                        <div class="chatbot-message-bubble">
+                            <p>{% translate_text "Hello! How can I help you today?" CURRENT_LANGUAGE_CODE %}</p>
+                        </div>
+                        <small class="chatbot-message-time">{% translate_text "Just now" CURRENT_LANGUAGE_CODE %}</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chatbot Input Area -->
+            <div class="chatbot-input-area">
+                <form id="chatbotForm" class="chatbot-form">
+                    <input type="text" 
+                           id="chatbotInput" 
+                           class="chatbot-input" 
+                           placeholder="{% translate_text 'Type your message...' CURRENT_LANGUAGE_CODE %}" 
+                           autocomplete="off"
+                           aria-label="{% translate_text 'Message input' CURRENT_LANGUAGE_CODE %}">
+                    <button type="submit" class="chatbot-send-btn" aria-label="{% translate_text 'Send message' CURRENT_LANGUAGE_CODE %}">
+                        <i class="bi bi-send-fill"></i>
+                    </button>
+                </form>
+                <div class="chatbot-quick-actions">
+                    <button class="chatbot-quick-btn" data-message="{% translate_text 'I want to view a property' CURRENT_LANGUAGE_CODE %}">
+                        <i class="bi bi-house-door"></i> {% translate_text "View Property" CURRENT_LANGUAGE_CODE %}
+                    </button>
+                    <button class="chatbot-quick-btn" data-message="{% translate_text 'I need help with booking' CURRENT_LANGUAGE_CODE %}">
+                        <i class="bi bi-calendar-check"></i> {% translate_text "Book Viewing" CURRENT_LANGUAGE_CODE %}
+                    </button>
+                    <button class="chatbot-quick-btn" data-message="{% translate_text 'Tell me about your services' CURRENT_LANGUAGE_CODE %}">
+                        <i class="bi bi-info-circle"></i> {% translate_text "Our Services" CURRENT_LANGUAGE_CODE %}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- WhatsApp Floating Button -->
     {% load property_tags %}
     {% if site_settings.whatsapp_enabled and site_settings.whatsapp_number %}
