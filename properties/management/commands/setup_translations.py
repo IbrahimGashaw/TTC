@@ -36,3 +36,4 @@ class Command(BaseCommand):
         self.stdout.write('3. Run: python manage.py compilemessages')
 
 
+

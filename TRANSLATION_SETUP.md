@@ -74,3 +74,4 @@ The translation service uses `deep-translator` which:
 - The service automatically detects the current language from Django's language settings
 
 
+
