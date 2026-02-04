@@ -44,8 +44,8 @@ class Property(models.Model):
     ]
 
     SALE_TYPE_CHOICES = [
-        ('for_sale', _('For Sale')),
-        ('for_rent', _('For Rent')),
+        ('for_sale', _('Financed with bank')),
+        ('for_rent', _('Non financed with bank')),
     ]
 
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='properties')

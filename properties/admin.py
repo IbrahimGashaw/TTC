@@ -388,7 +388,7 @@ class MarketReportAdmin(admin.ModelAdmin):
             'fields': ('title', 'slug', 'excerpt', 'content', 'category', 'tags')
         }),
         (_('Media'), {
-            'fields': ('featured_image', 'pdf_file')
+            'fields': ('featured_image',)
         }),
         (_('Settings'), {
             'fields': ('is_published', 'is_featured', 'publication_date')

@@ -43,10 +43,15 @@
             <form method="get" id="search-form" class="row g-4">
                 <div class="col-md-3">
                     <div class="form-field-wrapper">
-                        <label for="list_location" class="form-label">
-                            <i class="bi bi-geo-alt"></i> {% translate_text "Location" CURRENT_LANGUAGE_CODE %}
+                        <label for="list_location" class="form-label property-type-label">
+                            <i class="bi bi-geo-alt"></i> <strong>{% translate_text "Location" CURRENT_LANGUAGE_CODE %}</strong>
                         </label>
-                        <input type="text" id="list_location" name="location" class="form-control" placeholder="{% translate_text 'Search by location' CURRENT_LANGUAGE_CODE %}" value="{{ request.GET.location }}">
+                        <select id="list_location" name="location" class="form-select" title="{% translate_text 'Location' CURRENT_LANGUAGE_CODE %}">
+                            <option value="">{% translate_text "All Locations" CURRENT_LANGUAGE_CODE %}</option>
+                            {% for loc in locations %}
+                                <option value="{{ loc }}" {% if request.GET.location == loc %}selected{% endif %}>{{ loc }}</option>
+                            {% endfor %}
+                        </select>
                     </div>
                 </div>
                 <div class="col-md-2">
@@ -65,24 +70,29 @@
                 </div>
                 <div class="col-md-2">
                     <div class="form-field-wrapper">
-                        <label for="list_bedrooms" class="form-label">
-                            <i class="bi bi-door-open"></i> {% translate_text "Bedrooms" CURRENT_LANGUAGE_CODE %}
+                        <label for="list_bedrooms" class="form-label property-type-label">
+                            <i class="bi bi-door-open"></i> <strong>{% translate_text "Bedrooms" CURRENT_LANGUAGE_CODE %}</strong>
                         </label>
-                        <input type="number" id="list_bedrooms" name="bedrooms" class="form-control" placeholder="{% translate_text 'Bedrooms' CURRENT_LANGUAGE_CODE %}" value="{{ request.GET.bedrooms }}" min="0">
+                        <select id="list_bedrooms" name="bedrooms" class="form-select" title="{% translate_text 'Bedrooms' CURRENT_LANGUAGE_CODE %}">
+                            <option value="">{% translate_text "Bedrooms" CURRENT_LANGUAGE_CODE %}</option>
+                            {% for beds in bedroom_options %}
+                                <option value="{{ beds }}" {% if request.GET.bedrooms == beds|stringformat:"s" %}selected{% endif %}>{{ beds }}</option>
+                            {% endfor %}
+                        </select>
                     </div>
                 </div>
                 <div class="col-md-2">
                     <div class="form-field-wrapper">
-                        <label for="list_bathrooms" class="form-label">
-                            <i class="bi bi-droplet"></i> {% translate_text "Bathrooms" CURRENT_LANGUAGE_CODE %}
+                        <label for="list_bathrooms" class="form-label property-type-label">
+                            <i class="bi bi-droplet"></i> <strong>{% translate_text "Bathrooms" CURRENT_LANGUAGE_CODE %}</strong>
                         </label>
                         <input type="number" id="list_bathrooms" name="bathrooms" class="form-control" placeholder="{% trans 'Bathrooms' %}" value="{{ request.GET.bathrooms }}" min="0">
                     </div>
                 </div>
                 <div class="col-md-2">
                     <div class="form-field-wrapper">
-                        <label for="list_status" class="form-label">
-                            <i class="bi bi-info-circle"></i> {% translate_text "Status" CURRENT_LANGUAGE_CODE %}
+                        <label for="list_status" class="form-label property-type-label">
+                            <i class="bi bi-info-circle"></i> <strong>{% translate_text "Status" CURRENT_LANGUAGE_CODE %}</strong>
                         </label>
                         <select id="list_status" name="status" class="form-select" title="{% trans 'Status' %}">
                             <option value="">{% trans "All Status" %}</option>
@@ -95,29 +105,29 @@
                     <div class="row g-4">
                         <div class="col-md-3">
                             <div class="form-field-wrapper">
-                                <label for="list_min_price" class="form-label">
-                                    <i class="bi bi-currency-dollar"></i> {% translate_text "Min Price (ETB)" CURRENT_LANGUAGE_CODE %}
+                                <label for="list_min_price" class="form-label property-type-label">
+                                    <i class="bi bi-currency-dollar"></i> <strong>{% translate_text "Min Price (ETB)" CURRENT_LANGUAGE_CODE %}</strong>
                                 </label>
                                 <input type="number" id="list_min_price" name="min_price" class="form-control" placeholder="{% translate_text 'Min' CURRENT_LANGUAGE_CODE %}" value="{{ request.GET.min_price }}" min="0" step="1000">
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="form-field-wrapper">
-                                <label for="list_max_price" class="form-label">
-                                    <i class="bi bi-currency-dollar"></i> {% translate_text "Max Price (ETB)" CURRENT_LANGUAGE_CODE %}
+                                <label for="list_max_price" class="form-label property-type-label">
+                                    <i class="bi bi-currency-dollar"></i> <strong>{% translate_text "Max Price (ETB)" CURRENT_LANGUAGE_CODE %}</strong>
                                 </label>
                                 <input type="number" id="list_max_price" name="max_price" class="form-control" placeholder="{% translate_text 'Max' CURRENT_LANGUAGE_CODE %}" value="{{ request.GET.max_price }}" min="0" step="1000">
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="form-field-wrapper">
-                                <label for="list_sale_type" class="form-label">
-                                    <i class="bi bi-tag"></i> {% translate_text "Sale Type" CURRENT_LANGUAGE_CODE %}
+                                <label for="list_sale_type" class="form-label property-type-label">
+                                    <i class="bi bi-tag"></i> <strong>{% translate_text "Sale/Payment Type" CURRENT_LANGUAGE_CODE %}</strong>
                                 </label>
                                 <select id="list_sale_type" name="sale_type" class="form-select">
                                     <option value="">{% trans "All" %}</option>
-                                    <option value="for_sale" {% if request.GET.sale_type == 'for_sale' %}selected{% endif %}>{% trans "For Sale" %}</option>
-                                    <option value="for_rent" {% if request.GET.sale_type == 'for_rent' %}selected{% endif %}>{% trans "For Rent" %}</option>
+                            <option value="for_sale" {% if request.GET.sale_type == 'for_sale' %}selected{% endif %}>{% translate_text "Financed with bank" CURRENT_LANGUAGE_CODE %}</option>
+                            <option value="for_rent" {% if request.GET.sale_type == 'for_rent' %}selected{% endif %}>{% translate_text "Non financed with bank" CURRENT_LANGUAGE_CODE %}</option>
                                 </select>
                             </div>
                         </div>
@@ -154,84 +164,78 @@
 
         {% if view_mode == 'map' %}
         <!-- Map View -->
-        {% if GOOGLE_MAPS_API_KEY and properties_with_coords %}
+        {% if properties_with_coords %}
         <div class="card-box-a card-shadow mb-4">
             <div class="card-body-a p-0">
                 <div id="properties-map" style="width: 100%; height: 600px;"></div>
             </div>
         </div>
-    {% else %}
-    <div class="alert alert-warning">
-        {% if not GOOGLE_MAPS_API_KEY %}
-            <i class="bi bi-exclamation-triangle"></i> {% trans "Google Maps API key is not configured." %}
         {% else %}
+        <div class="alert alert-warning">
             <i class="bi bi-info-circle"></i> {% trans "No properties with location coordinates found." %}
-        {% endif %}
-    </div>
+        </div>
         {% endif %}
         {% endif %}
 
-        <!-- Properties Grid - EstateAgency Style -->
+        <!-- Properties Grid - Card Style -->
         <div class="row {% if view_mode == 'map' %}d-none{% endif %}">
             {% for property in properties %}
-            <div class="col-md-6 col-lg-4">
-                <div class="card-box-a card-shadow">
-                    <div class="img-box-a">
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card shadow-sm property-card h-100 border-0 rounded-3">
+                    <div class="position-relative">
                         {% with display_image=property.get_display_image %}
                             {% if display_image %}
-                                <img src="{{ display_image.url }}" loading="lazy" 
-                                     alt="{{ property.title }}" 
-                                     class="img-a img-fluid">
+                                <img src="{{ display_image.url }}" loading="lazy" alt="{{ property.title }}"
+                                     class="card-img-top">
                             {% else %}
-                                <div class="img-a img-fluid bg-secondary d-flex align-items-center justify-content-center" style="height: 350px; min-height: 350px;">
-                                    <i class="bi bi-image text-white" style="font-size: 3rem;"></i>
+                                <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center text-white"
+                                     style="height: 250px;">
+                                    <i class="bi bi-image" style="font-size: 3rem;"></i>
                                 </div>
                             {% endif %}
                         {% endwith %}
-                    </div>
-                    <div class="card-overlay">
-                        <div class="card-overlay-a-content">
-                            <div class="card-header-a">
-                                <h2 class="card-title-a">
-                                    <a href="{% url 'properties:property_detail' property.slug %}">{{ property.title|translate:CURRENT_LANGUAGE_CODE }}</a>
-                                </h2>
-                            </div>
-                            <div class="card-body-a">
-                                <div class="price-box d-flex">
-                                    <span class="price-a">{{ property.get_sale_type_display }} | {{ property.price|floatformat:0 }} ETB</span>
-                                </div>
-                                <a href="{% url 'properties:property_detail' property.slug %}" class="link-a">Click here to view
-                                    <span class="bi bi-chevron-right"></span>
-                                </a>
-                            </div>
-                            <div class="card-footer-a">
-                                <ul class="card-info d-flex justify-content-around">
-                                    {% if property.bedrooms > 0 %}
-                                    <li>
-                                        <h4 class="card-info-title">{{ property.bedrooms }}</h4>
-                                        <span>{% translate_text "Bedrooms" CURRENT_LANGUAGE_CODE %}</span>
-                                    </li>
-                                    {% endif %}
-                                    {% if property.bathrooms > 0 %}
-                                    <li>
-                                        <h4 class="card-info-title">{{ property.bathrooms }}</h4>
-                                        <span>{% translate_text "Bathrooms" CURRENT_LANGUAGE_CODE %}</span>
-                                    </li>
-                                    {% endif %}
-                                    <li>
-                                        <h4 class="card-info-title">{{ property.size }}</h4>
-                                        <span>m²</span>
-                                    </li>
-                                </ul>
-                            </div>
+                        <div class="position-absolute start-0 bottom-0 m-3 bg-white px-3 py-2 fw-bold text-primary shadow-sm rounded-2">
+                            {% if property.price %}
+                                ETB {{ property.price|floatformat:0 }}
+                            {% else %}
+                                {% translate_text "Contact for price" CURRENT_LANGUAGE_CODE %}
+                            {% endif %}
                         </div>
+                        <span class="badge bg-primary position-absolute top-0 end-0 m-3">
+                            {{ property.get_sale_type_display }}
+                        </span>
+                    </div>
+                    <div class="card-body property-card-content">
+                        <h5 class="card-title mb-2">
+                            <a href="{% url 'properties:property_detail' property.slug %}" class="text-decoration-none text-dark">
+                                {{ property.title|translate:CURRENT_LANGUAGE_CODE }}
+                            </a>
+                        </h5>
+                        <div class="d-flex align-items-center text-muted mb-2">
+                            <i class="bi bi-geo-alt me-1"></i>
+                            <small>{{ property.location }}</small>
+                        </div>
+                        <div class="d-flex align-items-center flex-wrap gap-3 text-muted mb-3">
+                            <span class="d-inline-flex align-items-center">
+                                <i class="bi bi-columns-gap me-1"></i> {{ property.bedrooms }} {% translate_text "Beds" CURRENT_LANGUAGE_CODE %}
+                            </span>
+                            <span class="d-inline-flex align-items-center">
+                                <i class="bi bi-droplet me-1"></i> {{ property.bathrooms }} {% translate_text "Baths" CURRENT_LANGUAGE_CODE %}
+                            </span>
+                            <span class="d-inline-flex align-items-center">
+                                <i class="bi bi-aspect-ratio me-1"></i> {{ property.size }} m²
+                            </span>
+                        </div>
+                        <a href="{% url 'properties:property_detail' property.slug %}" class="btn btn-primary w-100">
+                            {% translate_text "View Details" CURRENT_LANGUAGE_CODE %}
+                        </a>
                     </div>
                 </div>
             </div>
             {% empty %}
             <div class="col-12 text-center py-5">
                 <i class="bi bi-inbox text-muted" style="font-size: 4rem;"></i>
-                <p class="text-muted mt-3">No properties found matching your criteria.</p>
+                <p class="text-muted mt-3">{% translate_text "No properties found matching your criteria." CURRENT_LANGUAGE_CODE %}</p>
                 <a href="{% url 'properties:property_list' %}" class="btn btn-b">{% translate_text "View All Properties" CURRENT_LANGUAGE_CODE %}</a>
             </div>
             {% endfor %}
@@ -269,8 +273,9 @@
 </section>
 <!--/ Property Grid End /-->
 
-{% if view_mode == 'map' and GOOGLE_MAPS_API_KEY and properties_with_coords %}
+{% if view_mode == 'map' and properties_with_coords %}
 {% block extra_js %}
+{% if GOOGLE_MAPS_API_KEY %}
 <script>
     function initPropertiesMap() {
         const map = new google.maps.Map(document.getElementById('properties-map'), {
@@ -290,42 +295,31 @@
             position: { lat: {{ property.latitude }}, lng: {{ property.longitude }} },
             map: map,
             title: '{{ property.title|escapejs }}',
-            icon: {
-                url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`
-                    <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="16" cy="16" r="12" fill="#1976d2" stroke="#fff" stroke-width="2"/>
-                        <path d="M16 8 L16 24 M8 16 L24 16" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
-                    </svg>
-                `),
-                scaledSize: new google.maps.Size(32, 32),
-                anchor: new google.maps.Point(16, 16)
-            }
         });
 
         const infoWindow{{ forloop.counter }} = new google.maps.InfoWindow({
             content: `
-                <div style="padding: 10px; max-width: 250px;">
-                    <h6 style="margin: 0 0 8px 0; font-weight: 600;">{{ property.title|escapejs }}</h6>
-                    <p style="margin: 0 0 5px 0; font-size: 12px; color: #666;">
+                <div style="padding: 10px; max-width: 240px;">
+                    <h6 style="margin: 0 0 6px 0; font-weight: 600;">{{ property.title|escapejs }}</h6>
+                    <p style="margin: 0 0 4px 0; font-size: 12px; color: #666;">
                         <i class="bi bi-geo-alt"></i> {{ property.location|escapejs }}
                     </p>
-                    <p style="margin: 0 0 5px 0; font-size: 12px; color: #666;">
-                        <strong>Price:</strong> {{ property.price|floatformat:0 }} ETB
+                    <p style="margin: 0 0 4px 0; font-size: 12px; color: #666;">
+                        <strong>{% trans "Price" %}:</strong> {{ property.price|floatformat:0 }} ETB
                     </p>
-                    <p style="margin: 0 0 10px 0; font-size: 12px; color: #666;">
-                        <strong>Type:</strong> {{ property.get_property_type_display }}
+                    <p style="margin: 0 0 8px 0; font-size: 12px; color: #666;">
+                        <strong>{% trans "Type" %}:</strong> {{ property.get_property_type_display }}
                     </p>
                     <a href="{% url 'properties:property_detail' property.slug %}" 
                        style="display: inline-block; padding: 6px 12px; background: #1976d2; color: white; text-decoration: none; border-radius: 4px; font-size: 12px;">
-                        View Details
+                        {% translate_text "View Details" CURRENT_LANGUAGE_CODE %}
                     </a>
                 </div>
             `
         });
 
         marker{{ forloop.counter }}.addListener('click', () => {
-            // Close all other info windows
-            infoWindows.forEach(window => window.close());
+            infoWindows.forEach(win => win.close());
             infoWindow{{ forloop.counter }}.open(map, marker{{ forloop.counter }});
         });
 
@@ -335,18 +329,53 @@
         {% endif %}
         {% endfor %}
 
-        // Fit map to show all markers
         if (markers.length > 0) {
             map.fitBounds(bounds);
-            // Don't zoom in too much if only one marker
             if (markers.length === 1) {
                 map.setZoom(15);
             }
         }
     }
 </script>
-{% if GOOGLE_MAPS_API_KEY %}
 <script src="https://maps.googleapis.com/maps/api/js?key={{ GOOGLE_MAPS_API_KEY }}&callback=initPropertiesMap" async defer></script>
+{% else %}
+<!-- Leaflet fallback when no Google Maps key is available -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-sA+e2atv8TTwLn2U5pSxbCkGmZ94KpR5YlJ/FO2hC2E=" crossorigin="anonymous">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-o9N1j8Mk3eQZx2NqodmTtHS4YJ1vyvyeEaCtdhZz7fM=" crossorigin="anonymous"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const map = L.map('properties-map').setView([9.1450, 38.7610], 12); // Addis Ababa default
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 18,
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        const markers = [];
+        {% for property in properties_with_coords %}
+        {% if property.latitude and property.longitude %}
+        const marker = L.marker([{{ property.latitude }}, {{ property.longitude }}]).addTo(map);
+        marker.bindPopup(`
+            <div style="min-width: 180px;">
+                <strong>{{ property.title|escapejs }}</strong><br>
+                <small>{{ property.location|escapejs }}</small><br>
+                <small>{% trans "Price" %}: {{ property.price|floatformat:0 }} ETB</small><br>
+                <small>{% trans "Type" %}: {{ property.get_property_type_display }}</small><br>
+                <a href="{% url 'properties:property_detail' property.slug %}" class="btn btn-sm btn-primary mt-2">{% translate_text "View Details" CURRENT_LANGUAGE_CODE %}</a>
+            </div>
+        `);
+        markers.push(marker.getLatLng());
+        {% endif %}
+        {% endfor %}
+
+        if (markers.length === 1) {
+            map.setView(markers[0], 15);
+        } else if (markers.length > 1) {
+            const bounds = L.latLngBounds(markers);
+            map.fitBounds(bounds, { padding: [30, 30] });
+        }
+    });
+</script>
 {% endif %}
 {% endblock %}
 {% endif %}

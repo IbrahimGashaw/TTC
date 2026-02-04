@@ -299,7 +299,7 @@
                     <hr>
                     <div class="d-flex flex-column gap-2">
                         <a href="{% url 'properties:book_viewing' property.slug %}" class="btn btn-primary btn-lg">
-                            <i class="bi bi-calendar-event"></i> {% translate_text "Book a Viewing" CURRENT_LANGUAGE_CODE %}
+                            <i class="bi bi-calendar-event"></i> {% translate_text "Book a Visiting" CURRENT_LANGUAGE_CODE %}
                         </a>
                         {% load property_tags %}
                         {% if site_settings.whatsapp_enabled and site_settings.whatsapp_number %}
@@ -479,7 +479,8 @@
     });
 </script>
 {% endif %}
-{% if property.latitude and property.longitude and GOOGLE_MAPS_API_KEY %}
+{% if property.latitude and property.longitude %}
+{% if GOOGLE_MAPS_API_KEY %}
 <script>
     function initPropertyMap() {
         const lat = {{ property.latitude }};
@@ -559,6 +560,33 @@
     }
 </script>
 <script src="https://maps.googleapis.com/maps/api/js?key={{ GOOGLE_MAPS_API_KEY }}&libraries=places&callback=initPropertyMap" async defer></script>
+{% else %}
+<!-- Leaflet fallback if Google Maps key is missing/invalid -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-sA+e2atv8TTwLn2U5pSxbCkGmZ94KpR5YlJ/FO2hC2E=" crossorigin="anonymous">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-o9N1j8Mk3eQZx2NqodmTtHS4YJ1vyvyeEaCtdhZz7fM=" crossorigin="anonymous"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const lat = {{ property.latitude }};
+        const lng = {{ property.longitude }};
+        const map = L.map('property-map').setView([lat, lng], 15);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        const marker = L.marker([lat, lng]).addTo(map);
+        marker.bindPopup(`
+            <div style="min-width: 200px;">
+                <strong>{{ property.title|escapejs }}</strong><br>
+                <small>{{ property.address|escapejs }}</small>
+            </div>
+        `);
+
+        map.fitBounds([ [lat, lng] ], { padding: [30, 30] });
+    });
+</script>
+{% endif %}
 {% endif %}
 {% endblock %}
 

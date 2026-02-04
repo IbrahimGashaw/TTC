@@ -28,6 +28,21 @@ def home(request):
     projects = Project.objects.all()[:15]
     team_members = TeamMember.objects.all()[:6]  # Get team members for agents section
     
+    # Dropdown options for homepage search
+    locations = (
+        Property.objects.exclude(location__isnull=True)
+        .exclude(location__exact='')
+        .values_list('location', flat=True)
+        .distinct()
+        .order_by('location')
+    )
+    bedroom_options = (
+        Property.objects.exclude(bedrooms__isnull=True)
+        .values_list('bedrooms', flat=True)
+        .distinct()
+        .order_by('bedrooms')
+    )
+    
     # Get homepage settings (singleton)
     homepage_settings = HomePageSettings.load()
     site_settings = SiteSettings.load()
@@ -61,6 +76,8 @@ def home(request):
         'site_settings': site_settings,
         'promotional_offers': promotional_offers,
         'team_members': team_members,  # Added for agents section
+        'locations': locations,
+        'bedroom_options': bedroom_options,
     }
     return render(request, 'properties/home.html', context)
 
@@ -68,6 +85,21 @@ def home(request):
 def property_list(request):
     properties = Property.objects.filter(status__in=['active', 'new_offer'])
     search_form = PropertySearchForm(request.GET)
+    
+    # Build dropdown options
+    locations = (
+        Property.objects.exclude(location__isnull=True)
+        .exclude(location__exact='')
+        .values_list('location', flat=True)
+        .distinct()
+        .order_by('location')
+    )
+    bedroom_options = (
+        Property.objects.exclude(bedrooms__isnull=True)
+        .values_list('bedrooms', flat=True)
+        .distinct()
+        .order_by('bedrooms')
+    )
     
     if search_form.is_valid():
         if search_form.cleaned_data.get('location'):
@@ -109,6 +141,8 @@ def property_list(request):
         'view_mode': view_mode,
         'properties_with_coords': properties_with_coords,
         'GOOGLE_MAPS_API_KEY': getattr(settings, 'GOOGLE_MAPS_API_KEY', None),
+        'locations': locations,
+        'bedroom_options': bedroom_options,
     }
     return render(request, 'properties/property_list.html', context)
 

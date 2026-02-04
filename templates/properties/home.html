@@ -55,10 +55,15 @@
             <form method="get" action="{% url 'properties:property_list' %}" class="row g-3">
             <div class="col-md-3">
                 <div class="form-field-wrapper">
-                    <label for="home_location" class="form-label">
-                        <i class="bi bi-geo-alt"></i> {% trans "Location" %}
+                    <label for="home_location" class="form-label property-type-label">
+                        <i class="bi bi-geo-alt"></i> <strong>{% trans "Location" %}</strong>
                     </label>
-                    <input type="text" id="home_location" name="location" class="form-control" placeholder="{% translate_text 'Search by location' CURRENT_LANGUAGE_CODE %}" value="{{ request.GET.location }}">
+                    <select id="home_location" name="location" class="form-select" title="{% translate_text 'Location' CURRENT_LANGUAGE_CODE %}">
+                        <option value="">{% translate_text "All Locations" CURRENT_LANGUAGE_CODE %}</option>
+                        {% for loc in locations %}
+                            <option value="{{ loc }}" {% if request.GET.location == loc %}selected{% endif %}>{{ loc }}</option>
+                        {% endfor %}
+                    </select>
                 </div>
             </div>
             <div class="col-md-2">
@@ -77,16 +82,21 @@
             </div>
             <div class="col-md-2">
                 <div class="form-field-wrapper">
-                    <label for="home_bedrooms" class="form-label">
-                        <i class="bi bi-door-open"></i> {% translate_text "Bedrooms" CURRENT_LANGUAGE_CODE %}
+                    <label for="home_bedrooms" class="form-label property-type-label">
+                        <i class="bi bi-door-open"></i> <strong>{% translate_text "Bedrooms" CURRENT_LANGUAGE_CODE %}</strong>
                     </label>
-                    <input type="number" id="home_bedrooms" name="bedrooms" class="form-control" placeholder="{% translate_text 'Bedrooms' CURRENT_LANGUAGE_CODE %}" value="{{ request.GET.bedrooms }}" min="0">
+                    <select id="home_bedrooms" name="bedrooms" class="form-select" title="{% translate_text 'Bedrooms' CURRENT_LANGUAGE_CODE %}">
+                        <option value="">{% translate_text "Bedrooms" CURRENT_LANGUAGE_CODE %}</option>
+                        {% for beds in bedroom_options %}
+                            <option value="{{ beds }}" {% if request.GET.bedrooms == beds|stringformat:"s" %}selected{% endif %}>{{ beds }}</option>
+                        {% endfor %}
+                    </select>
                 </div>
             </div>
             <div class="col-md-2">
                 <div class="form-field-wrapper">
-                    <label for="home_status" class="form-label">
-                        <i class="bi bi-info-circle"></i> {% translate_text "Status" CURRENT_LANGUAGE_CODE %}
+                    <label for="home_status" class="form-label property-type-label">
+                        <i class="bi bi-info-circle"></i> <strong>{% translate_text "Status" CURRENT_LANGUAGE_CODE %}</strong>
                     </label>
                     <select id="home_status" name="status" class="form-select" title="{% translate_text 'Status' CURRENT_LANGUAGE_CODE %}">
                         <option value="">{% translate_text "All Status" CURRENT_LANGUAGE_CODE %}</option>
@@ -99,29 +109,29 @@
                 <div class="row g-4">
                     <div class="col-md-3">
                         <div class="form-field-wrapper">
-                            <label for="home_min_price" class="form-label">
-                                <i class="bi bi-currency-dollar"></i> {% translate_text "Min Price (ETB)" CURRENT_LANGUAGE_CODE %}
+                            <label for="home_min_price" class="form-label property-type-label">
+                                <i class="bi bi-currency-dollar"></i> <strong>{% translate_text "Min Price (ETB)" CURRENT_LANGUAGE_CODE %}</strong>
                             </label>
                             <input type="number" id="home_min_price" name="min_price" class="form-control" placeholder="{% translate_text 'Min' CURRENT_LANGUAGE_CODE %}" value="{{ request.GET.min_price }}" min="0" step="1000">
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="form-field-wrapper">
-                            <label for="home_max_price" class="form-label">
-                                <i class="bi bi-currency-dollar"></i> {% translate_text "Max Price (ETB)" CURRENT_LANGUAGE_CODE %}
+                            <label for="home_max_price" class="form-label property-type-label">
+                                <i class="bi bi-currency-dollar"></i> <strong>{% translate_text "Max Price (ETB)" CURRENT_LANGUAGE_CODE %}</strong>
                             </label>
                             <input type="number" id="home_max_price" name="max_price" class="form-control" placeholder="{% translate_text 'Max' CURRENT_LANGUAGE_CODE %}" value="{{ request.GET.max_price }}" min="0" step="1000">
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="form-field-wrapper">
-                            <label for="home_sale_type" class="form-label">
-                                <i class="bi bi-tag"></i> {% translate_text "Sale Type" CURRENT_LANGUAGE_CODE %}
-                            </label>
+                            <label for="home_sale_type" class="form-label property-type-label">
+                                <i class="bi bi-tag"></i> <strong>{% translate_text "Sale/Payment Type" CURRENT_LANGUAGE_CODE %}</strong>
+                    </label>
                             <select id="home_sale_type" name="sale_type" class="form-select">
                                 <option value="">{% translate_text "All" CURRENT_LANGUAGE_CODE %}</option>
-                                <option value="for_sale" {% if request.GET.sale_type == 'for_sale' %}selected{% endif %}>{% translate_text "For Sale" CURRENT_LANGUAGE_CODE %}</option>
-                                <option value="for_rent" {% if request.GET.sale_type == 'for_rent' %}selected{% endif %}>{% translate_text "For Rent" CURRENT_LANGUAGE_CODE %}</option>
+                        <option value="for_sale" {% if request.GET.sale_type == 'for_sale' %}selected{% endif %}>{% translate_text "Financed with bank" CURRENT_LANGUAGE_CODE %}</option>
+                        <option value="for_rent" {% if request.GET.sale_type == 'for_rent' %}selected{% endif %}>{% translate_text "Non financed with bank" CURRENT_LANGUAGE_CODE %}</option>
                             </select>
                         </div>
                     </div>
