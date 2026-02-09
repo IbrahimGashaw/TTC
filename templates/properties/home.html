@@ -245,6 +245,128 @@
     </div>
 </section>
 
+<!-- Feature Highlights Section -->
+<section class="section-padding bg-light-section">
+    <div class="container">
+        <div class="section-heading-estateagency">
+            <h2>{% translate_text "Explore everything you can do here" CURRENT_LANGUAGE_CODE %}</h2>
+            <p>{% translate_text "All the key tools in one place so you can stay on the homepage and keep scrolling." CURRENT_LANGUAGE_CODE %}</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-lg-4 col-md-6">
+                <div class="card property-card-estateagency h-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-start gap-3">
+                            <div class="icon-circle" style="width:64px;height:64px; background: var(--secondary-color); border-radius: 50%; display:flex; align-items:center; justify-content:center;">
+                                <i class="bi bi-map text-white" style="font-size: 1.6rem;"></i>
+                            </div>
+                            <div>
+                                <h5 class="fw-bold mb-1">{% translate_text "Search & Map View" CURRENT_LANGUAGE_CODE %}</h5>
+                                <p class="text-muted mb-3">{% translate_text "Browse every listing in list or map view with filters that match your criteria." CURRENT_LANGUAGE_CODE %}</p>
+                                <div class="d-flex gap-2 flex-wrap">
+                                    <a href="{% url 'properties:property_list' %}" class="btn btn-sm btn-estateagency-primary">{% translate_text "See Listings" CURRENT_LANGUAGE_CODE %}</a>
+                                    <a href="{% url 'properties:property_list' %}?view=map" class="btn btn-sm btn-outline-primary">{% translate_text "View on Map" CURRENT_LANGUAGE_CODE %}</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6">
+                <div class="card property-card-estateagency h-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-start gap-3">
+                            <div class="icon-circle" style="width:64px;height:64px; background: var(--secondary-color); border-radius: 50%; display:flex; align-items:center; justify-content:center;">
+                                <i class="bi bi-clipboard-check text-white" style="font-size: 1.6rem;"></i>
+                            </div>
+                            <div>
+                                <h5 class="fw-bold mb-1">{% translate_text "Submit Your Needs" CURRENT_LANGUAGE_CODE %}</h5>
+                                <p class="text-muted mb-3">{% translate_text "Tell us your budget, bedrooms, location and timeline—we’ll match properties for you." CURRENT_LANGUAGE_CODE %}</p>
+                                <a href="{% url 'properties:property_request' %}" class="btn btn-sm btn-estateagency-primary">{% translate_text "Property Request" CURRENT_LANGUAGE_CODE %}</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6">
+                <div class="card property-card-estateagency h-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-start gap-3">
+                            <div class="icon-circle" style="width:64px;height:64px; background: var(--secondary-color); border-radius: 50%; display:flex; align-items:center; justify-content:center;">
+                                <i class="bi bi-bar-chart-line text-white" style="font-size: 1.6rem;"></i>
+                            </div>
+                            <div>
+                                <h5 class="fw-bold mb-1">{% translate_text "Market Intel & Guides" CURRENT_LANGUAGE_CODE %}</h5>
+                                <p class="text-muted mb-3">{% translate_text "Stay informed with fresh market reports and step-by-step buying guides." CURRENT_LANGUAGE_CODE %}</p>
+                                <div class="d-flex gap-2 flex-wrap">
+                                    <a href="{% url 'properties:market_report_list' %}" class="btn btn-sm btn-outline-primary">{% translate_text "Market Reports" CURRENT_LANGUAGE_CODE %}</a>
+                                    <a href="{% url 'properties:buying_guide_list' %}" class="btn btn-sm btn-estateagency-primary">{% translate_text "Buying Guides" CURRENT_LANGUAGE_CODE %}</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6">
+                <div class="card property-card-estateagency h-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-start gap-3">
+                            <div class="icon-circle" style="width:64px;height:64px; background: var(--secondary-color); border-radius: 50%; display:flex; align-items:center; justify-content:center;">
+                                <i class="bi bi-building-check text-white" style="font-size: 1.6rem;"></i>
+                            </div>
+                            <div>
+                                <h5 class="fw-bold mb-1">{% translate_text "Construction Updates" CURRENT_LANGUAGE_CODE %}</h5>
+                                <p class="text-muted mb-3">{% translate_text "Follow ongoing projects and monitor progress with photos and milestones." CURRENT_LANGUAGE_CODE %}</p>
+                                <a href="{% url 'properties:project_list' %}" class="btn btn-sm btn-estateagency-primary">{% translate_text "View Projects" CURRENT_LANGUAGE_CODE %}</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6">
+                <div class="card property-card-estateagency h-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-start gap-3">
+                            <div class="icon-circle" style="width:64px;height:64px; background: var(--secondary-color); border-radius: 50%; display:flex; align-items:center; justify-content:center;">
+                                <i class="bi bi-people text-white" style="font-size: 1.6rem;"></i>
+                            </div>
+                            <div>
+                                <h5 class="fw-bold mb-1">{% translate_text "Meet the Team" CURRENT_LANGUAGE_CODE %}</h5>
+                                <p class="text-muted mb-3">{% translate_text "Connect with our verified sales officers and agents for expert guidance." CURRENT_LANGUAGE_CODE %}</p>
+                                <a href="{% url 'properties:team' %}" class="btn btn-sm btn-estateagency-primary">{% translate_text "Our Team" CURRENT_LANGUAGE_CODE %}</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6">
+                <div class="card property-card-estateagency h-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-start gap-3">
+                            <div class="icon-circle" style="width:64px;height:64px; background: var(--secondary-color); border-radius: 50%; display:flex; align-items:center; justify-content:center;">
+                                <i class="bi bi-chat-dots text-white" style="font-size: 1.6rem;"></i>
+                            </div>
+                            <div>
+                                <h5 class="fw-bold mb-1">{% translate_text "Chat & Reach Us" CURRENT_LANGUAGE_CODE %}</h5>
+                                <p class="text-muted mb-3">{% translate_text "Use the chatbot, email, or call—book a visiting and get quick responses." CURRENT_LANGUAGE_CODE %}</p>
+                                <div class="d-flex gap-2 flex-wrap">
+                                    <a href="{% url 'properties:contact' %}" class="btn btn-sm btn-outline-primary">{% translate_text "Contact" CURRENT_LANGUAGE_CODE %}</a>
+                                    <a href="{% url 'blog:blog_list' %}" class="btn btn-sm btn-estateagency-primary">{% translate_text "Latest Blog" CURRENT_LANGUAGE_CODE %}</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
 <!-- Projects Section - EstateAgency Style -->
 <section class="section-padding">
     <div class="container">
