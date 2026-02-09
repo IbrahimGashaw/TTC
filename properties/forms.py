@@ -1,7 +1,7 @@
 from django import forms
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
-from .models import Contact, Property, PropertyBooking, ViewingAppointment
+from .models import Contact, Property, PropertyBooking, ViewingAppointment, PropertyNeedRequest
 
 
 class ContactForm(forms.ModelForm):
@@ -177,4 +177,55 @@ class ViewingAppointmentForm(forms.ModelForm):
         if date and date < timezone.now().date():
             raise forms.ValidationError(_('Preferred date cannot be in the past.'))
         return date
+
+
+class PropertyNeedRequestForm(forms.ModelForm):
+    class Meta:
+        model = PropertyNeedRequest
+        fields = [
+            'full_name', 'email', 'phone', 'whatsapp_number',
+            'preferred_location', 'property_type', 'sale_type',
+            'bedrooms_min', 'bedrooms_max', 'bathrooms_min', 'bathrooms_max',
+            'budget_min', 'budget_max', 'size_min', 'size_max',
+            'move_in_timeline', 'notes'
+        ]
+        widgets = {
+            'full_name': forms.TextInput(attrs={'class': 'form-control', 'required': True}),
+            'email': forms.EmailInput(attrs={'class': 'form-control', 'required': True}),
+            'phone': forms.TextInput(attrs={'class': 'form-control'}),
+            'whatsapp_number': forms.TextInput(attrs={'class': 'form-control'}),
+            'preferred_location': forms.TextInput(attrs={'class': 'form-control'}),
+            'property_type': forms.Select(attrs={'class': 'form-select'}),
+            'sale_type': forms.Select(attrs={'class': 'form-select'}),
+            'bedrooms_min': forms.NumberInput(attrs={'class': 'form-control', 'min': 0}),
+            'bedrooms_max': forms.NumberInput(attrs={'class': 'form-control', 'min': 0}),
+            'bathrooms_min': forms.NumberInput(attrs={'class': 'form-control', 'min': 0}),
+            'bathrooms_max': forms.NumberInput(attrs={'class': 'form-control', 'min': 0}),
+            'budget_min': forms.NumberInput(attrs={'class': 'form-control', 'min': 0, 'step': 1000}),
+            'budget_max': forms.NumberInput(attrs={'class': 'form-control', 'min': 0, 'step': 1000}),
+            'size_min': forms.NumberInput(attrs={'class': 'form-control', 'min': 0}),
+            'size_max': forms.NumberInput(attrs={'class': 'form-control', 'min': 0}),
+            'move_in_timeline': forms.TextInput(attrs={'class': 'form-control', 'placeholder': _('e.g., 1-3 months')}),
+            'notes': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
+        }
+
+    def clean(self):
+        cleaned_data = super().clean()
+        min_budget = cleaned_data.get('budget_min')
+        max_budget = cleaned_data.get('budget_max')
+        if min_budget and max_budget and min_budget > max_budget:
+            raise forms.ValidationError(_('Minimum budget cannot exceed maximum budget.'))
+        bed_min = cleaned_data.get('bedrooms_min')
+        bed_max = cleaned_data.get('bedrooms_max')
+        if bed_min and bed_max and bed_min > bed_max:
+            raise forms.ValidationError(_('Minimum bedrooms cannot exceed maximum bedrooms.'))
+        bath_min = cleaned_data.get('bathrooms_min')
+        bath_max = cleaned_data.get('bathrooms_max')
+        if bath_min and bath_max and bath_min > bath_max:
+            raise forms.ValidationError(_('Minimum bathrooms cannot exceed maximum bathrooms.'))
+        size_min = cleaned_data.get('size_min')
+        size_max = cleaned_data.get('size_max')
+        if size_min and size_max and size_min > size_max:
+            raise forms.ValidationError(_('Minimum size cannot exceed maximum size.'))
+        return cleaned_data
 

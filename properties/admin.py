@@ -17,6 +17,10 @@ try:
 except ImportError:
     AboutPageSettings = None
 
+try:
+    from .models import PropertyNeedRequest
+except ImportError:
+    PropertyNeedRequest = None
 
 class PropertyImageInline(admin.TabularInline):
     model = PropertyImage
@@ -258,37 +262,42 @@ if PromotionalOffer is not None:
         list_filter = ['is_active', 'badge_type', 'icon', 'start_date', 'end_date']
         search_fields = ['title', 'description']
         list_editable = ['order', 'is_active']
-        
+
+
+if PropertyNeedRequest is not None:
+    @admin.register(PropertyNeedRequest)
+    class PropertyNeedRequestAdmin(admin.ModelAdmin):
+        list_display = ['full_name', 'preferred_location', 'property_type', 'sale_type', 'budget_min', 'budget_max', 'created_at']
+        list_filter = ['property_type', 'sale_type', 'created_at']
+        search_fields = ['full_name', 'email', 'phone', 'preferred_location', 'notes']
+        readonly_fields = ['created_at']
         fieldsets = (
-        (_('Offer Details'), {
-            'fields': (
-                'title',
-                'description',
-                'icon',
-                'icon_color',
-                'badge_type',
-                'badge_color',
-            )
-        }),
-        (_('Actions'), {
-            'fields': (
-                'call_action_text',
-                'call_action_url',
-                'details_action_text',
-                'details_action_url',
-            )
-        }),
-        (_('Settings'), {
-            'fields': (
-                'is_active',
-                'order',
-                'start_date',
-                'end_date',
-            )
-        }),
-    )
-    
-    readonly_fields = ['created_at', 'updated_at']
+            (_('Contact'), {
+                'fields': ('full_name', 'email', 'phone', 'whatsapp_number')
+            }),
+            (_('Preferences'), {
+                'fields': ('preferred_location', 'property_type', 'sale_type', 'move_in_timeline')
+            }),
+            (_('Bedrooms / Bathrooms'), {
+                'fields': (
+                    ('bedrooms_min', 'bedrooms_max'),
+                    ('bathrooms_min', 'bathrooms_max'),
+                )
+            }),
+            (_('Budget & Size'), {
+                'fields': (
+                    ('budget_min', 'budget_max'),
+                    ('size_min', 'size_max'),
+                )
+            }),
+            (_('Notes'), {
+                'fields': ('notes',)
+            }),
+            (_('Meta'), {
+                'fields': ('created_at',),
+                'classes': ('collapse',)
+            }),
+        )
 
 
 # @admin.register(AboutPageSettings)  # Commented out if model doesn't exist

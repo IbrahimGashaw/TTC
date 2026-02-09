@@ -19,7 +19,10 @@ try:
     from .models import PromotionalOffer
 except ImportError:
     PromotionalOffer = None
-from .forms import ContactForm, PropertyInquiryForm, PropertySearchForm, PropertyBookingForm, ViewingAppointmentForm
+from .forms import (
+    ContactForm, PropertyInquiryForm, PropertySearchForm, PropertyBookingForm,
+    ViewingAppointmentForm, PropertyNeedRequestForm
+)
 
 
 def home(request):
@@ -410,6 +413,23 @@ def contact(request):
         'form': form,
     }
     return render(request, 'properties/contact.html', context)
+
+
+def property_request(request):
+    """Page for customers to submit their property needs"""
+    if request.method == 'POST':
+        form = PropertyNeedRequestForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, _('Your property request has been submitted! Our team will contact you soon.'))
+            return redirect('properties:property_request')
+    else:
+        form = PropertyNeedRequestForm()
+    
+    context = {
+        'form': form,
+    }
+    return render(request, 'properties/property_request.html', context)
 
 
 @login_required

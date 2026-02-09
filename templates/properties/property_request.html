@@ -1,0 +1,246 @@
+{% extends 'base.html' %}
+{% load translation_tags %}
+{% load i18n %}
+
+{% block title %}{% translate_text "Property Request" CURRENT_LANGUAGE_CODE %} - Andromeda Properties{% endblock %}
+
+{% block extra_css %}
+<style>
+    .request-hero {
+        background: radial-gradient(circle at 20% 20%, #e3f2ff 0, transparent 30%), radial-gradient(circle at 80% 0%, #eef5ff 0, transparent 25%), linear-gradient(135deg, #f8fbff 0%, #eef3ff 100%);
+        border-radius: 22px;
+        padding: 32px 28px;
+    }
+    .request-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 14px;
+        border-radius: 999px;
+        background: rgba(13, 110, 253, 0.08);
+        color: #0d6efd;
+        font-weight: 600;
+        font-size: 0.95rem;
+    }
+    .glass-card {
+        border: 1px solid rgba(13, 110, 253, 0.12);
+        box-shadow: 0 18px 38px rgba(13, 110, 253, 0.08);
+        border-radius: 18px;
+    }
+    .section-label {
+        font-weight: 700;
+        color: #0d1b3d;
+        letter-spacing: 0.2px;
+    }
+    .help-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 14px;
+        border-radius: 12px;
+        background: #f8f9fb;
+        border: 1px solid #eef1f7;
+        margin-bottom: 10px;
+    }
+    .info-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: #e7f4ff;
+        color: #0d6efd;
+        padding: 6px 10px;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+    .subtext {
+        color: #6c757d;
+        font-size: 0.95rem;
+    }
+    .form-section-title {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #0d1b3d;
+    }
+    .divider-line {
+        height: 1px;
+        background: #edf0f7;
+        margin: 10px 0 18px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5 pt-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-11">
+            <div class="request-hero mb-4">
+                <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+                    <div>
+                        <div class="request-pill mb-2">
+                            <i class="bi bi-stars"></i>
+                            {% translate_text "Personalized property match" CURRENT_LANGUAGE_CODE %}
+                        </div>
+                        <h1 class="display-6 fw-bold mb-2">{% translate_text "Tell us what you need" CURRENT_LANGUAGE_CODE %}</h1>
+                        <p class="subtext mb-0">{% translate_text "Share your requirements and our team will curate the best options for you." CURRENT_LANGUAGE_CODE %}</p>
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="info-badge"><i class="bi bi-shield-check"></i> {% translate_text "Secure & confidential" CURRENT_LANGUAGE_CODE %}</span>
+                        <span class="info-badge"><i class="bi bi-clock-history"></i> {% translate_text "Response within 1 business day" CURRENT_LANGUAGE_CODE %}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <div class="glass-card p-4 h-100">
+                        <h4 class="fw-bold mb-3">{% translate_text "Need help filling this out?" CURRENT_LANGUAGE_CODE %}</h4>
+                        <p class="subtext mb-3">{% translate_text "Share what matters most: location, budget, bedrooms, or move-in timing." CURRENT_LANGUAGE_CODE %}</p>
+                        <div class="help-chip">
+                            <i class="bi bi-geo-alt-fill text-primary"></i>
+                            <span>{% translate_text "We focus on your preferred neighborhoods." CURRENT_LANGUAGE_CODE %}</span>
+                        </div>
+                        <div class="help-chip">
+                            <i class="bi bi-wallet2 text-primary"></i>
+                            <span>{% translate_text "Set a budget range; we’ll shortlist matching homes." CURRENT_LANGUAGE_CODE %}</span>
+                        </div>
+                        <div class="help-chip">
+                            <i class="bi bi-house-heart-fill text-primary"></i>
+                            <span>{% translate_text "Pick property & payment type to tailor financing." CURRENT_LANGUAGE_CODE %}</span>
+                        </div>
+                        <div class="divider-line"></div>
+                        <div class="d-flex flex-column gap-2">
+                            <span class="fw-semibold"><i class="bi bi-telephone-forward me-2 text-primary"></i>{% translate_text "Talk to an advisor" CURRENT_LANGUAGE_CODE %}</span>
+                            <span class="subtext">{% translate_text "We’ll reach back using the contact details you provide." CURRENT_LANGUAGE_CODE %}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-8">
+                    <div class="card glass-card">
+                        <div class="card-body p-4">
+                            <form method="post" class="row g-3">
+                                {% csrf_token %}
+
+                                <div class="col-12">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <span class="form-section-title">{% translate_text "Contact details" CURRENT_LANGUAGE_CODE %}</span>
+                                        <span class="subtext">{% translate_text "So we can reach you quickly" CURRENT_LANGUAGE_CODE %}</span>
+                                    </div>
+                                    <div class="divider-line"></div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">{% translate_text "Full Name" CURRENT_LANGUAGE_CODE %}</label>
+                                    {{ form.full_name }}
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">{% translate_text "Email" CURRENT_LANGUAGE_CODE %}</label>
+                                    {{ form.email }}
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">{% translate_text "Phone" CURRENT_LANGUAGE_CODE %}</label>
+                                    {{ form.phone }}
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">{% translate_text "WhatsApp Number" CURRENT_LANGUAGE_CODE %}</label>
+                                    {{ form.whatsapp_number }}
+                                </div>
+
+                                <div class="col-12 mt-2">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <span class="form-section-title">{% translate_text "Property preferences" CURRENT_LANGUAGE_CODE %}</span>
+                                        <span class="subtext">{% translate_text "Location, type & payment" CURRENT_LANGUAGE_CODE %}</span>
+                                    </div>
+                                    <div class="divider-line"></div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">{% translate_text "Preferred Location" CURRENT_LANGUAGE_CODE %}</label>
+                                    {{ form.preferred_location }}
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">{% translate_text "Property Type" CURRENT_LANGUAGE_CODE %}</label>
+                                    {{ form.property_type }}
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">{% translate_text "Sale/Payment Type" CURRENT_LANGUAGE_CODE %}</label>
+                                    {{ form.sale_type }}
+                                </div>
+
+                                <div class="col-12 mt-2">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <span class="form-section-title">{% translate_text "Space & size" CURRENT_LANGUAGE_CODE %}</span>
+                                        <span class="subtext">{% translate_text "Bedrooms, bathrooms, size" CURRENT_LANGUAGE_CODE %}</span>
+                                    </div>
+                                    <div class="divider-line"></div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">{% translate_text "Min Bedrooms" CURRENT_LANGUAGE_CODE %}</label>
+                                    {{ form.bedrooms_min }}
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">{% translate_text "Max Bedrooms" CURRENT_LANGUAGE_CODE %}</label>
+                                    {{ form.bedrooms_max }}
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">{% translate_text "Min Bathrooms" CURRENT_LANGUAGE_CODE %}</label>
+                                    {{ form.bathrooms_min }}
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">{% translate_text "Max Bathrooms" CURRENT_LANGUAGE_CODE %}</label>
+                                    {{ form.bathrooms_max }}
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">{% translate_text "Min Size (m²)" CURRENT_LANGUAGE_CODE %}</label>
+                                    {{ form.size_min }}
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">{% translate_text "Max Size (m²)" CURRENT_LANGUAGE_CODE %}</label>
+                                    {{ form.size_max }}
+                                </div>
+
+                                <div class="col-12 mt-2">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <span class="form-section-title">{% translate_text "Budget & timing" CURRENT_LANGUAGE_CODE %}</span>
+                                        <span class="subtext">{% translate_text "Set your range & move-in window" CURRENT_LANGUAGE_CODE %}</span>
+                                    </div>
+                                    <div class="divider-line"></div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">{% translate_text "Min Budget (ETB)" CURRENT_LANGUAGE_CODE %}</label>
+                                    {{ form.budget_min }}
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">{% translate_text "Max Budget (ETB)" CURRENT_LANGUAGE_CODE %}</label>
+                                    {{ form.budget_max }}
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">{% translate_text "Preferred Move-in Timeline" CURRENT_LANGUAGE_CODE %}</label>
+                                    {{ form.move_in_timeline }}
+                                </div>
+
+                                <div class="col-12 mt-2">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <span class="form-section-title">{% translate_text "Anything else?" CURRENT_LANGUAGE_CODE %}</span>
+                                        <span class="subtext">{% translate_text "Share specific must-haves" CURRENT_LANGUAGE_CODE %}</span>
+                                    </div>
+                                    <div class="divider-line"></div>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label">{% translate_text "Additional Notes" CURRENT_LANGUAGE_CODE %}</label>
+                                    {{ form.notes }}
+                                </div>
+
+                                <div class="col-12 text-end mt-2">
+                                    <button type="submit" class="btn btn-primary btn-lg px-4">
+                                        <i class="bi bi-send"></i> {% translate_text "Submit Request" CURRENT_LANGUAGE_CODE %}
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -149,6 +149,22 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    // Footer email toggle
+    const footerEmailToggle = document.getElementById('footerEmailToggle');
+    const footerEmailForm = document.getElementById('footerEmailForm');
+    if (footerEmailToggle && footerEmailForm) {
+        footerEmailToggle.addEventListener('click', function() {
+            footerEmailForm.classList.toggle('d-none');
+        });
+    }
+    const contactEmailToggle = document.getElementById('contactEmailToggle');
+    const contactEmailForm = document.getElementById('contactEmailForm');
+    if (contactEmailToggle && contactEmailForm) {
+        contactEmailToggle.addEventListener('click', function() {
+            contactEmailForm.classList.toggle('d-none');
+        });
+    }
+
     // Back to top button - Soft UI Dashboard Style
     const backToTopBtn = document.createElement('button');
     backToTopBtn.innerHTML = '<i class="bi bi-arrow-up"></i>';

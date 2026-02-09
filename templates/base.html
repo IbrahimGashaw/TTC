@@ -64,6 +64,7 @@
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="{% url 'properties:market_report_list' %}">{% translate_text "Market Reports" CURRENT_LANGUAGE_CODE %}</a></li>
                                 <li><a class="dropdown-item" href="{% url 'properties:buying_guide_list' %}">{% translate_text "Buying Guides" CURRENT_LANGUAGE_CODE %}</a></li>
+                                <li><a class="dropdown-item" href="{% url 'properties:property_request' %}">{% translate_text "Submit Property Request" CURRENT_LANGUAGE_CODE %}</a></li>
                             </ul>
                         </li>
                         <li class="nav-item dropdown">
@@ -146,12 +147,65 @@
                 <div class="col-lg-4 col-md-6 mb-4">
                     <h5>Andromeda Properties</h5>
                     <p>Andromeda Properties is becoming the best real estate developer in Addis Ababa, Ethiopia. We are one of the top real estate high quality developers in Addis Ababa, Ethiopia.</p>
-                    <div class="d-flex gap-3 mt-3">
-                        <a href="#" class="text-light"><i class="bi bi-facebook fs-5"></i></a>
-                        <a href="#" class="text-light"><i class="bi bi-youtube fs-5"></i></a>
-                        <a href="#" class="text-light"><i class="bi bi-instagram fs-5"></i></a>
-                        <a href="#" class="text-light"><i class="bi bi-linkedin fs-5"></i></a>
-                        <a href="#" class="text-light"><i class="bi bi-telegram fs-5"></i></a>
+                    <div class="d-flex flex-wrap gap-3 mt-3 align-items-center">
+                        <a href="https://facebook.com/andromedaproperties" target="_blank" rel="noopener" class="text-light" data-bs-toggle="tooltip" title="Visit our Facebook" aria-label="Facebook">
+                            <i class="bi bi-facebook fs-5"></i>
+                        </a>
+                        <a href="https://youtube.com/@andromedaproperties" target="_blank" rel="noopener" class="text-light" data-bs-toggle="tooltip" title="Watch on YouTube" aria-label="YouTube">
+                            <i class="bi bi-youtube fs-5"></i>
+                        </a>
+                        <a href="https://instagram.com/andromedaproperties" target="_blank" rel="noopener" class="text-light" data-bs-toggle="tooltip" title="Follow on Instagram" aria-label="Instagram">
+                            <i class="bi bi-instagram fs-5"></i>
+                        </a>
+                        <a href="https://www.linkedin.com/company/andromedaproperties" target="_blank" rel="noopener" class="text-light" data-bs-toggle="tooltip" title="Connect on LinkedIn" aria-label="LinkedIn">
+                            <i class="bi bi-linkedin fs-5"></i>
+                        </a>
+                        <a href="https://t.me/andromedaproperties" target="_blank" rel="noopener" class="text-light" data-bs-toggle="tooltip" title="Join us on Telegram" aria-label="Telegram">
+                            <i class="bi bi-telegram fs-5"></i>
+                        </a>
+                        <a href="https://twitter.com/AndromedaProps" target="_blank" rel="noopener" class="text-light" data-bs-toggle="tooltip" title="Follow on X (Twitter)" aria-label="X">
+                            <i class="bi bi-twitter-x fs-5"></i>
+                        </a>
+                        <a href="https://www.tiktok.com/@andromedaproperties" target="_blank" rel="noopener" class="text-light" data-bs-toggle="tooltip" title="Follow on TikTok" aria-label="TikTok">
+                            <i class="bi bi-tiktok fs-5"></i>
+                        </a>
+                        <a href="https://wa.me/251913677468" target="_blank" rel="noopener" class="text-light" data-bs-toggle="tooltip" title="Chat on WhatsApp" aria-label="WhatsApp">
+                            <i class="bi bi-whatsapp fs-5"></i>
+                        </a>
+                        <a href="https://www.snapchat.com/add/andromedaproperties" target="_blank" rel="noopener" class="text-light" data-bs-toggle="tooltip" title="Find us on Snapchat" aria-label="Snapchat">
+                            <i class="bi bi-snapchat fs-5"></i>
+                        </a>
+                        <!-- Email toggle -->
+                        <button type="button" id="footerEmailToggle" class="btn btn-outline-light btn-sm d-flex align-items-center gap-1">
+                            <i class="bi bi-envelope fs-6"></i>
+                            <span class="fw-semibold">{% translate_text "Email" CURRENT_LANGUAGE_CODE %}</span>
+                        </button>
+                    </div>
+                    <!-- Hidden email form -->
+                    <div id="footerEmailForm" class="card bg-dark text-light border-0 mt-3 d-none">
+                        <div class="card-body">
+                            <h6 class="mb-3">{% translate_text "Send us an email" CURRENT_LANGUAGE_CODE %}</h6>
+                            <form method="post" action="{% url 'properties:contact' %}" class="row g-2">
+                                {% csrf_token %}
+                                <div class="col-12">
+                                    <label class="form-label small">{% translate_text "Your Name" CURRENT_LANGUAGE_CODE %}</label>
+                                    <input type="text" name="name" class="form-control form-control-sm" required>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label small">{% translate_text "Email" CURRENT_LANGUAGE_CODE %}</label>
+                                    <input type="email" name="email" class="form-control form-control-sm" required>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label small">{% translate_text "Message" CURRENT_LANGUAGE_CODE %}</label>
+                                    <textarea name="message" class="form-control form-control-sm" rows="3" required></textarea>
+                                </div>
+                                <div class="col-12 d-flex justify-content-end">
+                                    <button type="submit" class="btn btn-primary btn-sm">
+                                        <i class="bi bi-send"></i> {% translate_text "Send" CURRENT_LANGUAGE_CODE %}
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
                 <div class="col-lg-2 col-md-6 mb-4">

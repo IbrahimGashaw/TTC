@@ -158,6 +158,48 @@ class Contact(models.Model):
         return f"Contact from {self.name}"
 
 
+class PropertyNeedRequest(models.Model):
+    """Customers can submit their property requirement"""
+    PROPERTY_TYPE_CHOICES = Property.PROPERTY_TYPE_CHOICES
+    SALE_TYPE_CHOICES = Property.SALE_TYPE_CHOICES
+
+    full_name = models.CharField(max_length=150, verbose_name=_('Full Name'))
+    email = models.EmailField(verbose_name=_('Email'))
+    phone = models.CharField(max_length=30, verbose_name=_('Phone'), blank=True)
+    whatsapp_number = models.CharField(max_length=30, verbose_name=_('WhatsApp Number'), blank=True)
+    preferred_location = models.CharField(max_length=200, verbose_name=_('Preferred Location'), blank=True)
+    property_type = models.CharField(
+        max_length=30,
+        choices=PROPERTY_TYPE_CHOICES,
+        verbose_name=_('Property Type'),
+        blank=True
+    )
+    sale_type = models.CharField(
+        max_length=30,
+        choices=SALE_TYPE_CHOICES,
+        verbose_name=_('Sale/Payment Type'),
+        blank=True
+    )
+    bedrooms_min = models.IntegerField(null=True, blank=True, verbose_name=_('Min Bedrooms'))
+    bedrooms_max = models.IntegerField(null=True, blank=True, verbose_name=_('Max Bedrooms'))
+    bathrooms_min = models.IntegerField(null=True, blank=True, verbose_name=_('Min Bathrooms'))
+    bathrooms_max = models.IntegerField(null=True, blank=True, verbose_name=_('Max Bathrooms'))
+    budget_min = models.DecimalField(max_digits=15, decimal_places=2, null=True, blank=True, verbose_name=_('Min Budget (ETB)'))
+    budget_max = models.DecimalField(max_digits=15, decimal_places=2, null=True, blank=True, verbose_name=_('Max Budget (ETB)'))
+    size_min = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, verbose_name=_('Min Size (m²)'))
+    size_max = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, verbose_name=_('Max Size (m²)'))
+    move_in_timeline = models.CharField(max_length=100, blank=True, verbose_name=_('Preferred Move-in Timeline'))
+    notes = models.TextField(blank=True, verbose_name=_('Additional Notes'))
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Submitted At'))
+
+    class Meta:
+        ordering = ['-created_at']
+        verbose_name = _('Property Need Request')
+        verbose_name_plural = _('Property Need Requests')
+
+    def __str__(self):
+        return f"{self.full_name} - {self.preferred_location or 'No location'}"
+
 class TeamMember(models.Model):
     ROLE_CHOICES = [
         ('sales_officer', 'Sales Officer'),

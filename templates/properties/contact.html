@@ -16,7 +16,24 @@
 
     <div class="row">
         <div class="col-md-8 mb-4">
-            <div class="card shadow-sm">
+            <!-- Social icons row with email toggle -->
+            <div class="d-flex flex-wrap gap-3 align-items-center mb-3">
+                <a href="https://facebook.com/andromedaproperties" target="_blank" rel="noopener" class="text-primary" data-bs-toggle="tooltip" title="{% translate_text 'Visit our Facebook' CURRENT_LANGUAGE_CODE %}" aria-label="Facebook"><i class="bi bi-facebook" style="font-size: 1.5rem;"></i></a>
+                <a href="https://youtube.com/@andromedaproperties" target="_blank" rel="noopener" class="text-danger" data-bs-toggle="tooltip" title="{% translate_text 'Watch on YouTube' CURRENT_LANGUAGE_CODE %}" aria-label="YouTube"><i class="bi bi-youtube" style="font-size: 1.5rem;"></i></a>
+                <a href="https://instagram.com/andromedaproperties" target="_blank" rel="noopener" class="text-info" data-bs-toggle="tooltip" title="{% translate_text 'Follow on Instagram' CURRENT_LANGUAGE_CODE %}" aria-label="Instagram"><i class="bi bi-instagram" style="font-size: 1.5rem;"></i></a>
+                <a href="https://www.linkedin.com/company/andromedaproperties" target="_blank" rel="noopener" class="text-primary" data-bs-toggle="tooltip" title="{% translate_text 'Connect on LinkedIn' CURRENT_LANGUAGE_CODE %}" aria-label="LinkedIn"><i class="bi bi-linkedin" style="font-size: 1.5rem;"></i></a>
+                <a href="https://t.me/andromedaproperties" target="_blank" rel="noopener" class="text-info" data-bs-toggle="tooltip" title="{% translate_text 'Join us on Telegram' CURRENT_LANGUAGE_CODE %}" aria-label="Telegram"><i class="bi bi-telegram" style="font-size: 1.5rem;"></i></a>
+                <a href="https://twitter.com/AndromedaProps" target="_blank" rel="noopener" class="text-primary" data-bs-toggle="tooltip" title="{% translate_text 'Follow on X (Twitter)' CURRENT_LANGUAGE_CODE %}" aria-label="X"><i class="bi bi-twitter-x" style="font-size: 1.5rem;"></i></a>
+                <a href="https://www.tiktok.com/@andromedaproperties" target="_blank" rel="noopener" class="text-dark" data-bs-toggle="tooltip" title="{% translate_text 'Follow on TikTok' CURRENT_LANGUAGE_CODE %}" aria-label="TikTok"><i class="bi bi-tiktok" style="font-size: 1.5rem;"></i></a>
+                <a href="https://wa.me/251913677468" target="_blank" rel="noopener" class="text-success" data-bs-toggle="tooltip" title="{% translate_text 'Chat on WhatsApp' CURRENT_LANGUAGE_CODE %}" aria-label="WhatsApp"><i class="bi bi-whatsapp" style="font-size: 1.5rem;"></i></a>
+                <a href="https://www.snapchat.com/add/andromedaproperties" target="_blank" rel="noopener" class="text-warning" data-bs-toggle="tooltip" title="{% translate_text 'Find us on Snapchat' CURRENT_LANGUAGE_CODE %}" aria-label="Snapchat"><i class="bi bi-snapchat" style="font-size: 1.5rem;"></i></a>
+                <button type="button" id="contactEmailToggle" class="btn btn-primary btn-sm d-flex align-items-center gap-1">
+                    <i class="bi bi-envelope"></i>
+                    <span>{% translate_text "Email" CURRENT_LANGUAGE_CODE %}</span>
+                </button>
+            </div>
+
+            <div class="card shadow-sm d-none" id="contactEmailForm">
                 <div class="card-body p-4">
                     <h3 class="mb-4">{% translate_text "Send us a message" CURRENT_LANGUAGE_CODE %}</h3>
                     <form method="post">
@@ -84,15 +101,6 @@
                     <div class="mb-3">
                         <p class="mb-1"><strong>{% translate_text "Address" CURRENT_LANGUAGE_CODE %}</strong></p>
                         <p class="mb-0"><i class="bi bi-geo-alt"></i> Bethel, Apple Plaza 4th floor</p>
-                    </div>
-                    <hr>
-                    <h5 class="mb-3">{% translate_text "Follow Us" CURRENT_LANGUAGE_CODE %}</h5>
-                    <div class="d-flex gap-3">
-                        <a href="#" class="text-primary"><i class="bi bi-facebook" style="font-size: 1.5rem;"></i></a>
-                        <a href="#" class="text-danger"><i class="bi bi-youtube" style="font-size: 1.5rem;"></i></a>
-                        <a href="#" class="text-info"><i class="bi bi-instagram" style="font-size: 1.5rem;"></i></a>
-                        <a href="#" class="text-primary"><i class="bi bi-linkedin" style="font-size: 1.5rem;"></i></a>
-                        <a href="#" class="text-info"><i class="bi bi-telegram" style="font-size: 1.5rem;"></i></a>
                     </div>
                 </div>
             </div>
