@@ -1,167 +1,82 @@
 {% extends 'base.html' %}
-{% load static %}
-{% load i18n %}
-{% load translation_tags %}
 
-{% block title %}{% trans "Our Team" %} - Andromeda Properties{% endblock %}
+{% block title %}Our Team - Team Training and Consultancy Service PLC{% endblock %}
 
 {% block content %}
-<div class="container mt-5 pt-4">
-    <div class="row mb-5">
-        <div class="col-12 text-center">
-            <h1 class="display-4 fw-bold mb-4">{% trans "Our Team" %}</h1>
-            <p class="lead text-muted">{% trans "Meet the professionals behind Andromeda Properties" %}</p>
-        </div>
+<section class="page-header-ttcs">
+    <div class="container">
+        <h1>Our Professional Team</h1>
+        <p class="lead mb-0 ttcs-lead">Experienced consultants, trainers, and industry experts</p>
     </div>
+</section>
 
-    {% if sales_officers %}
-    <div class="row mb-5">
-        <div class="col-12">
-            <h2 class="mb-4">{% translate_text "Sales Officers" CURRENT_LANGUAGE_CODE %}</h2>
+{% if founders %}
+<section class="section-ttcs">
+    <div class="container">
+        <div class="section-title">
+            <h2>Founders & Leadership</h2>
+            <div class="title-underline"></div>
         </div>
-        {% for member in sales_officers %}
-        <div class="col-md-3 mb-4">
-            <div class="card shadow-sm h-100">
-                {% if member.image %}
-                    <img src="{{ member.image.url }}" class="card-img-top" alt="{{ member.name }}" style="height: 250px; object-fit: cover;">
-                {% else %}
-                    <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" style="height: 250px;">
-                        <i class="bi bi-person text-white" style="font-size: 4rem;"></i>
+        <div class="row g-4 justify-content-center">
+            {% for member in founders %}
+            <div class="col-lg-4 col-md-6">
+                <div class="team-card">
+                    {% if member.image %}
+                    <div class="ttcs-media-frame ttcs-media-frame--team ttcs-media-frame--card">
+                        <img src="{{ member.image.url }}" alt="{{ member.name }}" class="ttcs-media-img" loading="lazy">
                     </div>
-                {% endif %}
-                <div class="card-body text-center">
-                    <div class="d-flex justify-content-center align-items-center gap-2 mb-2">
-                        <h5 class="card-title mb-0">{{ member.name }}</h5>
-                        {% if member.is_verified %}
-                            <span class="verified-badge" title="{% trans 'Verified Agent' %}">
-                                <i class="bi bi-patch-check-fill"></i>
-                            </span>
-                        {% endif %}
+                    {% else %}
+                    <div class="ttcs-media-placeholder ttcs-media-placeholder--team">
+                        <i class="bi bi-person-circle"></i>
                     </div>
-                    <p class="text-muted small">{{ member.get_role_display }}</p>
-                    {% if member.years_experience > 0 %}
-                        <p class="small text-primary mb-2">
-                            <i class="bi bi-award"></i> {{ member.years_experience }} {% trans "years experience" %}
-                        </p>
                     {% endif %}
-                    {% if member.bio %}
-                        <p class="small text-muted mb-2">{{ member.bio|truncatewords:15 }}</p>
-                    {% endif %}
-                    {% if member.languages %}
-                        <p class="small text-muted mb-2">
-                            <i class="bi bi-translate"></i> {{ member.languages }}
-                        </p>
-                    {% endif %}
-                    <div class="mt-3">
-                        {% if member.email %}
-                            <a href="mailto:{{ member.email }}" class="btn btn-sm btn-outline-primary mb-1 w-100">
-                                <i class="bi bi-envelope"></i> {% trans "Email" %}
-                            </a>
-                        {% endif %}
-                        {% if member.phone %}
-                            <a href="tel:{{ member.phone }}" class="btn btn-sm btn-outline-success mb-1 w-100">
-                                <i class="bi bi-phone"></i> {% trans "Call" %}
-                            </a>
-                        {% endif %}
-                        {% if member.whatsapp_number %}
-                            {% load property_tags %}
-                            {% whatsapp_url_simple as whatsapp_base_url %}
-                            {% if whatsapp_base_url %}
-                                <a href="{{ whatsapp_base_url|add:'?text=Hello '|add:member.name }}" 
-                                   target="_blank" 
-                                   class="btn btn-sm btn-success mb-1 w-100">
-                                    <i class="bi bi-whatsapp"></i> {% trans "WhatsApp" %}
-                                </a>
-                            {% endif %}
-                        {% endif %}
-                        <a href="{% url 'properties:agent_detail' member.id %}" class="btn btn-sm btn-primary w-100">
-                            <i class="bi bi-person-circle"></i> {% trans "View Profile" %}
-                        </a>
+                    <div class="team-info">
+                        <h5>{{ member.name }}</h5>
+                        <p class="role">{{ member.title|default:member.get_role_display }}</p>
+                        <p class="small text-muted">{{ member.bio|truncatewords:30 }}</p>
+                        <a href="{{ member.get_absolute_url }}" class="btn btn-sm btn-primary">Full Profile</a>
                     </div>
                 </div>
             </div>
+            {% endfor %}
         </div>
-        {% endfor %}
     </div>
-    {% endif %}
+</section>
+{% endif %}
 
-    {% if sales_agents %}
-    <div class="row mb-5">
-        <div class="col-12">
-            <h2 class="mb-4">{% translate_text "Sales Agents" CURRENT_LANGUAGE_CODE %}</h2>
+<section class="section-ttcs {% if founders %}bg-light{% endif %}">
+    <div class="container">
+        <div class="section-title">
+            <h2>Our Team</h2>
+            <div class="title-underline"></div>
         </div>
-        {% for member in sales_agents %}
-        <div class="col-md-3 mb-4">
-            <div class="card shadow-sm h-100">
-                {% if member.image %}
-                    <img src="{{ member.image.url }}" class="card-img-top" alt="{{ member.name }}" style="height: 250px; object-fit: cover;">
-                {% else %}
-                    <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" style="height: 250px;">
-                        <i class="bi bi-person text-white" style="font-size: 4rem;"></i>
+        <div class="row g-4">
+            {% for member in team_members %}
+            {% if not member.is_founder %}
+            <div class="col-lg-3 col-md-6">
+                <div class="team-card">
+                    {% if member.image %}
+                    <div class="ttcs-media-frame ttcs-media-frame--team ttcs-media-frame--card">
+                        <img src="{{ member.image.url }}" alt="{{ member.name }}" class="ttcs-media-img" loading="lazy">
                     </div>
-                {% endif %}
-                <div class="card-body text-center">
-                    <div class="d-flex justify-content-center align-items-center gap-2 mb-2">
-                        <h5 class="card-title mb-0">{{ member.name }}</h5>
-                        {% if member.is_verified %}
-                            <span class="verified-badge" title="{% trans 'Verified Agent' %}">
-                                <i class="bi bi-patch-check-fill"></i>
-                            </span>
-                        {% endif %}
+                    {% else %}
+                    <div class="ttcs-media-placeholder ttcs-media-placeholder--team">
+                        <i class="bi bi-person-circle"></i>
                     </div>
-                    <p class="text-muted small">{{ member.get_role_display }}</p>
-                    {% if member.years_experience > 0 %}
-                        <p class="small text-primary mb-2">
-                            <i class="bi bi-award"></i> {{ member.years_experience }} {% trans "years experience" %}
-                        </p>
                     {% endif %}
-                    {% if member.bio %}
-                        <p class="small text-muted mb-2">{{ member.bio|truncatewords:15 }}</p>
-                    {% endif %}
-                    {% if member.languages %}
-                        <p class="small text-muted mb-2">
-                            <i class="bi bi-translate"></i> {{ member.languages }}
-                        </p>
-                    {% endif %}
-                    <div class="mt-3">
-                        {% if member.email %}
-                            <a href="mailto:{{ member.email }}" class="btn btn-sm btn-outline-primary mb-1 w-100">
-                                <i class="bi bi-envelope"></i> {% trans "Email" %}
-                            </a>
-                        {% endif %}
-                        {% if member.phone %}
-                            <a href="tel:{{ member.phone }}" class="btn btn-sm btn-outline-success mb-1 w-100">
-                                <i class="bi bi-phone"></i> {% trans "Call" %}
-                            </a>
-                        {% endif %}
-                        {% if member.whatsapp_number %}
-                            {% load property_tags %}
-                            {% whatsapp_url_simple as whatsapp_base_url %}
-                            {% if whatsapp_base_url %}
-                                <a href="{{ whatsapp_base_url|add:'?text=Hello '|add:member.name }}" 
-                                   target="_blank" 
-                                   class="btn btn-sm btn-success mb-1 w-100">
-                                    <i class="bi bi-whatsapp"></i> {% trans "WhatsApp" %}
-                                </a>
-                            {% endif %}
-                        {% endif %}
-                        <a href="{% url 'properties:agent_detail' member.id %}" class="btn btn-sm btn-primary w-100">
-                            <i class="bi bi-person-circle"></i> {% trans "View Profile" %}
-                        </a>
+                    <div class="team-info">
+                        <h5>{{ member.name }}</h5>
+                        <p class="role">{{ member.title|default:member.get_role_display }}</p>
+                        {% if member.years_experience %}<p class="small text-muted">{{ member.years_experience }}+ years experience</p>{% endif %}
+                        <a href="{{ member.get_absolute_url }}" class="btn btn-sm btn-outline-primary">View Profile</a>
                     </div>
                 </div>
             </div>
+            {% endif %}
+            {% empty %}
+            <div class="col-12 text-center text-muted">Team profiles coming soon.</div>
+            {% endfor %}
         </div>
-        {% endfor %}
     </div>
-    {% endif %}
-
-    {% if not sales_officers and not sales_agents %}
-    <div class="text-center py-5">
-        <i class="bi bi-people text-muted" style="font-size: 4rem;"></i>
-        <p class="text-muted mt-3">Team information coming soon.</p>
-    </div>
-    {% endif %}
-</div>
+</section>
 {% endblock %}
-

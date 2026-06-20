@@ -3,14 +3,14 @@
 {% load i18n %}
 {% load translation_tags %}
 
-{% block title %}{% trans "Market Reports" %} - Andromeda Properties{% endblock %}
+{% block title %}{% trans "Market Reports" %} - Team Training and Consultancy Service PLC{% endblock %}
 
 {% block content %}
 <div class="container mt-5 pt-4">
     <div class="row mb-4">
         <div class="col-12">
             <h1 class="display-5 fw-bold">{% trans "Market Reports" %}</h1>
-            <p class="lead text-muted">{% trans "Stay informed with our latest real estate market analysis and insights" %}</p>
+            <p class="lead text-muted">{% trans "Insights and analysis from our training and consultancy work" %}</p>
         </div>
     </div>
 
@@ -48,7 +48,7 @@
                     </div>
                 </div>
                 <div class="card-footer bg-transparent">
-                    <a href="{% url 'properties:market_report_detail' report.slug %}" class="btn btn-primary btn-sm w-100">
+                    <a href="{% url 'site:market_report_detail' report.slug %}" class="btn btn-primary btn-sm w-100">
                         {% trans "Read More" %}
                     </a>
                 </div>
@@ -62,7 +62,7 @@
     {% if categories %}
     <div class="mb-4">
         <div class="btn-group" role="group">
-            <a href="{% url 'properties:market_report_list' %}" 
+            <a href="{% url 'site:market_report_list' %}" 
                class="btn btn-outline-primary {% if not current_category %}active{% endif %}">
                 {% trans "All Categories" %}
             </a>
@@ -217,7 +217,7 @@
                     </div>
                 </div>
                 <div class="card-footer bg-transparent">
-                    <a href="{% url 'properties:market_report_detail' report.slug %}" class="btn btn-primary btn-sm w-100">
+                    <a href="{% url 'site:market_report_detail' report.slug %}" class="btn btn-primary btn-sm w-100">
                         {% trans "Read More" %}
                     </a>
                 </div>

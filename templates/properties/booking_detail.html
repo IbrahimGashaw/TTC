@@ -69,8 +69,8 @@
                     </div>
 
                     <div class="mt-4">
-                        <a href="{% url 'properties:my_bookings' %}" class="btn btn-primary">{% translate_text "Back to My Bookings" CURRENT_LANGUAGE_CODE %}</a>
-                        <a href="{% url 'properties:property_detail' booking.property.slug %}" class="btn btn-outline-secondary">{% translate_text "View Property" CURRENT_LANGUAGE_CODE %}</a>
+                        <a href="{% url 'site:my_bookings' %}" class="btn btn-primary">{% translate_text "Back to My Bookings" CURRENT_LANGUAGE_CODE %}</a>
+                        <a href="{% url 'site:service_list' %}" class="btn btn-outline-secondary">{% translate_text "View Services" CURRENT_LANGUAGE_CODE %}</a>
                     </div>
                 </div>
             </div>

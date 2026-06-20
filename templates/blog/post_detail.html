@@ -1,57 +1,62 @@
 {% extends 'base.html' %}
-{% load static %}
-{% load translation_tags %}
-{% load i18n %}
 
-{% block title %}{{ post.title }} - Andromeda Properties{% endblock %}
+{% block title %}{{ post.title }} - Team Training and Consultancy Service PLC{% endblock %}
 
 {% block content %}
-<div class="container mt-5 pt-4">
-    <div class="row">
-        <div class="col-md-8">
-            <nav aria-label="breadcrumb" class="mb-4">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{% url 'properties:home' %}">{% translate_text "Home" CURRENT_LANGUAGE_CODE %}</a></li>
-                    <li class="breadcrumb-item"><a href="{% url 'blog:blog_list' %}">{% translate_text "Blog" CURRENT_LANGUAGE_CODE %}</a></li>
-                    <li class="breadcrumb-item active">{{ post.title|translate:CURRENT_LANGUAGE_CODE|truncatewords:5 }}</li>
-                </ol>
-            </nav>
+<section class="page-header-ttcs">
+    <div class="container">
+        <h1>{{ post.title }}</h1>
+        <p class="mb-0">
+            <i class="bi bi-calendar"></i> {{ post.created_at|date:"F d, Y" }}
+            {% if post.category %} | <span class="badge bg-warning text-dark">{{ post.category.name }}</span>{% endif %}
+        </p>
+    </div>
+</section>
 
-            <article>
+<section class="section-ttcs">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
                 {% if post.featured_image %}
-                    <img src="{{ post.featured_image.url }}" class="img-fluid rounded mb-4" alt="{{ post.title }}">
-                {% endif %}
-                <h1 class="display-5 fw-bold mb-3">{{ post.title|translate:CURRENT_LANGUAGE_CODE }}</h1>
-                <p class="text-muted mb-4">
-                    <i class="bi bi-calendar"></i> {{ post.created_at|date:"F d, Y" }} | 
-                    <i class="bi bi-person"></i> {{ post.author.get_full_name|default:post.author.username }}
-                </p>
-                <div class="content">
-                    {{ post.content|translate:CURRENT_LANGUAGE_CODE|linebreaks }}
-                </div>
-            </article>
-        </div>
-
-        <div class="col-md-4">
-            <div class="card mb-4 shadow-sm">
-                <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0">Recent Posts</h5>
-                </div>
-                <div class="list-group list-group-flush">
-                    {% for recent in recent_posts %}
-                    <a href="{% url 'blog:post_detail' recent.slug %}" class="list-group-item list-group-item-action">
-                        <h6 class="mb-1">{{ recent.title }}</h6>
-                        <small class="text-muted">{{ recent.created_at|date:"F d, Y" }}</small>
-                    </a>
-                    {% empty %}
-                    <div class="list-group-item">
-                        <p class="text-muted mb-0">No recent posts.</p>
+                <div class="ttcs-featured-media">
+                    <div class="ttcs-media-frame ttcs-media-frame--hero">
+                        <img src="{{ post.featured_image.url }}" alt="{{ post.title }}" class="ttcs-media-img" loading="eager">
                     </div>
+                </div>
+                {% endif %}
+                <div class="ttcs-content ttcs-content-block">{{ post.content|linebreaks }}</div>
+                {% if post.get_meta_tags_list %}
+                <div class="mt-4">
+                    <strong>Tags:</strong>
+                    {% for tag in post.get_meta_tags_list %}
+                    <a href="{% url 'blog:blog_list' %}?tag={{ tag }}" class="badge bg-light text-dark text-decoration-none">{{ tag }}</a>
                     {% endfor %}
                 </div>
+                {% endif %}
+            </div>
+            <div class="col-lg-4">
+                {% if categories %}
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-header bg-primary text-white"><h6 class="mb-0">Categories</h6></div>
+                    <div class="list-group list-group-flush">
+                        {% for cat in categories %}
+                        <a href="{% url 'blog:blog_list' %}?category={{ cat.slug }}" class="list-group-item list-group-item-action">{{ cat.name }}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+                {% if recent_posts %}
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-primary text-white"><h6 class="mb-0">Recent Posts</h6></div>
+                    <div class="list-group list-group-flush">
+                        {% for recent in recent_posts %}
+                        <a href="{% url 'blog:post_detail' recent.slug %}" class="list-group-item list-group-item-action">{{ recent.title|truncatewords:8 }}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
             </div>
         </div>
     </div>
-</div>
+</section>
 {% endblock %}
-

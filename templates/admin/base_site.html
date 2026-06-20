@@ -1,15 +1,13 @@
 {% extends "admin/base.html" %}
 {% load static %}
 
-{% block title %}Andromeda Admin{% endblock %}
+{% block title %}{% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | TTCS Admin{% endblock %}
 
 {% block branding %}
-<h1 id="site-name"><a href="{% url 'admin:index' %}">
-	<img src="{% static 'images/andromeda-logo.svg' %}" alt="Andromeda" class="admin-logo" />
-	<span class="admin-brand-text">Andromeda Admin</span>
-	</a></h1>
+<a href="{% url 'admin:index' %}" class="brand-link">
+    <img src="{% static 'images/team-training-logo.jpg' %}" alt="TTCS" class="brand-image elevation-3">
+    <span class="brand-text font-weight-light">TTCS Admin</span>
+</a>
 {% endblock %}
 
-{% block nav-global %}
-{{ block.super }}
-{% endblock %}
+{% block nav-global %}{% endblock %}

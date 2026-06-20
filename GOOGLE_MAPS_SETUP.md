@@ -9,7 +9,7 @@
 2. **Create a New Project (or select existing)**
    - Click on the project dropdown at the top
    - Click "New Project"
-   - Enter a project name (e.g., "Andromeda Properties")
+   - Enter a project name (e.g., "Team Training and Consultancy Service")
    - Click "Create"
 
 3. **Enable Required APIs**
@@ -58,7 +58,7 @@ export GOOGLE_MAPS_API_KEY="YOUR_API_KEY_HERE"
 
 ### Option 2: Direct Configuration (Development Only)
 
-Edit `andromedaproperties/settings.py` and uncomment the line:
+Edit `ttcs_site/settings.py` and uncomment the line:
 ```python
 GOOGLE_MAPS_API_KEY = 'YOUR_GOOGLE_MAPS_API_KEY_HERE'
 ```
@@ -67,13 +67,13 @@ GOOGLE_MAPS_API_KEY = 'YOUR_GOOGLE_MAPS_API_KEY_HERE'
 
 ### Option 3: Create a local_settings.py file
 
-Create a file `andromedaproperties/local_settings.py`:
+Create a file `ttcs_site/local_settings.py`:
 ```python
 # Local settings (not in version control)
 GOOGLE_MAPS_API_KEY = 'YOUR_API_KEY_HERE'
 ```
 
-Then add at the end of `andromedaproperties/settings.py`:
+Then add at the end of `ttcs_site/settings.py`:
 ```python
 try:
     from .local_settings import *

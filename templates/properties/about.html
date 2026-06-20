@@ -1,189 +1,185 @@
 {% extends 'base.html' %}
-{% load static %}
-{% load content_filters %}
-{% load translation_tags %}
-{% load i18n %}
 
-{% block title %}About Us - Andromeda Properties{% endblock %}
+{% block title %}About Us - Team Training and Consultancy Service PLC{% endblock %}
 
 {% block content %}
-<div class="container mt-5 pt-4">
-    <div class="row mb-5">
-        <div class="col-12 text-center">
-            <h1 class="display-4 fw-bold mb-4">{% translate_text "About Andromeda Properties" CURRENT_LANGUAGE_CODE %}</h1>
-            <p class="lead text-muted">{% translate_text "The Best Real Estate In Ethiopia" CURRENT_LANGUAGE_CODE %}</p>
-        </div>
+<section class="page-header-ttcs">
+    <div class="container">
+        <h1>About Us</h1>
+        <p class="lead mb-0 ttcs-lead">Guiding your Success, Every step of the way!</p>
     </div>
+</section>
 
-    <div class="row mb-5">
-        <div class="col-md-6">
-            <h2 class="mb-4">{% translate_text "Our Mission" CURRENT_LANGUAGE_CODE %}</h2>
-            <p class="lead">{% translate_text "Andromeda Properties / Andromeda Real Estate is becoming the best real estate developer in Addis Ababa, Ethiopia. We are one of the top real estate high quality developers in Addis Ababa, Ethiopia." CURRENT_LANGUAGE_CODE %}</p>
-            <p>{% translate_text "At Andromeda, our pride comes from a simple, powerful mission: to do more than just build; we want to make the dream of owning a home a reality for everyone. We are all about delivering high-quality apartments in a timely manner." CURRENT_LANGUAGE_CODE %}</p>
-        </div>
-        <div class="col-md-6">
-            <div class="card shadow-sm">
-                <div class="card-body text-center p-4">
-                    <h3 class="mb-4">{% translate_text "Watch this video to know us better" CURRENT_LANGUAGE_CODE %}</h3>
-                    {% if about_settings.about_video_enabled %}
-                        {% if about_settings.about_video_url %}
-                            <!-- External Video (YouTube, Vimeo, etc.) -->
-                            {% if 'youtube.com' in about_settings.about_video_url or 'youtu.be' in about_settings.about_video_url %}
-                                {% with video_id=about_settings.about_video_url|extract_youtube_id %}
-                                    {% if video_id %}
-                                    <div class="ratio ratio-16x9">
-                                        <iframe src="https://www.youtube.com/embed/{{ video_id }}" 
-                                                frameborder="0" 
-                                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                                                allowfullscreen
-                                                title="About Andromeda Properties Video"
-                                                style="border-radius: 8px;"></iframe>
-                                    </div>
-                                    {% endif %}
-                                {% endwith %}
-                            {% elif 'vimeo.com' in about_settings.about_video_url %}
-                                {% with video_id=about_settings.about_video_url|extract_vimeo_id %}
-                                    {% if video_id %}
-                                    <div class="ratio ratio-16x9">
-                                        <iframe src="https://player.vimeo.com/video/{{ video_id }}" 
-                                                frameborder="0" 
-                                                allow="autoplay; fullscreen; picture-in-picture" 
-                                                allowfullscreen
-                                                title="About Andromeda Properties Video"
-                                                style="border-radius: 8px;"></iframe>
-                                    </div>
-                                    {% endif %}
-                                {% endwith %}
-                            {% else %}
-                                <!-- Generic iframe for other video URLs -->
-                                <div class="ratio ratio-16x9">
-                                    <iframe src="{{ about_settings.about_video_url }}" 
-                                            frameborder="0" 
-                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                                            allowfullscreen
-                                            title="About Andromeda Properties Video"
-                                            style="border-radius: 8px;"></iframe>
-                                </div>
-                            {% endif %}
-                        {% elif about_settings.about_video %}
-                            <!-- Uploaded Video File -->
-                            <div class="ratio ratio-16x9">
-                                <video 
-                                    class="w-100 h-100" 
-                                    controls 
-                                    preload="metadata"
-                                    {% if about_settings.about_video_poster %}poster="{{ about_settings.about_video_poster.url }}"{% endif %}
-                                    style="border-radius: 8px; object-fit: cover;">
-                                    <source src="{{ about_settings.about_video.url }}" type="video/mp4">
-                                    Your browser does not support the video tag.
-                                </video>
-                            </div>
-                        {% else %}
-                            <!-- No video configured - show placeholder -->
-                            <div class="bg-secondary rounded d-flex align-items-center justify-content-center" style="height: 300px; border-radius: 8px;">
-                                <div class="text-center text-white">
-                                    <i class="bi bi-play-circle" style="font-size: 4rem;"></i>
-                                    <p class="mt-3">No video configured</p>
-                                    <small>Upload a video in admin settings</small>
-                                </div>
-                            </div>
-                        {% endif %}
-                    {% else %}
-                        <!-- Video disabled -->
-                        <div class="bg-secondary rounded d-flex align-items-center justify-content-center" style="height: 300px; border-radius: 8px;">
-                            <div class="text-center text-white">
-                                <i class="bi bi-play-circle" style="font-size: 4rem;"></i>
-                                <p class="mt-3">Video is disabled</p>
-                            </div>
+<section class="section-ttcs">
+    <div class="container">
+        <div class="row align-items-center mb-5">
+            <div class="col-lg-6 ttcs-content">
+                <h2 class="text-primary mb-4">Our Story</h2>
+                <p>Team Training and Consultancy Service PLC (TTC) was established on Thursday, April 18, 2024, and officially began operations on May 7, 2024. We provide specialized training, consultancy, and human resource sourcing solutions tailored to enhance organizational effectiveness and employee development.</p>
+                <p>With a team of experienced consultants and trainers, we empower organizations through practical and innovative strategies that foster growth, productivity, and sustainable success. Our diverse range of programs is designed to meet the specific needs of businesses across various industries.</p>
+                <p>Two visionary individuals with extensive experience in higher education and industry founded TTC. Over the past decade, they have honed their theoretical and practical expertise, supported by numerous testimonial letters and certificates from the companies they have served.</p>
+            </div>
+            <div class="col-lg-6">
+                <div class="row g-3">
+                    <div class="col-6">
+                        <div class="value-card">
+                            <div class="stat-number text-primary" style="font-size:2.5rem;">{{ stats.clients_served }}+</div>
+                            <p class="mb-0">Clients Served</p>
                         </div>
-                    {% endif %}
+                    </div>
+                    <div class="col-6">
+                        <div class="value-card">
+                            <div class="stat-number text-primary" style="font-size:2.5rem;">{{ stats.years_experience }}+</div>
+                            <p class="mb-0">Years Experience</p>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="value-card">
+                            <div class="stat-number text-primary" style="font-size:2.5rem;">{{ stats.training_programs }}+</div>
+                            <p class="mb-0">Training Programs</p>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="value-card">
+                            <div class="stat-number text-primary" style="font-size:2.5rem;">{{ stats.associate_trainers }}+</div>
+                            <p class="mb-0">Associate Trainers</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+</section>
 
-    <!-- Statistics Banner -->
-    <div class="row mb-5">
-        <div class="col-12">
-            <div class="statistics-banner text-white py-5">
-                <div class="row text-center g-0">
-                    <div class="col-md-4 col-12 py-4">
-                        <h2 class="statistics-number fw-bold mb-2">{{ stats.customers }}+</h2>
-                        <p class="statistics-label mb-0">{% translate_text "Customers" CURRENT_LANGUAGE_CODE %}</p>
-                    </div>
-                    <div class="col-md-4 col-12 py-4">
-                        <h2 class="statistics-number fw-bold mb-2">{{ stats.years_experience }}+</h2>
-                        <p class="statistics-label mb-0">{% translate_text "Years Of Experience" CURRENT_LANGUAGE_CODE %}</p>
-                    </div>
-                    <div class="col-md-4 col-12 py-4">
-                        <h2 class="statistics-number fw-bold mb-2">{{ stats.delivered_projects }}+</h2>
-                        <p class="statistics-label mb-0">{% translate_text "Delivered Projects" CURRENT_LANGUAGE_CODE %}</p>
-                    </div>
+<section class="section-ttcs bg-light">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-lg-4">
+                <div class="value-card h-100">
+                    <i class="bi bi-eye"></i>
+                    <h4 class="text-primary">Our Vision</h4>
+                    <p>Team Training and Consultancy Service PLC aspires to emerge as a leading force among influential business consulting and human resource sourcing firms in Ethiopia, setting the standard for excellence and innovation in the industry.</p>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="value-card h-100">
+                    <i class="bi bi-bullseye"></i>
+                    <h4 class="text-primary">Our Mission</h4>
+                    <p>Our mission is to provide comprehensive consulting services, tailored training programs, and top-tier human resource solutions to businesses across Ethiopia. We are committed to delivering excellence through our high-caliber professionals with theoretical expertise, university teaching backgrounds, and extensive industry experience.</p>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="value-card h-100">
+                    <i class="bi bi-quote"></i>
+                    <h4 class="text-primary">Our Motto</h4>
+                    <p class="fs-5 fw-semibold text-warning">"Guiding your Success, Every step of the way"</p>
+                    <p class="small text-muted mt-3">We are dedicated to making meaningful contributions to the wider community by fostering economic growth and development.</p>
                 </div>
             </div>
         </div>
     </div>
+</section>
 
-    <!-- Why Choose Us -->
-    <div class="row mb-5">
-        <div class="col-12">
-            <h2 class="text-center mb-5">{% translate_text "Why Choose Us" CURRENT_LANGUAGE_CODE %}</h2>
+<section class="section-ttcs">
+    <div class="container">
+        <div class="section-title">
+            <h2>Our Core Values</h2>
+            <div class="title-underline"></div>
         </div>
-        <div class="col-md-4 mb-4">
-            <div class="card h-100 shadow-sm">
-                <div class="card-body text-center">
-                    <i class="bi bi-geo-alt-fill text-primary" style="font-size: 3rem;"></i>
-                    <h4 class="mt-3">{% translate_text "Location" CURRENT_LANGUAGE_CODE %}</h4>
-                    <p class="text-muted">{% translate_text "Discover thoughtfully designed properties that suit your lifestyle, with easy access to essential amenities, top-rated schools, and major transportation hubs" CURRENT_LANGUAGE_CODE %}</p>
+        <div class="row g-4">
+            <div class="col-lg-4 col-md-6">
+                <div class="value-card">
+                    <i class="bi bi-award"></i>
+                    <h5>Excellence</h5>
+                    <p>We strive for excellence in everything we do, delivering high-quality services that exceed expectations.</p>
                 </div>
             </div>
-        </div>
-        <div class="col-md-4 mb-4">
-            <div class="card h-100 shadow-sm">
-                <div class="card-body text-center">
-                    <i class="bi bi-currency-dollar text-primary" style="font-size: 3rem;"></i>
-                    <h4 class="mt-3">{% translate_text "Affordable" CURRENT_LANGUAGE_CODE %}</h4>
-                    <p class="text-muted">{% translate_text "Find your ideal home at a price that fits your budget. Our collection offers quality and affordability with clear, upfront pricing." CURRENT_LANGUAGE_CODE %}</p>
+            <div class="col-lg-4 col-md-6">
+                <div class="value-card">
+                    <i class="bi bi-shield-check"></i>
+                    <h5>Integrity</h5>
+                    <p>We uphold the highest standards of integrity, honesty, and transparency in all our interactions.</p>
                 </div>
             </div>
-        </div>
-        <div class="col-md-4 mb-4">
-            <div class="card h-100 shadow-sm">
-                <div class="card-body text-center">
-                    <i class="bi bi-award text-primary" style="font-size: 3rem;"></i>
-                    <h4 class="mt-3">{% translate_text "Quality" CURRENT_LANGUAGE_CODE %}</h4>
-                    <p class="text-muted">{% translate_text "Make smart property investments backed by a focus on safety, long-lasting quality, and strong value—guaranteed through thorough inspections." CURRENT_LANGUAGE_CODE %}</p>
+            <div class="col-lg-4 col-md-6">
+                <div class="value-card">
+                    <i class="bi bi-people"></i>
+                    <h5>Collaboration</h5>
+                    <p>We believe in the power of collaboration, leveraging diverse perspectives to deliver innovative solutions.</p>
                 </div>
             </div>
-        </div>
-        <div class="col-md-4 mb-4">
-            <div class="card h-100 shadow-sm">
-                <div class="card-body text-center">
-                    <i class="bi bi-shield-check text-primary" style="font-size: 3rem;"></i>
-                    <h4 class="mt-3">{% translate_text "Safety & Security" CURRENT_LANGUAGE_CODE %}</h4>
-                    <p class="text-muted">{% translate_text "Discover safe neighborhoods and well-appointed properties featuring key security measures and a strong sense of community." CURRENT_LANGUAGE_CODE %}</p>
+            <div class="col-lg-4 col-md-6">
+                <div class="value-card">
+                    <i class="bi bi-graph-up-arrow"></i>
+                    <h5>Continuous Improvement</h5>
+                    <p>We are committed to continuous learning, growth, and innovation to better serve our clients.</p>
                 </div>
             </div>
-        </div>
-        <div class="col-md-4 mb-4">
-            <div class="card h-100 shadow-sm">
-                <div class="card-body text-center">
-                    <i class="bi bi-graph-up-arrow text-primary" style="font-size: 3rem;"></i>
-                    <h4 class="mt-3">{% translate_text "Investment" CURRENT_LANGUAGE_CODE %}</h4>
-                    <p class="text-muted">{% translate_text "Invest in properties designed to grow in value, perfectly aligned with your long-term financial goals and dreams." CURRENT_LANGUAGE_CODE %}</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4 mb-4">
-            <div class="card h-100 shadow-sm">
-                <div class="card-body text-center">
-                    <i class="bi bi-star text-primary" style="font-size: 3rem;"></i>
-                    <h4 class="mt-3">{% translate_text "Amenity" CURRENT_LANGUAGE_CODE %}</h4>
-                    <p class="text-muted">{% translate_text "Enjoy comfort and ease in properties packed with amenities, designed to fit your lifestyle and personal needs." CURRENT_LANGUAGE_CODE %}</p>
+            <div class="col-lg-4 col-md-6">
+                <div class="value-card">
+                    <i class="bi bi-lightning"></i>
+                    <h5>Empowerment</h5>
+                    <p>We empower our employees and clients to reach their full potential through growth and development.</p>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</section>
+
+{% if milestones %}
+<section class="section-ttcs bg-light">
+    <div class="container">
+        <div class="section-title">
+            <h2>Key Milestones</h2>
+            <div class="title-underline"></div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="timeline-ttcs">
+                    {% for milestone in milestones %}
+                    <div class="timeline-item">
+                        <div class="year">{{ milestone.year }}</div>
+                        <h5>{{ milestone.title }}</h5>
+                        <p class="text-muted">{{ milestone.description }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<section class="section-ttcs">
+    <div class="container">
+        <div class="section-title">
+            <h2>Organizational Capabilities</h2>
+            <div class="title-underline"></div>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-6">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><i class="bi bi-check-circle-fill text-primary me-2"></i> Management consultancy services</li>
+                    <li class="list-group-item"><i class="bi bi-check-circle-fill text-primary me-2"></i> Economic development, business, and investment consultancy</li>
+                    <li class="list-group-item"><i class="bi bi-check-circle-fill text-primary me-2"></i> Local labor recruitment and linkage activities</li>
+                </ul>
+            </div>
+            <div class="col-md-6">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><i class="bi bi-check-circle-fill text-primary me-2"></i> Personality development training</li>
+                    <li class="list-group-item"><i class="bi bi-check-circle-fill text-primary me-2"></i> Management and business training</li>
+                    <li class="list-group-item"><i class="bi bi-check-circle-fill text-primary me-2"></i> Leadership and strategic management programs</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="cta-ttcs">
+    <div class="container">
+        <h2>Partner With Us</h2>
+        <p class="mb-4">Discover how TTCS can help your organization achieve sustainable success.</p>
+        <a href="{% url 'site:contact' %}" class="btn btn-light btn-lg">Get in Touch</a>
+    </div>
+</section>
 {% endblock %}
-

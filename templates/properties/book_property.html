@@ -100,7 +100,7 @@
                         {% endif %}
                         <div class="mt-4">
                             <button type="submit" class="btn btn-primary">{% translate_text "Submit Booking Request" CURRENT_LANGUAGE_CODE %}</button>
-                            <a href="{% url 'properties:property_detail' property.slug %}" class="btn btn-outline-secondary">{% translate_text "Cancel" CURRENT_LANGUAGE_CODE %}</a>
+                            <a href="{% url 'site:property_detail' property.slug %}" class="btn btn-outline-secondary">{% translate_text "Cancel" CURRENT_LANGUAGE_CODE %}</a>
                         </div>
                     </form>
                 </div>

@@ -6,11 +6,11 @@ import sys
 
 def main():
     """Run administrative tasks."""
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'andromedaproperties.settings')
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'ttcs_site.settings')
     try:
         from django.core.management import execute_from_command_line
         # Apply Python 3.14 compatibility patch after Django is imported
-        from andromedaproperties.compatibility import apply_python314_patch
+        from ttcs_site.compatibility import apply_python314_patch
         apply_python314_patch()
     except ImportError as exc:
         raise ImportError(

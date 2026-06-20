@@ -1,111 +1,178 @@
 {% extends "admin/base_site.html" %}
 {% load static %}
-{% load andromeda_admin_extras %}
+{% load ttcs_admin_extras %}
 
 {% block content %}
-<div class="admin-hero" role="banner" aria-hidden="false">
-    <div class="admin-hero-inner text-center">
-        <h1 class="display-4">Andromeda Admin</h1>
-        <p class="lead">Manage properties, projects, blog posts and users from here.</p>
-        <p class="text-muted small">Quick links below make common tasks faster.</p>
-    </div>
+<div class="admin-hero text-start">
+    <img src="{% static 'images/team-training-logo.jpg' %}" alt="TTCS" class="admin-hero-logo">
+    <h1>Team Training & Consultancy</h1>
+    <p class="lead">Content Management Portal</p>
+    <p class="small mb-0 opacity-75">Manage services, training programs, team profiles, showcases, and site settings</p>
 </div>
 
-<div class="container admin-dashboard-container">
-    <div class="admin-dashboard row gx-4 gy-4 my-4">
+<div class="admin-dashboard-container">
+    <h4 class="admin-section-title">Core Content</h4>
+    <div class="row g-3 mb-4">
         <div class="col-12 col-md-6 col-lg-3">
-            <a href="{% url 'admin:properties_property_changelist' %}" class="admin-card d-block text-decoration-none">
+            <a href="{% url 'admin:properties_service_changelist' %}" class="admin-card d-block text-decoration-none text-dark">
                 <div class="card shadow-sm">
                     <div class="card-body">
-                        <div class="d-flex align-items-center">
-                            <div class="me-3 admin-card-icon bg-primary text-white rounded-circle d-flex align-items-center justify-content-center">
-                                <!-- Property icon -->
-                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                                    <path d="M3 11.5L12 3l9 8.5V21a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1v-9.5z" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
-                                </svg>
-                            </div>
-                            <div>
-                                <h5 class="mb-0">Properties</h5>
-                                <div class="admin-card-count">{% model_count 'properties' 'Property' %}</div>
-                                <small class="text-muted">View and manage property listings</small>
-                            </div>
-                        </div>
+                        <div class="admin-card-icon"><i class="fas fa-briefcase"></i></div>
+                        <h5>Services</h5>
+                        <div class="admin-card-count">{% model_count 'properties' 'Service' %}</div>
+                        <small class="text-muted">Consultancy & training offerings</small>
                     </div>
                 </div>
             </a>
         </div>
-
         <div class="col-12 col-md-6 col-lg-3">
-            <a href="{% url 'admin:properties_project_changelist' %}" class="admin-card d-block text-decoration-none">
+            <a href="{% url 'admin:properties_trainingevent_changelist' %}" class="admin-card d-block text-decoration-none text-dark">
                 <div class="card shadow-sm">
                     <div class="card-body">
-                        <div class="d-flex align-items-center">
-                            <div class="me-3 admin-card-icon bg-success text-white rounded-circle d-flex align-items-center justify-content-center">
-                                <!-- Project icon -->
-                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                                    <path d="M3 7h18M3 12h18M3 17h18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                </svg>
-                            </div>
-                            <div>
-                                <h5 class="mb-0">Projects</h5>
-                                <div class="admin-card-count">{% model_count 'properties' 'Project' %}</div>
-                                <small class="text-muted">Manage development projects</small>
-                            </div>
-                        </div>
+                        <div class="admin-card-icon"><i class="fas fa-chalkboard-teacher"></i></div>
+                        <h5>Training Events</h5>
+                        <div class="admin-card-count">{% model_count 'properties' 'TrainingEvent' %}</div>
+                        <small class="text-muted">Programs, workshops & seminars</small>
                     </div>
                 </div>
             </a>
         </div>
-
         <div class="col-12 col-md-6 col-lg-3">
-            <a href="{% url 'admin:blog_blogpost_changelist' %}" class="admin-card d-block text-decoration-none">
+            <a href="{% url 'admin:properties_eventregistration_changelist' %}" class="admin-card d-block text-decoration-none text-dark">
                 <div class="card shadow-sm">
                     <div class="card-body">
-                        <div class="d-flex align-items-center">
-                            <div class="me-3 admin-card-icon bg-info text-white rounded-circle d-flex align-items-center justify-content-center">
-                                <!-- Blog icon -->
-                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                                    <path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-                                </svg>
-                            </div>
-                            <div>
-                                <h5 class="mb-0">Blog Posts</h5>
-                                <div class="admin-card-count">{% model_count 'blog' 'BlogPost' %}</div>
-                                <small class="text-muted">Create and edit posts</small>
-                            </div>
-                        </div>
+                        <div class="admin-card-icon"><i class="fas fa-user-check"></i></div>
+                        <h5>Registrations</h5>
+                        <div class="admin-card-count">{% model_count 'properties' 'EventRegistration' %}</div>
+                        <small class="text-muted">Event sign-ups & attendees</small>
                     </div>
                 </div>
             </a>
         </div>
-
         <div class="col-12 col-md-6 col-lg-3">
-            <a href="{% url 'admin:auth_user_changelist' %}" class="admin-card d-block text-decoration-none">
+            <a href="{% url 'admin:properties_casestudy_changelist' %}" class="admin-card d-block text-decoration-none text-dark">
                 <div class="card shadow-sm">
                     <div class="card-body">
-                        <div class="d-flex align-items-center">
-                            <div class="me-3 admin-card-icon bg-warning text-white rounded-circle d-flex align-items-center justify-content-center">
-                                <!-- Users icon -->
-                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                                    <path d="M16 11c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM8 11c1.657 0 3-1.343 3-3S9.657 5 8 5 5 6.343 5 8s1.343 3 3 3zM2 20c0-2.21 3.582-4 8-4s8 1.79 8 4v1H2v-1z" stroke="currentColor" stroke-width="0.2"/>
-                                </svg>
-                            </div>
-                            <div>
-                                <h5 class="mb-0">Users</h5>
-                                <div class="admin-card-count">{% model_count 'auth' 'User' %}</div>
-                                <small class="text-muted">Manage admin users</small>
-                            </div>
-                        </div>
+                        <div class="admin-card-icon"><i class="fas fa-chart-line"></i></div>
+                        <h5>Case Studies</h5>
+                        <div class="admin-card-count">{% model_count 'properties' 'CaseStudy' %}</div>
+                        <small class="text-muted">Client success showcases</small>
                     </div>
                 </div>
             </a>
         </div>
     </div>
 
-    <!-- Keep the default app list below for completeness -->
-    <div class="mt-4">
-        {{ block.super }}
+    <h4 class="admin-section-title">People & Engagement</h4>
+    <div class="row g-3 mb-4">
+        <div class="col-12 col-md-6 col-lg-3">
+            <a href="{% url 'admin:properties_teammember_changelist' %}" class="admin-card d-block text-decoration-none text-dark">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <div class="admin-card-icon"><i class="fas fa-user-tie"></i></div>
+                        <h5>Team Members</h5>
+                        <div class="admin-card-count">{% model_count 'properties' 'TeamMember' %}</div>
+                        <small class="text-muted">Trainers & consultants</small>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-12 col-md-6 col-lg-3">
+            <a href="{% url 'admin:properties_testimonial_changelist' %}" class="admin-card d-block text-decoration-none text-dark">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <div class="admin-card-icon"><i class="fas fa-quote-left"></i></div>
+                        <h5>Testimonials</h5>
+                        <div class="admin-card-count">{% model_count 'properties' 'Testimonial' %}</div>
+                        <small class="text-muted">Client feedback & reviews</small>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-12 col-md-6 col-lg-3">
+            <a href="{% url 'admin:properties_partner_changelist' %}" class="admin-card d-block text-decoration-none text-dark">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <div class="admin-card-icon"><i class="fas fa-handshake"></i></div>
+                        <h5>Partners</h5>
+                        <div class="admin-card-count">{% model_count 'properties' 'Partner' %}</div>
+                        <small class="text-muted">Partner & client logos</small>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-12 col-md-6 col-lg-3">
+            <a href="{% url 'admin:properties_contact_changelist' %}" class="admin-card d-block text-decoration-none text-dark">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <div class="admin-card-icon"><i class="fas fa-envelope"></i></div>
+                        <h5>Contact Messages</h5>
+                        <div class="admin-card-count">{% model_count 'properties' 'Contact' %}</div>
+                        <small class="text-muted">Inquiries from contact form</small>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <h4 class="admin-section-title">Media & Blog</h4>
+    <div class="row g-3 mb-4">
+        <div class="col-12 col-md-6 col-lg-3">
+            <a href="{% url 'admin:properties_mediaalbum_changelist' %}" class="admin-card d-block text-decoration-none text-dark">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <div class="admin-card-icon"><i class="fas fa-images"></i></div>
+                        <h5>Photo Gallery</h5>
+                        <div class="admin-card-count">{% model_count 'properties' 'MediaAlbum' %}</div>
+                        <small class="text-muted">Media albums & events</small>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-12 col-md-6 col-lg-3">
+            <a href="{% url 'admin:blog_blogpost_changelist' %}" class="admin-card d-block text-decoration-none text-dark">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <div class="admin-card-icon"><i class="fas fa-blog"></i></div>
+                        <h5>Blog Posts</h5>
+                        <div class="admin-card-count">{% model_count 'blog' 'BlogPost' %}</div>
+                        <small class="text-muted">News & articles</small>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-12 col-md-6 col-lg-3">
+            <a href="{% url 'admin:blog_blogcategory_changelist' %}" class="admin-card d-block text-decoration-none text-dark">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <div class="admin-card-icon"><i class="fas fa-tags"></i></div>
+                        <h5>Blog Categories</h5>
+                        <div class="admin-card-count">{% model_count 'blog' 'BlogCategory' %}</div>
+                        <small class="text-muted">Article groupings</small>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-12 col-md-6 col-lg-3">
+            <a href="{% url 'admin:properties_milestone_changelist' %}" class="admin-card d-block text-decoration-none text-dark">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <div class="admin-card-icon"><i class="fas fa-flag"></i></div>
+                        <h5>Milestones</h5>
+                        <div class="admin-card-count">{% model_count 'properties' 'Milestone' %}</div>
+                        <small class="text-muted">Company history timeline</small>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <h4 class="admin-section-title">Site Settings</h4>
+    <div class="admin-quick-links mb-4">
+        <a href="{% url 'admin:properties_sitesettings_changelist' %}" class="btn btn-outline-primary btn-sm">Site Settings</a>
+        <a href="{% url 'admin:properties_homepagesettings_changelist' %}" class="btn btn-outline-primary btn-sm">Homepage</a>
+        <a href="{% url 'admin:properties_workingschedule_changelist' %}" class="btn btn-outline-primary btn-sm">Working Hours</a>
+        <a href="/" target="_blank" class="btn btn-primary btn-sm">View Website</a>
     </div>
 </div>
-
 {% endblock %}

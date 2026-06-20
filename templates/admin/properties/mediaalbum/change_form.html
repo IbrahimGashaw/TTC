@@ -1,0 +1,42 @@
+{% extends "admin/change_form.html" %}
+{% load i18n %}
+
+{% block after_field_sets %}
+<div class="card card-outline card-primary mb-4 ttcs-bulk-media-upload">
+    <div class="card-header">
+        <h3 class="card-title mb-0">
+            <i class="fas fa-images mr-1"></i>
+            {% trans "Upload multiple photos & videos" %}
+        </h3>
+    </div>
+    <div class="card-body">
+        <p class="text-muted mb-3">
+            {% trans "Select many files at once (hold Ctrl or Cmd while clicking). Supported: JPG, PNG, WebP, GIF, MP4, WebM. Then click Save at the bottom of the page." %}
+        </p>
+        <div class="form-group mb-0">
+            <label for="id_bulk_photos" class="font-weight-bold">{% trans "Choose files" %}</label>
+            <input type="file"
+                   name="bulk_photos"
+                   id="id_bulk_photos"
+                   multiple
+                   accept="image/*,video/*,.jpg,.jpeg,.png,.webp,.gif,.mp4,.webm,.mov"
+                   class="form-control-file ttcs-bulk-media-input">
+        </div>
+        <p class="help-block text-muted mt-2 mb-0" id="bulk-photos-count"></p>
+    </div>
+</div>
+<script>
+(function () {
+    var input = document.getElementById('id_bulk_photos');
+    var counter = document.getElementById('bulk-photos-count');
+    if (!input || !counter) return;
+    input.addEventListener('change', function () {
+        var n = input.files ? input.files.length : 0;
+        counter.textContent = n
+            ? n + ' {% trans "file(s) selected — click Save to upload" %}'
+            : '';
+    });
+})();
+</script>
+{{ block.super }}
+{% endblock %}

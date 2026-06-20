@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load media_tags %}
+
+{% block title %}{{ service.title }} - Team Training and Consultancy Service PLC{% endblock %}
+
+{% block content %}
+<section class="page-header-ttcs">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb breadcrumb-ttcs">
+                <li class="breadcrumb-item"><a href="{% url 'site:home' %}" class="text-white-50">Home</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'site:service_list' %}" class="text-white-50">Services</a></li>
+                <li class="breadcrumb-item active text-white">{{ service.title }}</li>
+            </ol>
+        </nav>
+        <h1>{{ service.title }}</h1>
+        <span class="badge bg-warning text-dark">{{ service.get_category_display }}</span>
+    </div>
+</section>
+
+<section class="section-ttcs">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-lg-8">
+                {% if service.image %}
+                <div class="ttcs-featured-media">
+                    <div class="ttcs-media-frame ttcs-media-frame--hero">
+                        <img src="{{ service.image.url }}" alt="{{ service.title }}" class="ttcs-media-img" loading="eager">
+                    </div>
+                </div>
+                {% endif %}
+                <div class="ttcs-content ttcs-content-block">
+                    {{ service.full_description|linebreaks }}
+                </div>
+                {% render_media_gallery service.media_items.all gallery_id='service' %}
+                <div class="mt-4 d-flex flex-wrap gap-2">
+                    <a href="{% url 'site:contact' %}" class="btn btn-ttcs-primary">Request This Service</a>
+                    <a href="{% url 'site:training_events' %}" class="btn btn-outline-primary">View Training Programs</a>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body ttcs-card-text">
+                        <h5 class="text-primary mb-3">Service Overview</h5>
+                        <p>{{ service.short_description }}</p>
+                        <hr>
+                        <h6 class="text-primary">Category</h6>
+                        <p class="mb-0">{{ service.get_category_display }}</p>
+                    </div>
+                </div>
+                {% if related_services %}
+                <div class="card border-0 shadow-sm mt-4">
+                    <div class="card-body">
+                        <h5 class="text-primary mb-3">Related Services</h5>
+                        <ul class="list-unstyled mb-0">
+                            {% for related in related_services %}
+                            <li class="mb-2"><a href="{{ related.get_absolute_url }}"><i class="bi bi-arrow-right text-primary"></i> {{ related.title }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -5,6 +5,31 @@ from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
 
 
+def sync_media_type(instance):
+    """Set media_type from whichever file or URL was uploaded."""
+    if instance.image and not instance.video_file and not instance.video_url:
+        instance.media_type = 'image'
+    elif (instance.video_file or instance.video_url) and not instance.image:
+        instance.media_type = 'video'
+
+
+def embed_video_url(url):
+    """Convert YouTube/Vimeo watch URLs to embed URLs."""
+    if not url:
+        return None
+    url = url.strip()
+    if 'youtube.com/watch' in url and 'v=' in url:
+        video_id = url.split('v=')[1].split('&')[0]
+        return f'https://www.youtube.com/embed/{video_id}'
+    if 'youtu.be/' in url:
+        video_id = url.rstrip('/').split('/')[-1].split('?')[0]
+        return f'https://www.youtube.com/embed/{video_id}'
+    if 'vimeo.com/' in url:
+        video_id = url.rstrip('/').split('/')[-1].split('?')[0]
+        return f'https://player.vimeo.com/video/{video_id}'
+    return url
+
+
 class Project(models.Model):
     name = models.CharField(max_length=200)
     slug = models.SlugField(unique=True)
@@ -21,7 +46,7 @@ class Project(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('properties:project_detail', kwargs={'slug': self.slug})
+        return reverse('site:project_detail', kwargs={'slug': self.slug})
 
     @property
     def property_count(self):
@@ -118,7 +143,7 @@ class Property(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return reverse('properties:property_detail', kwargs={'slug': self.slug})
+        return reverse('site:property_detail', kwargs={'slug': self.slug})
     
     def get_display_image(self):
         """Get the main image or first available image"""
@@ -202,9 +227,13 @@ class PropertyNeedRequest(models.Model):
 
 class TeamMember(models.Model):
     ROLE_CHOICES = [
-        ('sales_officer', 'Sales Officer'),
-        ('sales_agent', 'Sales Agent'),
-        ('other', 'Other'),
+        ('founder', _('Founder & Manager')),
+        ('deputy_manager', _('Deputy Manager')),
+        ('associate_trainer', _('Associate Trainer')),
+        ('consultant', _('Consultant')),
+        ('sales_officer', _('Sales Officer')),
+        ('sales_agent', _('Business Development Officer')),
+        ('other', _('Other')),
     ]
 
     name = models.CharField(max_length=100)
@@ -221,12 +250,25 @@ class TeamMember(models.Model):
     bio = models.TextField(blank=True)
     is_verified = models.BooleanField(
         default=False,
-        help_text=_('Mark agent as verified'),
+        help_text=_('Mark team member as verified'),
         verbose_name=_('Verified')
     )
+    title = models.CharField(
+        max_length=200,
+        blank=True,
+        help_text=_('Professional title or designation'),
+        verbose_name=_('Title')
+    )
+    credentials = models.TextField(
+        blank=True,
+        help_text=_('Degrees, certifications, and professional credentials'),
+        verbose_name=_('Credentials')
+    )
+    is_founder = models.BooleanField(default=False, verbose_name=_('Founder'))
+    order = models.IntegerField(default=0, verbose_name=_('Display Order'))
     years_experience = models.IntegerField(
         default=0,
-        help_text=_('Years of experience in real estate'),
+        help_text=_('Years of professional experience'),
         verbose_name=_('Years of Experience')
     )
     languages = models.CharField(
@@ -238,13 +280,13 @@ class TeamMember(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        ordering = ['name']
+        ordering = ['order', 'name']
 
     def __str__(self):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('properties:agent_detail', kwargs={'pk': self.pk})
+        return reverse('site:team_member_detail', kwargs={'pk': self.pk})
 
 
 class PropertyBooking(models.Model):
@@ -345,7 +387,7 @@ class MarketReport(models.Model):
         return self.title
     
     def get_absolute_url(self):
-        return reverse('properties:market_report_detail', kwargs={'slug': self.slug})
+        return reverse('site:market_report_detail', kwargs={'slug': self.slug})
     
     def get_tags_list(self):
         """Return tags as a list"""
@@ -406,7 +448,7 @@ class BuyingGuide(models.Model):
         return self.title
     
     def get_absolute_url(self):
-        return reverse('properties:buying_guide_detail', kwargs={'slug': self.slug})
+        return reverse('site:buying_guide_detail', kwargs={'slug': self.slug})
     
     def get_tags_list(self):
         """Return tags as a list"""
@@ -478,24 +520,29 @@ class HomePageSettings(models.Model):
     # Hero Section Text
     hero_title = models.CharField(
         max_length=200,
-        default='MAKE YOUR NEXT MOVE WITH US',
+        default='Guiding your Success, Every step of the way!',
         verbose_name=_('Hero Title')
     )
     hero_subtitle = models.CharField(
         max_length=200,
-        default='ANDROMEDA PROPERTIES',
+        default='TEAM TRAINING AND CONSULTANCY SERVICE PLC',
         verbose_name=_('Hero Subtitle')
     )
     hero_description = models.TextField(
         max_length=500,
-        default='Discover the latest real estate in Ethiopia on Andromeda Properties',
+        default='Specialized training, consultancy, and human resource sourcing solutions tailored to enhance organizational effectiveness and employee development.',
         blank=True,
         verbose_name=_('Hero Description')
     )
     hero_button_text = models.CharField(
         max_length=50,
-        default='Explore Properties',
+        default='Explore Our Services',
         verbose_name=_('Hero Button Text')
+    )
+    hero_button_url = models.CharField(
+        max_length=200,
+        default='/services/',
+        verbose_name=_('Hero Button URL')
     )
     
     # Fallback to static video if no video uploaded
@@ -554,7 +601,7 @@ class HomePageSettings(models.Model):
         if self.hero_video_poster:
             return self.hero_video_poster.url
         # Return static path - template will use {% static %} tag
-        return 'images/header-realestate.svg'
+        return 'images/team-training-logo.jpg'
     
     def get_poster_is_static(self):
         """Check if poster is from static files (not uploaded)"""
@@ -572,7 +619,7 @@ class SiteSettings(models.Model):
     )
     whatsapp_default_message = models.CharField(
         max_length=500,
-        default='Hello! I am interested in your properties.',
+        default='Hello! I am interested in your training and consultancy services.',
         help_text=_('Default message for WhatsApp inquiries'),
         verbose_name=_('Default WhatsApp Message')
     )
@@ -583,8 +630,30 @@ class SiteSettings(models.Model):
     )
     
     # Contact Information
-    company_phone = models.CharField(max_length=20, blank=True, verbose_name=_('Company Phone'))
+    company_name = models.CharField(
+        max_length=200,
+        default='Team Training and Consultancy Service PLC',
+        verbose_name=_('Company Name')
+    )
+    company_tagline = models.CharField(
+        max_length=200,
+        default='Guiding your Success, Every step of the way!',
+        verbose_name=_('Company Tagline')
+    )
+    company_phone = models.CharField(max_length=50, blank=True, verbose_name=_('Company Phone'))
+    company_phone_secondary = models.CharField(max_length=50, blank=True, verbose_name=_('Secondary Phone'))
     company_email = models.EmailField(blank=True, verbose_name=_('Company Email'))
+    company_address = models.CharField(max_length=300, blank=True, verbose_name=_('Company Address'))
+    latitude = models.DecimalField(
+        max_digits=9, decimal_places=6, blank=True, null=True,
+        help_text=_('Latitude for map (e.g., 8.5400)'),
+        verbose_name=_('Latitude')
+    )
+    longitude = models.DecimalField(
+        max_digits=9, decimal_places=6, blank=True, null=True,
+        help_text=_('Longitude for map (e.g., 39.2700)'),
+        verbose_name=_('Longitude')
+    )
     
     updated_at = models.DateTimeField(auto_now=True, verbose_name=_('Updated At'))
     
@@ -610,7 +679,7 @@ class SiteSettings(models.Model):
         obj, created = cls.objects.get_or_create(pk=1)
         return obj
     
-    def get_whatsapp_url(self, message=None, property_title=None):
+    def get_whatsapp_url(self, message=None, subject=None, property_title=None):
         """Generate WhatsApp click-to-chat URL"""
         if not self.whatsapp_number:
             return None
@@ -619,8 +688,9 @@ class SiteSettings(models.Model):
         phone = self.whatsapp_number.replace(' ', '').replace('-', '').replace('(', '').replace(')', '')
         
         # Build message
-        if property_title:
-            msg = f"Hello! I'm interested in: {property_title}. {message or self.whatsapp_default_message}"
+        inquiry_subject = subject or property_title
+        if inquiry_subject:
+            msg = f"Hello! I'd like to inquire about: {inquiry_subject}. {message or self.whatsapp_default_message}"
         else:
             msg = message or self.whatsapp_default_message
         
@@ -895,3 +965,411 @@ class AboutPageSettings(models.Model):
         """Get or create the singleton instance"""
         obj, created = cls.objects.get_or_create(pk=1)
         return obj
+
+
+class Service(models.Model):
+    CATEGORY_CHOICES = [
+        ('management_consultancy', _('Management Consultancy')),
+        ('strategic_leadership', _('Strategic Leadership')),
+        ('hr_sourcing', _('HR Sourcing')),
+        ('investment', _('Investment')),
+        ('organizational_development', _('Organizational Development')),
+    ]
+
+    title = models.CharField(max_length=200, verbose_name=_('Title'))
+    slug = models.SlugField(unique=True, verbose_name=_('Slug'))
+    category = models.CharField(max_length=50, choices=CATEGORY_CHOICES, verbose_name=_('Category'))
+    short_description = models.TextField(max_length=500, verbose_name=_('Short Description'))
+    full_description = models.TextField(verbose_name=_('Full Description'))
+    icon = models.CharField(
+        max_length=50,
+        default='bi-briefcase',
+        help_text=_('Bootstrap icon class (e.g., bi-briefcase)'),
+        verbose_name=_('Icon')
+    )
+    image = models.ImageField(upload_to='services/', blank=True, null=True, verbose_name=_('Image'))
+    is_featured = models.BooleanField(default=False, verbose_name=_('Featured'))
+    order = models.IntegerField(default=0, verbose_name=_('Display Order'))
+    is_active = models.BooleanField(default=True, verbose_name=_('Active'))
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['order', 'title']
+        verbose_name = _('Service')
+        verbose_name_plural = _('Services')
+
+    def __str__(self):
+        return self.title
+
+    def get_absolute_url(self):
+        return reverse('site:service_detail', kwargs={'slug': self.slug})
+
+
+class TrainingEvent(models.Model):
+    EVENT_TYPE_CHOICES = [
+        ('training', _('Training Program')),
+        ('workshop', _('Workshop')),
+        ('seminar', _('Seminar')),
+        ('conference', _('Conference')),
+        ('consultancy', _('Consultancy Session')),
+    ]
+
+    title = models.CharField(max_length=200, verbose_name=_('Title'))
+    slug = models.SlugField(unique=True, verbose_name=_('Slug'))
+    event_type = models.CharField(max_length=30, choices=EVENT_TYPE_CHOICES, default='training')
+    description = models.TextField(verbose_name=_('Description'))
+    short_description = models.TextField(max_length=500, blank=True, verbose_name=_('Short Description'))
+    start_date = models.DateTimeField(verbose_name=_('Start Date'))
+    end_date = models.DateTimeField(verbose_name=_('End Date'))
+    location = models.CharField(max_length=200, verbose_name=_('Location'))
+    venue = models.CharField(max_length=200, blank=True, verbose_name=_('Venue'))
+    max_participants = models.IntegerField(default=50, verbose_name=_('Max Participants'))
+    registration_deadline = models.DateTimeField(blank=True, null=True, verbose_name=_('Registration Deadline'))
+    brochure = models.FileField(
+        upload_to='brochures/',
+        blank=True,
+        null=True,
+        help_text=_('Downloadable brochure (PDF)'),
+        verbose_name=_('Brochure')
+    )
+    featured_image = models.ImageField(upload_to='events/', blank=True, null=True, verbose_name=_('Featured Image'))
+    is_published = models.BooleanField(default=True, verbose_name=_('Published'))
+    is_featured = models.BooleanField(default=False, verbose_name=_('Featured'))
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['start_date']
+        verbose_name = _('Training Event')
+        verbose_name_plural = _('Training Events')
+
+    def __str__(self):
+        return self.title
+
+    def get_absolute_url(self):
+        return reverse('site:event_detail', kwargs={'slug': self.slug})
+
+    @property
+    def is_registration_open(self):
+        from django.utils import timezone
+        now = timezone.now()
+        if self.registration_deadline and now > self.registration_deadline:
+            return False
+        if now > self.start_date:
+            return False
+        return self.registered_count < self.max_participants
+
+    @property
+    def registered_count(self):
+        return self.registrations.filter(status='confirmed').count()
+
+    @property
+    def spots_remaining(self):
+        return max(0, self.max_participants - self.registered_count)
+
+
+class EventRegistration(models.Model):
+    STATUS_CHOICES = [
+        ('pending', _('Pending')),
+        ('confirmed', _('Confirmed')),
+        ('cancelled', _('Cancelled')),
+    ]
+
+    event = models.ForeignKey(TrainingEvent, on_delete=models.CASCADE, related_name='registrations')
+    full_name = models.CharField(max_length=200, verbose_name=_('Full Name'))
+    email = models.EmailField(verbose_name=_('Email'))
+    phone = models.CharField(max_length=30, verbose_name=_('Phone'))
+    organization = models.CharField(max_length=200, blank=True, verbose_name=_('Organization'))
+    job_title = models.CharField(max_length=200, blank=True, verbose_name=_('Job Title'))
+    notes = models.TextField(blank=True, verbose_name=_('Notes'))
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+        verbose_name = _('Event Registration')
+        verbose_name_plural = _('Event Registrations')
+
+    def __str__(self):
+        return f"{self.full_name} - {self.event.title}"
+
+
+class CaseStudy(models.Model):
+    title = models.CharField(max_length=200, verbose_name=_('Title'))
+    slug = models.SlugField(unique=True, verbose_name=_('Slug'))
+    client_name = models.CharField(max_length=200, verbose_name=_('Client Name'))
+    industry = models.CharField(max_length=100, blank=True, verbose_name=_('Industry'))
+    challenge = models.TextField(verbose_name=_('Challenge'))
+    solution = models.TextField(verbose_name=_('Solution'))
+    results = models.TextField(verbose_name=_('Results'))
+    excerpt = models.TextField(max_length=500, blank=True, verbose_name=_('Excerpt'))
+    featured_image = models.ImageField(upload_to='case_studies/', blank=True, null=True, verbose_name=_('Featured Image'))
+    project_start = models.DateField(blank=True, null=True, verbose_name=_('Project Start'))
+    project_end = models.DateField(blank=True, null=True, verbose_name=_('Project End'))
+    is_featured = models.BooleanField(default=False, verbose_name=_('Featured'))
+    is_published = models.BooleanField(default=True, verbose_name=_('Published'))
+    order = models.IntegerField(default=0, verbose_name=_('Display Order'))
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['order', '-created_at']
+        verbose_name = _('Case Study')
+        verbose_name_plural = _('Case Studies')
+
+    def __str__(self):
+        return self.title
+
+    def get_absolute_url(self):
+        return reverse('site:case_study_detail', kwargs={'slug': self.slug})
+
+
+class CaseStudyTimeline(models.Model):
+    case_study = models.ForeignKey(CaseStudy, on_delete=models.CASCADE, related_name='timeline')
+    title = models.CharField(max_length=200, verbose_name=_('Title'))
+    description = models.TextField(blank=True, verbose_name=_('Description'))
+    date = models.DateField(verbose_name=_('Date'))
+    order = models.IntegerField(default=0, verbose_name=_('Order'))
+
+    class Meta:
+        ordering = ['order', 'date']
+        verbose_name = _('Case Study Timeline')
+        verbose_name_plural = _('Case Study Timelines')
+
+    def __str__(self):
+        return f"{self.case_study.title} - {self.title}"
+
+
+class Testimonial(models.Model):
+    client_name = models.CharField(max_length=100, verbose_name=_('Client Name'))
+    organization = models.CharField(max_length=200, blank=True, verbose_name=_('Organization'))
+    position = models.CharField(max_length=100, blank=True, verbose_name=_('Position'))
+    content = models.TextField(verbose_name=_('Testimonial'))
+    image = models.ImageField(upload_to='testimonials/', blank=True, null=True, verbose_name=_('Photo'))
+    rating = models.IntegerField(
+        default=5,
+        validators=[MinValueValidator(1), MaxValueValidator(5)],
+        verbose_name=_('Rating')
+    )
+    is_featured = models.BooleanField(default=False, verbose_name=_('Featured'))
+    is_active = models.BooleanField(default=True, verbose_name=_('Active'))
+    order = models.IntegerField(default=0, verbose_name=_('Display Order'))
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['order', '-created_at']
+        verbose_name = _('Testimonial')
+        verbose_name_plural = _('Testimonials')
+
+    def __str__(self):
+        return f"{self.client_name} - {self.organization}"
+
+
+class Partner(models.Model):
+    name = models.CharField(max_length=200, verbose_name=_('Name'))
+    logo = models.ImageField(upload_to='partners/', blank=True, null=True, verbose_name=_('Logo'))
+    website = models.URLField(blank=True, verbose_name=_('Website'))
+    description = models.TextField(blank=True, verbose_name=_('Description'))
+    is_active = models.BooleanField(default=True, verbose_name=_('Active'))
+    order = models.IntegerField(default=0, verbose_name=_('Display Order'))
+
+    class Meta:
+        ordering = ['order', 'name']
+        verbose_name = _('Partner')
+        verbose_name_plural = _('Partners')
+
+    def __str__(self):
+        return self.name
+
+
+class Milestone(models.Model):
+    year = models.CharField(max_length=20, verbose_name=_('Year'))
+    title = models.CharField(max_length=200, verbose_name=_('Title'))
+    description = models.TextField(verbose_name=_('Description'))
+    order = models.IntegerField(default=0, verbose_name=_('Display Order'))
+
+    class Meta:
+        ordering = ['order', 'year']
+        verbose_name = _('Milestone')
+        verbose_name_plural = _('Milestones')
+
+    def __str__(self):
+        return f"{self.year} - {self.title}"
+
+
+class MediaAlbum(models.Model):
+    title = models.CharField(max_length=200, verbose_name=_('Title'))
+    slug = models.SlugField(unique=True, verbose_name=_('Slug'))
+    description = models.TextField(blank=True, verbose_name=_('Description'))
+    cover_image = models.ImageField(upload_to='gallery/covers/', blank=True, null=True, verbose_name=_('Cover Image'))
+    category = models.CharField(max_length=100, blank=True, verbose_name=_('Category'))
+    is_published = models.BooleanField(default=True, verbose_name=_('Published'))
+    order = models.IntegerField(default=0, verbose_name=_('Display Order'))
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['order', '-created_at']
+        verbose_name = _('Media Album')
+        verbose_name_plural = _('Media Albums')
+
+    def __str__(self):
+        return self.title
+
+    def get_absolute_url(self):
+        return reverse('site:gallery_detail', kwargs={'slug': self.slug})
+
+
+class MediaItem(models.Model):
+    MEDIA_TYPE_CHOICES = [
+        ('image', _('Image')),
+        ('video', _('Video')),
+    ]
+
+    album = models.ForeignKey(MediaAlbum, on_delete=models.CASCADE, related_name='items')
+    title = models.CharField(max_length=200, blank=True, verbose_name=_('Title'))
+    media_type = models.CharField(max_length=10, choices=MEDIA_TYPE_CHOICES, default='image')
+    image = models.ImageField(
+        upload_to='gallery/images/',
+        blank=True,
+        null=True,
+        verbose_name=_('Image'),
+        help_text=_('Recommended: 1200×800px or larger, JPG/PNG/WebP'),
+    )
+    video_file = models.FileField(
+        upload_to='gallery/videos/',
+        blank=True,
+        null=True,
+        verbose_name=_('Video File'),
+        help_text=_('MP4 or WebM video upload'),
+    )
+    video_url = models.URLField(
+        blank=True,
+        verbose_name=_('Video URL'),
+        help_text=_('YouTube or Vimeo link (alternative to uploaded video)'),
+    )
+    caption = models.CharField(max_length=300, blank=True, verbose_name=_('Caption'))
+    order = models.IntegerField(default=0, verbose_name=_('Order'))
+
+    class Meta:
+        ordering = ['order']
+        verbose_name = _('Media Item')
+        verbose_name_plural = _('Media Items')
+
+    def __str__(self):
+        return self.title or f"Media in {self.album.title}"
+
+    def save(self, *args, **kwargs):
+        sync_media_type(self)
+        super().save(*args, **kwargs)
+
+    def get_embed_video_url(self):
+        return embed_video_url(self.video_url)
+
+
+class ServiceMedia(models.Model):
+    MEDIA_TYPE_CHOICES = MediaItem.MEDIA_TYPE_CHOICES
+
+    service = models.ForeignKey(Service, on_delete=models.CASCADE, related_name='media_items')
+    title = models.CharField(max_length=200, blank=True, verbose_name=_('Title'))
+    media_type = models.CharField(max_length=10, choices=MEDIA_TYPE_CHOICES, default='image')
+    image = models.ImageField(upload_to='services/gallery/', blank=True, null=True, verbose_name=_('Image'))
+    video_file = models.FileField(upload_to='services/videos/', blank=True, null=True, verbose_name=_('Video File'))
+    video_url = models.URLField(blank=True, verbose_name=_('Video URL'))
+    caption = models.CharField(max_length=300, blank=True, verbose_name=_('Caption'))
+    order = models.IntegerField(default=0, verbose_name=_('Order'))
+
+    class Meta:
+        ordering = ['order']
+        verbose_name = _('Service Media')
+        verbose_name_plural = _('Service Media')
+
+    def __str__(self):
+        return self.title or f'{self.service.title} media'
+
+    def save(self, *args, **kwargs):
+        sync_media_type(self)
+        super().save(*args, **kwargs)
+
+    def get_embed_video_url(self):
+        return embed_video_url(self.video_url)
+
+
+class CaseStudyMedia(models.Model):
+    MEDIA_TYPE_CHOICES = MediaItem.MEDIA_TYPE_CHOICES
+
+    case_study = models.ForeignKey(CaseStudy, on_delete=models.CASCADE, related_name='media_items')
+    title = models.CharField(max_length=200, blank=True, verbose_name=_('Title'))
+    media_type = models.CharField(max_length=10, choices=MEDIA_TYPE_CHOICES, default='image')
+    image = models.ImageField(upload_to='case_studies/gallery/', blank=True, null=True, verbose_name=_('Image'))
+    video_file = models.FileField(upload_to='case_studies/videos/', blank=True, null=True, verbose_name=_('Video File'))
+    video_url = models.URLField(blank=True, verbose_name=_('Video URL'))
+    caption = models.CharField(max_length=300, blank=True, verbose_name=_('Caption'))
+    order = models.IntegerField(default=0, verbose_name=_('Order'))
+
+    class Meta:
+        ordering = ['order']
+        verbose_name = _('Case Study Media')
+        verbose_name_plural = _('Case Study Media')
+
+    def __str__(self):
+        return self.title or f'{self.case_study.title} media'
+
+    def save(self, *args, **kwargs):
+        sync_media_type(self)
+        super().save(*args, **kwargs)
+
+    def get_embed_video_url(self):
+        return embed_video_url(self.video_url)
+
+
+class EventMedia(models.Model):
+    MEDIA_TYPE_CHOICES = MediaItem.MEDIA_TYPE_CHOICES
+
+    event = models.ForeignKey(TrainingEvent, on_delete=models.CASCADE, related_name='media_items')
+    title = models.CharField(max_length=200, blank=True, verbose_name=_('Title'))
+    media_type = models.CharField(max_length=10, choices=MEDIA_TYPE_CHOICES, default='image')
+    image = models.ImageField(upload_to='events/gallery/', blank=True, null=True, verbose_name=_('Image'))
+    video_file = models.FileField(upload_to='events/videos/', blank=True, null=True, verbose_name=_('Video File'))
+    video_url = models.URLField(blank=True, verbose_name=_('Video URL'))
+    caption = models.CharField(max_length=300, blank=True, verbose_name=_('Caption'))
+    order = models.IntegerField(default=0, verbose_name=_('Order'))
+
+    class Meta:
+        ordering = ['order']
+        verbose_name = _('Event Media')
+        verbose_name_plural = _('Event Media')
+
+    def __str__(self):
+        return self.title or f'{self.event.title} media'
+
+    def save(self, *args, **kwargs):
+        sync_media_type(self)
+        super().save(*args, **kwargs)
+
+    def get_embed_video_url(self):
+        return embed_video_url(self.video_url)
+
+
+class WorkingSchedule(models.Model):
+    DAY_CHOICES = [
+        (0, _('Monday')),
+        (1, _('Tuesday')),
+        (2, _('Wednesday')),
+        (3, _('Thursday')),
+        (4, _('Friday')),
+        (5, _('Saturday')),
+        (6, _('Sunday')),
+    ]
+
+    day_of_week = models.IntegerField(choices=DAY_CHOICES, unique=True, verbose_name=_('Day'))
+    open_time = models.TimeField(blank=True, null=True, verbose_name=_('Open Time'))
+    close_time = models.TimeField(blank=True, null=True, verbose_name=_('Close Time'))
+    is_closed = models.BooleanField(default=False, verbose_name=_('Closed'))
+
+    class Meta:
+        ordering = ['day_of_week']
+        verbose_name = _('Working Schedule')
+        verbose_name_plural = _('Working Schedules')
+
+    def __str__(self):
+        if self.is_closed:
+            return f"{self.get_day_of_week_display()} - Closed"
+        return f"{self.get_day_of_week_display()} {self.open_time}-{self.close_time}"

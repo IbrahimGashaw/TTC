@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load media_tags %}
+
+{% block title %}{{ album.title }} - Media Gallery{% endblock %}
+
+{% block content %}
+<section class="page-header-ttcs">
+    <div class="container">
+        <h1>{{ album.title }}</h1>
+        {% if album.description %}<p class="lead mb-0 ttcs-lead">{{ album.description }}</p>{% endif %}
+    </div>
+</section>
+
+<section class="section-ttcs">
+    <div class="container">
+        {% if album.cover_image %}
+        <div class="ttcs-featured-media">
+            <div class="ttcs-media-frame ttcs-media-frame--hero">
+                <img src="{{ album.cover_image.url }}" alt="{{ album.title }}" class="ttcs-media-img" loading="eager">
+            </div>
+        </div>
+        {% endif %}
+
+        {% render_media_gallery album.items.all gallery_id='album' %}
+
+        {% if not album.items.all %}
+        <div class="col-12 text-center text-muted py-5">No media items in this album yet.</div>
+        {% endif %}
+
+        <div class="text-start mt-4">
+            <a href="{% url 'site:gallery_list' %}" class="btn btn-outline-primary"><i class="bi bi-arrow-left"></i> Back to Gallery</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

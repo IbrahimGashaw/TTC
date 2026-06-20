@@ -1,7 +1,7 @@
 from django import forms
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
-from .models import Contact, Property, PropertyBooking, ViewingAppointment, PropertyNeedRequest
+from .models import Contact, Property, PropertyBooking, ViewingAppointment, PropertyNeedRequest, EventRegistration
 
 
 class ContactForm(forms.ModelForm):
@@ -228,4 +228,18 @@ class PropertyNeedRequestForm(forms.ModelForm):
         if size_min and size_max and size_min > size_max:
             raise forms.ValidationError(_('Minimum size cannot exceed maximum size.'))
         return cleaned_data
+
+
+class EventRegistrationForm(forms.ModelForm):
+    class Meta:
+        model = EventRegistration
+        fields = ['full_name', 'email', 'phone', 'organization', 'job_title', 'notes']
+        widgets = {
+            'full_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': _('Full Name')}),
+            'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': _('Email Address')}),
+            'phone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': _('Phone Number')}),
+            'organization': forms.TextInput(attrs={'class': 'form-control', 'placeholder': _('Organization')}),
+            'job_title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': _('Job Title')}),
+            'notes': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': _('Additional notes (optional)')}),
+        }
 

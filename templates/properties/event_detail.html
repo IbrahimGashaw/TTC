@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% load media_tags %}
+
+{% block title %}{{ event.title }} - Team Training and Consultancy Service PLC{% endblock %}
+
+{% block content %}
+<section class="page-header-ttcs">
+    <div class="container">
+        <h1>{{ event.title }}</h1>
+        <span class="badge bg-warning text-dark">{{ event.get_event_type_display }}</span>
+    </div>
+</section>
+
+<section class="section-ttcs">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                {% if event.featured_image %}
+                <div class="ttcs-featured-media">
+                    <div class="ttcs-media-frame ttcs-media-frame--hero">
+                        <img src="{{ event.featured_image.url }}" alt="{{ event.title }}" class="ttcs-media-img" loading="eager">
+                    </div>
+                </div>
+                {% endif %}
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <h6 class="text-primary"><i class="bi bi-calendar3"></i> Start Date</h6>
+                                <p>{{ event.start_date|date:"l, F d, Y H:i" }}</p>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <h6 class="text-primary"><i class="bi bi-calendar-check"></i> End Date</h6>
+                                <p>{{ event.end_date|date:"l, F d, Y H:i" }}</p>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <h6 class="text-primary"><i class="bi bi-geo-alt"></i> Location</h6>
+                                <p>{{ event.location }}{% if event.venue %}, {{ event.venue }}{% endif %}</p>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <h6 class="text-primary"><i class="bi bi-people"></i> Capacity</h6>
+                                <p>{{ event.registered_count }} / {{ event.max_participants }} registered</p>
+                            </div>
+                        </div>
+                        {% if event.brochure %}
+                        <a href="{{ event.brochure.url }}" class="btn btn-outline-primary" download><i class="bi bi-download"></i> Download Brochure</a>
+                        {% endif %}
+                    </div>
+                </div>
+                <h4 class="ttcs-content-heading">About This Event</h4>
+                <div class="ttcs-content">{{ event.description|linebreaks }}</div>
+                {% render_media_gallery event.media_items.all gallery_id='event' %}
+            </div>
+            <div class="col-lg-4">
+                <div class="card border-0 shadow-sm sticky-top" style="top: 100px;">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0"><i class="bi bi-pencil-square"></i> Register for Event</h5>
+                    </div>
+                    <div class="card-body">
+                        {% if event.is_registration_open %}
+                        <form method="post">
+                            {% csrf_token %}
+                            {% for field in form %}
+                            <div class="mb-3">
+                                <label class="form-label">{{ field.label }}{% if field.field.required %} *{% endif %}</label>
+                                {{ field }}
+                                {% if field.errors %}<div class="text-danger small">{{ field.errors.0 }}</div>{% endif %}
+                            </div>
+                            {% endfor %}
+                            <button type="submit" class="btn btn-ttcs-primary w-100">Submit Registration</button>
+                        </form>
+                        {% else %}
+                        <div class="alert alert-secondary">
+                            <i class="bi bi-info-circle"></i> Registration is currently closed for this event.
+                        </div>
+                        <a href="{% url 'site:contact' %}" class="btn btn-outline-primary w-100">Contact Us for Inquiries</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

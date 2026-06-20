@@ -183,7 +183,7 @@ This document outlines the implementation plan for enhancing the Andromeda Prope
 - `templates/properties/property_detail.html` - Add map section
 - `templates/properties/property_list.html` - Add map view
 - `static/js/maps.js` - Map initialization and amenities
-- `andromedaproperties/settings.py` - Add Google Maps API key
+- `ttcs_site/settings.py` - Add Google Maps API key
 
 ---
 
@@ -277,7 +277,7 @@ This document outlines the implementation plan for enhancing the Andromeda Prope
   - Add database indexes
 
 **Files to Modify:**
-- `andromedaproperties/settings.py` - Caching, compression
+- `ttcs_site/settings.py` - Caching, compression
 - `static/css/style.css` - Optimize
 - `static/js/main.js` - Optimize
 - All templates - Add lazy loading, optimize images

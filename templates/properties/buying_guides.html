@@ -3,14 +3,14 @@
 {% load i18n %}
 {% load translation_tags %}
 
-{% block title %}{% trans "Buying Guides" %} - Andromeda Properties{% endblock %}
+{% block title %}{% trans "Buying Guides" %} - Team Training and Consultancy Service PLC{% endblock %}
 
 {% block content %}
 <div class="container mt-5 pt-4">
     <div class="row mb-4">
         <div class="col-12">
             <h1 class="display-5 fw-bold">{% trans "Buying Guides" %}</h1>
-            <p class="lead text-muted">{% trans "Expert advice and guides to help you make informed real estate decisions" %}</p>
+            <p class="lead text-muted">{% trans "Expert advice and resources to support your organizational development" %}</p>
         </div>
     </div>
 
@@ -46,7 +46,7 @@
                     </div>
                 </div>
                 <div class="card-footer bg-transparent">
-                    <a href="{% url 'properties:buying_guide_detail' guide.slug %}" class="btn btn-primary btn-sm w-100">
+                    <a href="{% url 'site:buying_guide_detail' guide.slug %}" class="btn btn-primary btn-sm w-100">
                         {% trans "Read Guide" %}
                     </a>
                 </div>
@@ -59,7 +59,7 @@
     <!-- Category Filter -->
     <div class="mb-4">
         <div class="btn-group" role="group">
-            <a href="{% url 'properties:buying_guide_list' %}" 
+            <a href="{% url 'site:buying_guide_list' %}" 
                class="btn btn-outline-primary {% if not current_category %}active{% endif %}">
                 {% trans "All Categories" %}
             </a>
@@ -100,7 +100,7 @@
                     </div>
                 </div>
                 <div class="card-footer bg-transparent">
-                    <a href="{% url 'properties:buying_guide_detail' guide.slug %}" class="btn btn-primary btn-sm w-100">
+                    <a href="{% url 'site:buying_guide_detail' guide.slug %}" class="btn btn-primary btn-sm w-100">
                         {% trans "Read Guide" %}
                     </a>
                 </div>

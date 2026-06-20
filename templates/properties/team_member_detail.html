@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ member.name }} - Team Training and Consultancy Service PLC{% endblock %}
+
+{% block content %}
+<section class="page-header-ttcs">
+    <div class="container">
+        <h1>{{ member.name }}</h1>
+        <p class="lead mb-0 ttcs-lead">{{ member.title|default:member.get_role_display }}</p>
+    </div>
+</section>
+
+<section class="section-ttcs">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4 text-center mb-4">
+                {% if member.image %}
+                <div class="ttcs-avatar-frame shadow">
+                    <img src="{{ member.image.url }}" alt="{{ member.name }}" class="ttcs-media-img">
+                </div>
+                {% else %}
+                <div class="rounded-circle shadow mx-auto d-flex align-items-center justify-content-center" style="width:250px; height:250px; background:#e8eef5;">
+                    <i class="bi bi-person-circle" style="font-size:8rem; color:#1e5a96;"></i>
+                </div>
+                {% endif %}
+                <div class="mt-4">
+                    {% if member.email %}<p><i class="bi bi-envelope text-primary"></i> {{ member.email }}</p>{% endif %}
+                    {% if member.phone %}<p><i class="bi bi-telephone text-primary"></i> {{ member.phone }}</p>{% endif %}
+                    {% if member.languages %}<p><i class="bi bi-translate text-primary"></i> {{ member.languages }}</p>{% endif %}
+                    {% if member.years_experience %}<p><i class="bi bi-briefcase text-primary"></i> {{ member.years_experience }}+ years experience</p>{% endif %}
+                </div>
+            </div>
+            <div class="col-lg-8 ttcs-content">
+                <h3 class="ttcs-content-heading">Biography</h3>
+                <div class="mb-4">{{ member.bio|linebreaks }}</div>
+
+                {% if member.credentials %}
+                <h4 class="ttcs-content-heading">Credentials & Qualifications</h4>
+                <div class="mb-4">{{ member.credentials|linebreaks }}</div>
+                {% endif %}
+
+                <a href="{% url 'site:team' %}" class="btn btn-outline-primary"><i class="bi bi-arrow-left"></i> Back to Team</a>
+                <a href="{% url 'site:contact' %}" class="btn btn-primary ms-2">Contact {{ member.name|truncatewords:1|cut:"..." }}</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

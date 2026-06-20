@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %}Operational Showcases - Team Training and Consultancy Service PLC{% endblock %}
+
+{% block content %}
+<section class="page-header-ttcs">
+    <div class="container">
+        <h1>Operational Showcases</h1>
+        <p class="lead mb-0 ttcs-lead">Enterprise case studies and client success stories</p>
+    </div>
+</section>
+
+<section class="section-ttcs">
+    <div class="container">
+        <div class="row g-4">
+            {% for case in case_studies %}
+            <div class="col-lg-4 col-md-6">
+                <div class="case-card">
+                    {% if case.featured_image %}
+                    <div class="ttcs-media-frame ttcs-media-frame--cover ttcs-media-frame--card">
+                        <img src="{{ case.featured_image.url }}" alt="{{ case.title }}" class="ttcs-media-img" loading="lazy">
+                    </div>
+                    {% else %}
+                    <div class="ttcs-media-placeholder">
+                        <i class="bi bi-briefcase"></i>
+                    </div>
+                    {% endif %}
+                    <div class="p-4">
+                        <span class="badge bg-primary mb-2">{{ case.client_name }}</span>
+                        {% if case.industry %}<span class="badge bg-secondary mb-2">{{ case.industry }}</span>{% endif %}
+                        <h5>{{ case.title }}</h5>
+                        <p class="text-muted small">{{ case.excerpt|default:case.challenge|truncatewords:25 }}</p>
+                        {% if case.project_start %}
+                        <p class="small text-muted"><i class="bi bi-calendar"></i> {{ case.project_start|date:"M Y" }}{% if case.project_end %} - {{ case.project_end|date:"M Y" }}{% endif %}</p>
+                        {% endif %}
+                        <a href="{{ case.get_absolute_url }}" class="btn btn-sm btn-primary">Read Full Case Study</a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center text-muted py-5">
+                <i class="bi bi-folder2-open" style="font-size:3rem;"></i>
+                <p class="mt-3">Case studies coming soon.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -3,7 +3,7 @@
 {% load i18n %}
 {% load translation_tags %}
 
-{% block title %}{% trans "Book a Visiting" %} - {{ property.title }} - Andromeda Properties{% endblock %}
+{% block title %}{% trans "Book a Visiting" %} - {{ property.title }} - Team Training and Consultancy Service PLC{% endblock %}
 
 {% block content %}
 <div class="container mt-5 pt-4">
@@ -114,13 +114,13 @@
                             <button type="submit" class="btn btn-primary btn-lg">
                                 <i class="bi bi-calendar-check"></i> {% translate_text "Submit Viewing Request" CURRENT_LANGUAGE_CODE %}
                             </button>
-                            <a href="{% url 'properties:property_detail' property.slug %}" class="btn btn-outline-secondary">
+                            <a href="{% url 'site:property_detail' property.slug %}" class="btn btn-outline-secondary">
                                 {% translate_text "Cancel" CURRENT_LANGUAGE_CODE %}
                             </a>
                         </div>
                     </form>
 
-                    {% load property_tags %}
+                    {% load ttcs_tags %}
                     {% if site_settings.whatsapp_enabled and site_settings.whatsapp_number %}
                         <hr>
                         <div class="text-center">

@@ -1,111 +1,139 @@
 {% extends 'base.html' %}
-{% load static %}
-{% load translation_tags %}
-{% load i18n %}
 
-{% block title %}Contact Us - Andromeda Properties{% endblock %}
+{% block title %}Contact Us - Team Training and Consultancy Service PLC{% endblock %}
 
 {% block content %}
-<div class="container mt-5 pt-4">
-    <div class="row mb-5">
-        <div class="col-12 text-center">
-            <h1 class="display-4 fw-bold mb-4">{% translate_text "Contact Us" CURRENT_LANGUAGE_CODE %}</h1>
-            <p class="lead text-muted">{% translate_text "In need of support? Get in touch!" CURRENT_LANGUAGE_CODE %}</p>
-        </div>
+<section class="page-header-ttcs">
+    <div class="container">
+        <h1>Contact Us</h1>
+        <p class="lead mb-0 ttcs-lead">Get in touch with our team for consultations and inquiries</p>
     </div>
+</section>
 
-    <div class="row">
-        <div class="col-md-8 mb-4">
-            <!-- Social icons row with email toggle -->
-            <div class="d-flex flex-wrap gap-3 align-items-center mb-3">
-                <a href="https://facebook.com/andromedaproperties" target="_blank" rel="noopener" class="text-primary" data-bs-toggle="tooltip" title="{% translate_text 'Visit our Facebook' CURRENT_LANGUAGE_CODE %}" aria-label="Facebook"><i class="bi bi-facebook" style="font-size: 1.5rem;"></i></a>
-                <a href="https://youtube.com/@andromedaproperties" target="_blank" rel="noopener" class="text-danger" data-bs-toggle="tooltip" title="{% translate_text 'Watch on YouTube' CURRENT_LANGUAGE_CODE %}" aria-label="YouTube"><i class="bi bi-youtube" style="font-size: 1.5rem;"></i></a>
-                <a href="https://instagram.com/andromedaproperties" target="_blank" rel="noopener" class="text-info" data-bs-toggle="tooltip" title="{% translate_text 'Follow on Instagram' CURRENT_LANGUAGE_CODE %}" aria-label="Instagram"><i class="bi bi-instagram" style="font-size: 1.5rem;"></i></a>
-                <a href="https://www.linkedin.com/company/andromedaproperties" target="_blank" rel="noopener" class="text-primary" data-bs-toggle="tooltip" title="{% translate_text 'Connect on LinkedIn' CURRENT_LANGUAGE_CODE %}" aria-label="LinkedIn"><i class="bi bi-linkedin" style="font-size: 1.5rem;"></i></a>
-                <a href="https://t.me/andromedaproperties" target="_blank" rel="noopener" class="text-info" data-bs-toggle="tooltip" title="{% translate_text 'Join us on Telegram' CURRENT_LANGUAGE_CODE %}" aria-label="Telegram"><i class="bi bi-telegram" style="font-size: 1.5rem;"></i></a>
-                <a href="https://twitter.com/AndromedaProps" target="_blank" rel="noopener" class="text-primary" data-bs-toggle="tooltip" title="{% translate_text 'Follow on X (Twitter)' CURRENT_LANGUAGE_CODE %}" aria-label="X"><i class="bi bi-twitter-x" style="font-size: 1.5rem;"></i></a>
-                <a href="https://www.tiktok.com/@andromedaproperties" target="_blank" rel="noopener" class="text-dark" data-bs-toggle="tooltip" title="{% translate_text 'Follow on TikTok' CURRENT_LANGUAGE_CODE %}" aria-label="TikTok"><i class="bi bi-tiktok" style="font-size: 1.5rem;"></i></a>
-                <a href="https://wa.me/251913677468" target="_blank" rel="noopener" class="text-success" data-bs-toggle="tooltip" title="{% translate_text 'Chat on WhatsApp' CURRENT_LANGUAGE_CODE %}" aria-label="WhatsApp"><i class="bi bi-whatsapp" style="font-size: 1.5rem;"></i></a>
-                <a href="https://www.snapchat.com/add/andromedaproperties" target="_blank" rel="noopener" class="text-warning" data-bs-toggle="tooltip" title="{% translate_text 'Find us on Snapchat' CURRENT_LANGUAGE_CODE %}" aria-label="Snapchat"><i class="bi bi-snapchat" style="font-size: 1.5rem;"></i></a>
-                <button type="button" id="contactEmailToggle" class="btn btn-primary btn-sm d-flex align-items-center gap-1">
-                    <i class="bi bi-envelope"></i>
-                    <span>{% translate_text "Email" CURRENT_LANGUAGE_CODE %}</span>
-                </button>
+<section class="section-ttcs">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-lg-5">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body p-4">
+                        <h4 class="text-primary mb-4">Contact Information</h4>
+                        <div class="mb-3">
+                            <h6><i class="bi bi-telephone text-primary me-2"></i> Phone</h6>
+                            <p class="mb-0">{{ site_settings.company_phone|default:"+251969055405" }}</p>
+                            <p>{{ site_settings.company_phone_secondary|default:"+251911744353" }}</p>
+                        </div>
+                        <div class="mb-3">
+                            <h6><i class="bi bi-envelope text-primary me-2"></i> Email</h6>
+                            <p><a href="mailto:{{ site_settings.company_email|default:'teamconsultency@gmail.com' }}">{{ site_settings.company_email|default:"teamconsultency@gmail.com" }}</a></p>
+                        </div>
+                        <div class="mb-3">
+                            <h6><i class="bi bi-geo-alt text-primary me-2"></i> Address</h6>
+                            <p>{{ site_settings.company_address|default:"Adama City, Ethiopia" }}</p>
+                        </div>
+
+                        {% if working_schedule %}
+                        <h5 class="text-primary mt-4 mb-3">Working Hours</h5>
+                        <table class="table table-sm schedule-table">
+                            {% for schedule in working_schedule %}
+                            <tr>
+                                <td><strong>{{ schedule.get_day_of_week_display }}</strong></td>
+                                <td>
+                                    {% if schedule.is_closed %}
+                                    <span class="text-muted">Closed</span>
+                                    {% else %}
+                                    {{ schedule.open_time|time:"g:i A" }} - {{ schedule.close_time|time:"g:i A" }}
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </table>
+                        {% endif %}
+                    </div>
+                </div>
             </div>
-
-            <div class="card shadow-sm d-none" id="contactEmailForm">
-                <div class="card-body p-4">
-                    <h3 class="mb-4">{% translate_text "Send us a message" CURRENT_LANGUAGE_CODE %}</h3>
-                    <form method="post">
-                        {% csrf_token %}
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label required">{% translate_text "Name" CURRENT_LANGUAGE_CODE %}</label>
-                                {{ form.name }}
-                                {% if form.name.errors %}
-                                    <div class="invalid-feedback d-block">{{ form.name.errors|first }}</div>
-                                {% endif %}
+            <div class="col-lg-7">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        <h4 class="text-primary mb-4">Send Us a Message</h4>
+                        <form method="post">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Name *</label>
+                                    {{ form.name }}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Last Name</label>
+                                    {{ form.last_name }}
+                                </div>
                             </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">{% translate_text "Last Name" CURRENT_LANGUAGE_CODE %}</label>
-                                {{ form.last_name }}
-                                {% if form.last_name.errors %}
-                                    <div class="invalid-feedback d-block">{{ form.last_name.errors|first }}</div>
-                                {% endif %}
+                            <div class="mb-3">
+                                <label class="form-label">Email *</label>
+                                {{ form.email }}
                             </div>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label required">{% translate_text "Email" CURRENT_LANGUAGE_CODE %}</label>
-                            {{ form.email }}
-                            {% if form.email.errors %}
-                                <div class="invalid-feedback d-block">{{ form.email.errors|first }}</div>
-                            {% endif %}
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label required">{% translate_text "Message" CURRENT_LANGUAGE_CODE %}</label>
-                            {{ form.message }}
-                            {% if form.message.errors %}
-                                <div class="invalid-feedback d-block">{{ form.message.errors|first }}</div>
-                            {% endif %}
-                        </div>
-                        <div class="mb-3 form-check">
-                            <input type="checkbox" class="form-check-input" id="gdpr" name="gdpr" required>
-                            <label class="form-check-label" for="gdpr">
-                                {% translate_text "I consent to the GDPR Terms" CURRENT_LANGUAGE_CODE %}
-                            </label>
-                        </div>
-                        <button type="submit" class="btn btn-primary btn-lg">
-                            <i class="bi bi-send"></i> {% translate_text "Send Email" CURRENT_LANGUAGE_CODE %}
-                        </button>
-                    </form>
+                            <div class="mb-3">
+                                <label class="form-label">Message *</label>
+                                {{ form.message }}
+                            </div>
+                            <div class="mb-3 form-check">
+                                <input type="checkbox" class="form-check-input" id="gdpr" name="gdpr" required>
+                                <label class="form-check-label" for="gdpr">I consent to having my data processed for this inquiry.</label>
+                            </div>
+                            <button type="submit" class="btn btn-ttcs-primary btn-lg"><i class="bi bi-send"></i> Send Message</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="col-md-4">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <h4 class="mb-4">{% translate_text "Contact Information" CURRENT_LANGUAGE_CODE %}</h4>
-                    <div class="mb-3">
-                        <p class="mb-1"><strong>Hotline</strong></p>
-                        <p class="mb-0"><i class="bi bi-telephone"></i> 6033</p>
-                    </div>
-                    <div class="mb-3">
-                        <p class="mb-1"><strong>Phone</strong></p>
-                        <p class="mb-0"><i class="bi bi-phone"></i> +251913677468</p>
-                    </div>
-                    <div class="mb-3">
-                        <p class="mb-1"><strong>{% translate_text "Email" CURRENT_LANGUAGE_CODE %}</strong></p>
-                        <p class="mb-0"><i class="bi bi-envelope"></i> info@andromedaproperties.com</p>
-                    </div>
-                    <div class="mb-3">
-                        <p class="mb-1"><strong>{% translate_text "Address" CURRENT_LANGUAGE_CODE %}</strong></p>
-                        <p class="mb-0"><i class="bi bi-geo-alt"></i> Bethel, Apple Plaza 4th floor</p>
-                    </div>
+        <div class="row mt-5">
+            <div class="col-12">
+                <h4 class="text-primary mb-3">Find Us on the Map</h4>
+                {% with map_address=site_settings.company_address|default:"Adama City, Ethiopia" %}
+                {% if site_settings.latitude and site_settings.longitude %}
+                {% with map_lat=site_settings.latitude map_lng=site_settings.longitude %}
+                <div class="contact-map">
+                    <iframe
+                        class="contact-map-iframe"
+                        title="Team Training and Consultancy Service PLC location"
+                        loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade"
+                        src="https://www.google.com/maps?q={{ map_lat }},{{ map_lng }}&amp;hl=en&amp;z=14&amp;output=embed"
+                        allowfullscreen>
+                    </iframe>
                 </div>
+                <p class="mt-3 mb-0">
+                    <i class="bi bi-geo-alt text-primary me-1"></i>
+                    <strong>{{ map_address }}</strong>
+                    <a href="https://www.google.com/maps/search/?api=1&amp;query={{ map_lat }},{{ map_lng }}"
+                       target="_blank" rel="noopener" class="btn btn-sm btn-outline-primary ms-2">
+                        Open in Google Maps
+                    </a>
+                </p>
+                {% endwith %}
+                {% else %}
+                <div class="contact-map">
+                    <iframe
+                        class="contact-map-iframe"
+                        title="Team Training and Consultancy Service PLC location"
+                        loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade"
+                        src="https://www.google.com/maps?q={{ map_address|urlencode }}&amp;hl=en&amp;z=14&amp;output=embed"
+                        allowfullscreen>
+                    </iframe>
+                </div>
+                <p class="mt-3 mb-0">
+                    <i class="bi bi-geo-alt text-primary me-1"></i>
+                    <strong>{{ map_address }}</strong>
+                    <a href="https://www.google.com/maps/search/?api=1&amp;query={{ map_address|urlencode }}"
+                       target="_blank" rel="noopener" class="btn btn-sm btn-outline-primary ms-2">
+                        Open in Google Maps
+                    </a>
+                </p>
+                {% endif %}
+                {% endwith %}
             </div>
         </div>
     </div>
-</div>
+</section>
 {% endblock %}
-

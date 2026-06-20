@@ -4,7 +4,7 @@
 {% load content_filters %}
 {% load translation_tags %}
 
-{% block title %}{{ guide.title }} - {% trans "Buying Guides" %} - Andromeda Properties{% endblock %}
+{% block title %}{{ guide.title }} - {% trans "Buying Guides" %} - Team Training and Consultancy Service PLC{% endblock %}
 
 {% block content %}
 <div class="container mt-5 pt-4">
@@ -14,8 +14,8 @@
                 <!-- Breadcrumb -->
                 <nav aria-label="breadcrumb" class="mb-4">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{% url 'properties:home' %}">{% trans "Home" %}</a></li>
-                        <li class="breadcrumb-item"><a href="{% url 'properties:buying_guide_list' %}">{% trans "Buying Guides" %}</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'site:home' %}">{% trans "Home" %}</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'site:buying_guide_list' %}">{% trans "Buying Guides" %}</a></li>
                         <li class="breadcrumb-item active">{{ guide.title|translate:CURRENT_LANGUAGE_CODE }}</li>
                     </ol>
                 </nav>
@@ -68,7 +68,7 @@
                 </div>
                 <div class="list-group list-group-flush">
                     {% for related in related_guides %}
-                    <a href="{% url 'properties:buying_guide_detail' related.slug %}" class="list-group-item list-group-item-action">
+                    <a href="{% url 'site:buying_guide_detail' related.slug %}" class="list-group-item list-group-item-action">
                         <h6 class="mb-1">{{ related.title }}</h6>
                         <small class="text-muted">{{ related.get_category_display }} • {{ related.publication_date|date:"M Y" }}</small>
                     </a>
@@ -81,11 +81,11 @@
             {% if related_properties %}
             <div class="card mb-4 shadow-sm">
                 <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0">{% trans "Featured Properties" %}</h5>
+                    <h5 class="mb-0">{% trans "Featured Showcases" %}</h5>
                 </div>
                 <div class="list-group list-group-flush">
                     {% for property in related_properties %}
-                    <a href="{% url 'properties:property_detail' property.slug %}" class="list-group-item list-group-item-action">
+                    <a href="{% url 'site:property_detail' property.slug %}" class="list-group-item list-group-item-action">
                         <div class="d-flex align-items-center">
                             {% if property.images.first %}
                                 <img src="{{ property.images.first.image.url }}" 

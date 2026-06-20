@@ -4,7 +4,7 @@
 {% load math_filters %}
 {% load translation_tags %}
 
-{% block title %}{{ project.name }} - Andromeda Properties{% endblock %}
+{% block title %}{{ project.name }} - Team Training and Consultancy Service PLC{% endblock %}
 
 {% block content %}
 <div class="container mt-5 pt-4">
@@ -12,8 +12,8 @@
         <div class="col-12">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{% url 'properties:home' %}">{% translate_text "Home" CURRENT_LANGUAGE_CODE %}</a></li>
-                    <li class="breadcrumb-item"><a href="{% url 'properties:project_list' %}">{% translate_text "Projects" CURRENT_LANGUAGE_CODE %}</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'site:home' %}">{% translate_text "Home" CURRENT_LANGUAGE_CODE %}</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'site:project_list' %}">{% translate_text "Projects" CURRENT_LANGUAGE_CODE %}</a></li>
                     <li class="breadcrumb-item active">{{ project.name|translate:CURRENT_LANGUAGE_CODE }}</li>
                 </ol>
             </nav>
@@ -39,7 +39,7 @@
                 <p>{{ project.description|translate:CURRENT_LANGUAGE_CODE|linebreaks }}</p>
             {% endif %}
             <div class="mt-4">
-                <span class="badge bg-primary fs-6">{{ project.property_count }} {% translate_text "Properties Available" CURRENT_LANGUAGE_CODE %}</span>
+                <span class="badge bg-primary fs-6">{{ project.property_count }} {% translate_text "Showcases Available" CURRENT_LANGUAGE_CODE %}</span>
             </div>
         </div>
     </div>
@@ -103,7 +103,7 @@
     {% if properties %}
     <div class="row">
         <div class="col-12">
-            <h2 class="mb-4">{% trans "Properties in this Project" %}</h2>
+            <h2 class="mb-4">{% trans "Related Showcases" %}</h2>
         </div>
         {% for property in properties %}
         <div class="col-md-4 mb-4">
@@ -133,7 +133,7 @@
                         {% endif %}
                         <span><i class="bi bi-rulers"></i> {{ property.size }} m²</span>
                     </div>
-                    <a href="{% url 'properties:property_detail' property.slug %}" class="btn btn-primary w-100" style="margin-top: 0.5rem;">View Details</a>
+                    <a href="{% url 'site:property_detail' property.slug %}" class="btn btn-primary w-100" style="margin-top: 0.5rem;">View Details</a>
                 </div>
             </div>
         </div>
@@ -141,7 +141,7 @@
     </div>
     {% else %}
     <div class="text-center py-5">
-        <p class="text-muted">{% trans "No properties available in this project at the moment." %}</p>
+        <p class="text-muted">{% trans "No showcases available in this project at the moment." %}</p>
     </div>
     {% endif %}
 </div>

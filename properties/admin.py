@@ -1,10 +1,18 @@
-from django.contrib import admin
+from django.contrib import admin, messages
+from django.http import Http404
+from django.urls import path, reverse
+from django.utils.html import format_html
+from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
+from .event_export import EXPORTERS, export_registrations
+from .media_bulk_upload import add_bulk_media_to_album
 from .models import (
     Project, Property, PropertyImage, Contact, TeamMember,
     PropertyBooking, ConstructionProgress, ConstructionProgressImage,
     HomePageSettings, SiteSettings, ViewingAppointment, FloorPlan,
-    MarketReport, BuyingGuide
+    MarketReport, BuyingGuide, Service, TrainingEvent, EventRegistration,
+    CaseStudy, CaseStudyTimeline, Testimonial, Partner, Milestone,
+    MediaAlbum, MediaItem, WorkingSchedule, ServiceMedia, CaseStudyMedia, EventMedia,
 )
 # PromotionalOffer and AboutPageSettings may not exist - check models.py
 try:
@@ -81,20 +89,21 @@ class PropertyImageAdmin(admin.ModelAdmin):
 
 @admin.register(Contact)
 class ContactAdmin(admin.ModelAdmin):
-    list_display = ['name', 'email', 'phone', 'property', 'created_at']
+    list_display = ['name', 'email', 'message', 'created_at']
     list_filter = ['created_at', 'gdpr_consent']
     search_fields = ['name', 'email', 'message']
     readonly_fields = ['created_at']
+    exclude = ['property']
 
 
 @admin.register(TeamMember)
 class TeamMemberAdmin(admin.ModelAdmin):
-    list_display = ['name', 'role', 'email', 'phone', 'is_verified', 'years_experience', 'created_at']
-    list_filter = ['role', 'is_verified']
-    search_fields = ['name', 'email', 'phone']
+    list_display = ['name', 'title', 'role', 'is_founder', 'email', 'years_experience', 'order']
+    list_filter = ['role', 'is_founder', 'is_verified']
+    search_fields = ['name', 'email', 'phone', 'title']
     fieldsets = (
         (_('Basic Information'), {
-            'fields': ('name', 'role', 'bio')
+            'fields': ('name', 'title', 'role', 'is_founder', 'bio', 'credentials', 'order')
         }),
         (_('Contact Information'), {
             'fields': ('email', 'phone', 'whatsapp_number')
@@ -207,6 +216,7 @@ class HomePageSettingsAdmin(admin.ModelAdmin):
                 'hero_subtitle',
                 'hero_description',
                 'hero_button_text',
+                'hero_button_url',
             )
         }),
         (_('Metadata'), {
@@ -238,10 +248,16 @@ class SiteSettingsAdmin(admin.ModelAdmin):
                 'whatsapp_default_message',
             )
         }),
-        (_('Contact Information'), {
+        (_('Company Information'), {
             'fields': (
+                'company_name',
+                'company_tagline',
                 'company_phone',
+                'company_phone_secondary',
                 'company_email',
+                'company_address',
+                'latitude',
+                'longitude',
             )
         }),
         (_('Metadata'), {
@@ -441,4 +457,246 @@ class BuyingGuideAdmin(admin.ModelAdmin):
             'classes': ('collapse',)
         }),
     )
+
+
+class CaseStudyTimelineInline(admin.TabularInline):
+    model = CaseStudyTimeline
+    extra = 1
+
+
+class MediaItemInline(admin.TabularInline):
+    model = MediaItem
+    extra = 1
+    min_num = 0
+    fields = ('title', 'image', 'video_file', 'video_url', 'caption', 'media_type', 'order')
+    verbose_name = _('Gallery item')
+    verbose_name_plural = _('Album items (edit titles/order below, or use bulk upload above)')
+
+
+class ServiceMediaInline(admin.StackedInline):
+    model = ServiceMedia
+    extra = 3
+    min_num = 0
+    fields = ('title', 'image', 'video_file', 'video_url', 'caption', 'media_type', 'order')
+
+
+class CaseStudyMediaInline(admin.StackedInline):
+    model = CaseStudyMedia
+    extra = 3
+    min_num = 0
+    fields = ('title', 'image', 'video_file', 'video_url', 'caption', 'media_type', 'order')
+
+
+class EventMediaInline(admin.StackedInline):
+    model = EventMedia
+    extra = 3
+    min_num = 0
+    fields = ('title', 'image', 'video_file', 'video_url', 'caption', 'media_type', 'order')
+
+
+@admin.register(Service)
+class ServiceAdmin(admin.ModelAdmin):
+    list_display = ['title', 'category', 'is_featured', 'is_active', 'order']
+    list_filter = ['category', 'is_featured', 'is_active']
+    list_editable = ['is_featured', 'is_active', 'order']
+    prepopulated_fields = {'slug': ('title',)}
+    search_fields = ['title', 'short_description']
+    inlines = [ServiceMediaInline]
+    fieldsets = (
+        (_('Service Details'), {
+            'fields': ('title', 'slug', 'category', 'icon', 'short_description', 'full_description', 'image')
+        }),
+        (_('Display'), {
+            'fields': ('is_featured', 'is_active', 'order')
+        }),
+    )
+
+
+@admin.register(TrainingEvent)
+class TrainingEventAdmin(admin.ModelAdmin):
+    list_display = ['title', 'event_type', 'start_date', 'location', 'registration_count', 'is_published', 'is_featured']
+    list_filter = ['event_type', 'is_published', 'is_featured']
+    list_editable = ['is_published', 'is_featured']
+    prepopulated_fields = {'slug': ('title',)}
+    search_fields = ['title', 'location']
+    date_hierarchy = 'start_date'
+    readonly_fields = ['export_participants_links']
+    fieldsets = (
+        (_('Event Details'), {
+            'fields': ('title', 'slug', 'event_type', 'short_description', 'description', 'featured_image')
+        }),
+        (_('Schedule & Location'), {
+            'fields': ('start_date', 'end_date', 'location', 'venue', 'registration_deadline')
+        }),
+        (_('Registration'), {
+            'fields': ('max_participants', 'brochure', 'export_participants_links'),
+            'description': _('Download registered participants for this event in Excel, CSV, Word, or PDF.'),
+        }),
+        (_('Publishing'), {
+            'fields': ('is_published', 'is_featured')
+        }),
+    )
+    inlines = [EventMediaInline]
+
+    @admin.display(description=_('Registrations'))
+    def registration_count(self, obj):
+        total = obj.registrations.count()
+        confirmed = obj.registrations.filter(status='confirmed').count()
+        return f'{confirmed}/{total}'
+
+    @admin.display(description=_('Export participants'))
+    def export_participants_links(self, obj):
+        if not obj or not obj.pk:
+            return _('Save this event first to export participants.')
+        links = []
+        labels = {
+            'xlsx': _('Excel (.xlsx)'),
+            'csv': _('CSV (.csv)'),
+            'docx': _('Word (.docx)'),
+            'pdf': _('PDF (.pdf)'),
+        }
+        for file_format, label in labels.items():
+            url = reverse(
+                'admin:properties_trainingevent_export_participants',
+                args=[obj.pk, file_format],
+            )
+            links.append(format_html('<a class="button" href="{}">{}</a>', url, label))
+        return mark_safe(' &nbsp;|&nbsp; '.join(str(link) for link in links))
+
+    def get_urls(self):
+        urls = super().get_urls()
+        custom_urls = [
+            path(
+                '<path:object_id>/export-participants/<str:file_format>/',
+                self.admin_site.admin_view(self.export_participants_view),
+                name='properties_trainingevent_export_participants',
+            ),
+        ]
+        return custom_urls + urls
+
+    def export_participants_view(self, request, object_id, file_format):
+        if file_format not in EXPORTERS:
+            raise Http404(_('Unsupported export format.'))
+
+        event = self.get_object(request, object_id)
+        if event is None:
+            raise Http404(_('Event not found.'))
+
+        queryset = event.registrations.all()
+        status = request.GET.get('status')
+        if status:
+            queryset = queryset.filter(status=status)
+
+        return export_registrations(queryset, file_format, event=event)
+
+
+def _make_export_action(file_format, label):
+    def action(modeladmin, request, queryset):
+        return export_registrations(queryset, file_format)
+
+    action.short_description = label
+    action.__name__ = f'export_selected_{file_format}'
+    return action
+
+
+@admin.register(EventRegistration)
+class EventRegistrationAdmin(admin.ModelAdmin):
+    list_display = ['full_name', 'event', 'email', 'organization', 'status', 'created_at']
+    list_filter = ['status', 'event', 'created_at']
+    search_fields = ['full_name', 'email', 'organization']
+    actions = [
+        _make_export_action('xlsx', _('Export selected to Excel (.xlsx)')),
+        _make_export_action('csv', _('Export selected to CSV (.csv)')),
+        _make_export_action('docx', _('Export selected to Word (.docx)')),
+        _make_export_action('pdf', _('Export selected to PDF (.pdf)')),
+    ]
+
+
+@admin.register(CaseStudy)
+class CaseStudyAdmin(admin.ModelAdmin):
+    list_display = ['title', 'client_name', 'industry', 'is_featured', 'is_published']
+    list_filter = ['is_featured', 'is_published', 'industry']
+    prepopulated_fields = {'slug': ('title',)}
+    inlines = [CaseStudyTimelineInline, CaseStudyMediaInline]
+
+
+@admin.register(Testimonial)
+class TestimonialAdmin(admin.ModelAdmin):
+    list_display = ['client_name', 'organization', 'rating', 'is_featured', 'is_active']
+    list_filter = ['is_featured', 'is_active', 'rating']
+
+
+@admin.register(Partner)
+class PartnerAdmin(admin.ModelAdmin):
+    list_display = ['name', 'is_active', 'order']
+    list_filter = ['is_active']
+
+
+@admin.register(Milestone)
+class MilestoneAdmin(admin.ModelAdmin):
+    list_display = ['year', 'title', 'order']
+
+
+@admin.register(MediaItem)
+class MediaItemAdmin(admin.ModelAdmin):
+    list_display = ['title', 'album', 'media_type', 'order']
+    list_filter = ['album', 'media_type']
+    search_fields = ['title', 'caption', 'album__title']
+    list_editable = ['order']
+    fields = ('album', 'title', 'image', 'video_file', 'video_url', 'caption', 'media_type', 'order')
+
+
+@admin.register(MediaAlbum)
+class MediaAlbumAdmin(admin.ModelAdmin):
+    list_display = ['title', 'category', 'item_count', 'is_published', 'order']
+    list_filter = ['category', 'is_published']
+    prepopulated_fields = {'slug': ('title',)}
+    inlines = [MediaItemInline]
+    change_form_template = 'admin/properties/mediaalbum/change_form.html'
+
+    @admin.display(description=_('Items'))
+    def item_count(self, obj):
+        return obj.items.count()
+
+    def save_related(self, request, form, formsets, change):
+        super().save_related(request, form, formsets, change)
+        files = request.FILES.getlist('bulk_photos')
+        if not files:
+            return
+        created = add_bulk_media_to_album(form.instance, files)
+        if created:
+            self.message_user(
+                request,
+                _('%(count)d file(s) added to the album.') % {'count': created},
+                messages.SUCCESS,
+            )
+        else:
+            self.message_user(
+                request,
+                _('No supported image or video files were uploaded.'),
+                messages.WARNING,
+            )
+
+
+@admin.register(WorkingSchedule)
+class WorkingScheduleAdmin(admin.ModelAdmin):
+    list_display = ['get_day_of_week_display', 'open_time', 'close_time', 'is_closed']
+
+
+# Unregister legacy real-estate models from admin (not used on TTCS website)
+_LEGACY_ADMIN_MODELS = [
+    Project, Property, PropertyImage, PropertyBooking,
+    ConstructionProgress, ConstructionProgressImage,
+    ViewingAppointment, FloorPlan, MarketReport, BuyingGuide,
+]
+if PromotionalOffer is not None:
+    _LEGACY_ADMIN_MODELS.append(PromotionalOffer)
+if PropertyNeedRequest is not None:
+    _LEGACY_ADMIN_MODELS.append(PropertyNeedRequest)
+
+for _legacy_model in _LEGACY_ADMIN_MODELS:
+    try:
+        admin.site.unregister(_legacy_model)
+    except admin.sites.NotRegistered:
+        pass
 

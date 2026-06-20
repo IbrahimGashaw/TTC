@@ -3,7 +3,7 @@
 {% load i18n %}
 {% load translation_tags %}
 
-{% block title %}{% trans "Properties" %} - Andromeda Properties{% endblock %}
+{% block title %}{% trans "Services" %} - Team Training and Consultancy Service PLC{% endblock %}
 
 {% block content %}
 <!-- Intro Single - EstateAgency Style -->
@@ -12,18 +12,18 @@
         <div class="row">
             <div class="col-md-12 col-lg-8">
                 <div class="title-single-box">
-                    <h1 class="title-single">{% translate_text "Properties" CURRENT_LANGUAGE_CODE %}</h1>
-                    <span class="color-text-a">{% translate_text "Find your perfect property in Ethiopia" CURRENT_LANGUAGE_CODE %}</span>
+                    <h1 class="title-single">{% translate_text "Our Services" CURRENT_LANGUAGE_CODE %}</h1>
+                    <span class="color-text-a">{% translate_text "Training, consultancy, and organizational development solutions" CURRENT_LANGUAGE_CODE %}</span>
                 </div>
             </div>
             <div class="col-md-12 col-lg-4">
                 <nav aria-label="breadcrumb" class="breadcrumb-box d-flex justify-content-lg-end">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">
-                            <a href="{% url 'properties:home' %}">{% translate_text "Home" CURRENT_LANGUAGE_CODE %}</a>
+                            <a href="{% url 'site:home' %}">{% translate_text "Home" CURRENT_LANGUAGE_CODE %}</a>
                         </li>
                         <li class="breadcrumb-item active" aria-current="page">
-                            {% translate_text "Properties" CURRENT_LANGUAGE_CODE %}
+                            {% translate_text "Services" CURRENT_LANGUAGE_CODE %}
                         </li>
                     </ol>
                 </nav>
@@ -152,11 +152,11 @@
 
         <!-- View Toggle Buttons -->
         <div class="d-flex justify-content-end mb-4 gap-2">
-            <a href="{% url 'properties:property_list' %}{% if request.GET.location %}?location={{ request.GET.location }}{% endif %}{% if request.GET.property_type %}&property_type={{ request.GET.property_type }}{% endif %}{% if request.GET.bedrooms %}&bedrooms={{ request.GET.bedrooms }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}{% if request.GET.min_price %}&min_price={{ request.GET.min_price }}{% endif %}{% if request.GET.max_price %}&max_price={{ request.GET.max_price }}{% endif %}{% if request.GET.sale_type %}&sale_type={{ request.GET.sale_type }}{% endif %}" 
+            <a href="{% url 'site:property_list' %}{% if request.GET.location %}?location={{ request.GET.location }}{% endif %}{% if request.GET.property_type %}&property_type={{ request.GET.property_type }}{% endif %}{% if request.GET.bedrooms %}&bedrooms={{ request.GET.bedrooms }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}{% if request.GET.min_price %}&min_price={{ request.GET.min_price }}{% endif %}{% if request.GET.max_price %}&max_price={{ request.GET.max_price }}{% endif %}{% if request.GET.sale_type %}&sale_type={{ request.GET.sale_type }}{% endif %}" 
                class="btn btn-b-n {% if view_mode != 'map' %}active{% endif %}">
                 <i class="bi bi-list-ul"></i> {% translate_text "List View" CURRENT_LANGUAGE_CODE %}
             </a>
-            <a href="{% url 'properties:property_list' %}?view=map{% if request.GET.location %}&location={{ request.GET.location }}{% endif %}{% if request.GET.property_type %}&property_type={{ request.GET.property_type }}{% endif %}{% if request.GET.bedrooms %}&bedrooms={{ request.GET.bedrooms }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}{% if request.GET.min_price %}&min_price={{ request.GET.min_price }}{% endif %}{% if request.GET.max_price %}&max_price={{ request.GET.max_price }}{% endif %}{% if request.GET.sale_type %}&sale_type={{ request.GET.sale_type }}{% endif %}" 
+            <a href="{% url 'site:property_list' %}?view=map{% if request.GET.location %}&location={{ request.GET.location }}{% endif %}{% if request.GET.property_type %}&property_type={{ request.GET.property_type }}{% endif %}{% if request.GET.bedrooms %}&bedrooms={{ request.GET.bedrooms }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}{% if request.GET.min_price %}&min_price={{ request.GET.min_price }}{% endif %}{% if request.GET.max_price %}&max_price={{ request.GET.max_price }}{% endif %}{% if request.GET.sale_type %}&sale_type={{ request.GET.sale_type }}{% endif %}" 
                class="btn btn-b-n {% if view_mode == 'map' %}active{% endif %}">
                 <i class="bi bi-map"></i> {% translate_text "Map View" CURRENT_LANGUAGE_CODE %}
             </a>
@@ -207,7 +207,7 @@
                     </div>
                     <div class="card-body property-card-content">
                         <h5 class="card-title mb-2">
-                            <a href="{% url 'properties:property_detail' property.slug %}" class="text-decoration-none text-dark">
+                            <a href="{% url 'site:property_detail' property.slug %}" class="text-decoration-none text-dark">
                                 {{ property.title|translate:CURRENT_LANGUAGE_CODE }}
                             </a>
                         </h5>
@@ -226,7 +226,7 @@
                                 <i class="bi bi-aspect-ratio me-1"></i> {{ property.size }} m²
                             </span>
                         </div>
-                        <a href="{% url 'properties:property_detail' property.slug %}" class="btn btn-primary w-100">
+                        <a href="{% url 'site:property_detail' property.slug %}" class="btn btn-primary w-100">
                             {% translate_text "View Details" CURRENT_LANGUAGE_CODE %}
                         </a>
                     </div>
@@ -236,7 +236,7 @@
             <div class="col-12 text-center py-5">
                 <i class="bi bi-inbox text-muted" style="font-size: 4rem;"></i>
                 <p class="text-muted mt-3">{% translate_text "No properties found matching your criteria." CURRENT_LANGUAGE_CODE %}</p>
-                <a href="{% url 'properties:property_list' %}" class="btn btn-b">{% translate_text "View All Properties" CURRENT_LANGUAGE_CODE %}</a>
+                <a href="{% url 'site:property_list' %}" class="btn btn-b">{% translate_text "View All Services" CURRENT_LANGUAGE_CODE %}</a>
             </div>
             {% endfor %}
         </div>
@@ -310,7 +310,7 @@
                     <p style="margin: 0 0 8px 0; font-size: 12px; color: #666;">
                         <strong>{% trans "Type" %}:</strong> {{ property.get_property_type_display }}
                     </p>
-                    <a href="{% url 'properties:property_detail' property.slug %}" 
+                    <a href="{% url 'site:property_detail' property.slug %}" 
                        style="display: inline-block; padding: 6px 12px; background: #1976d2; color: white; text-decoration: none; border-radius: 4px; font-size: 12px;">
                         {% translate_text "View Details" CURRENT_LANGUAGE_CODE %}
                     </a>
@@ -361,7 +361,7 @@
                 <small>{{ property.location|escapejs }}</small><br>
                 <small>{% trans "Price" %}: {{ property.price|floatformat:0 }} ETB</small><br>
                 <small>{% trans "Type" %}: {{ property.get_property_type_display }}</small><br>
-                <a href="{% url 'properties:property_detail' property.slug %}" class="btn btn-sm btn-primary mt-2">{% translate_text "View Details" CURRENT_LANGUAGE_CODE %}</a>
+                <a href="{% url 'site:property_detail' property.slug %}" class="btn btn-sm btn-primary mt-2">{% translate_text "View Details" CURRENT_LANGUAGE_CODE %}</a>
             </div>
         `);
         markers.push(marker.getLatLng());

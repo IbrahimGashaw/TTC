@@ -4,7 +4,7 @@
 {% load content_filters %}
 {% load translation_tags %}
 
-{% block title %}{{ report.title }} - {% trans "Market Reports" %} - Andromeda Properties{% endblock %}
+{% block title %}{{ report.title }} - {% trans "Market Reports" %} - Team Training and Consultancy Service PLC{% endblock %}
 
 {% block content %}
 <div class="container mt-5 pt-4">
@@ -14,8 +14,8 @@
                 <!-- Breadcrumb -->
                 <nav aria-label="breadcrumb" class="mb-4">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{% url 'properties:home' %}">{% trans "Home" %}</a></li>
-                        <li class="breadcrumb-item"><a href="{% url 'properties:market_report_list' %}">{% trans "Market Reports" %}</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'site:home' %}">{% trans "Home" %}</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'site:market_report_list' %}">{% trans "Market Reports" %}</a></li>
                         <li class="breadcrumb-item active">{{ report.title|translate:CURRENT_LANGUAGE_CODE }}</li>
                     </ol>
                 </nav>
@@ -82,7 +82,7 @@
                 </div>
                 <div class="list-group list-group-flush">
                     {% for related in related_reports %}
-                    <a href="{% url 'properties:market_report_detail' related.slug %}" class="list-group-item list-group-item-action">
+                    <a href="{% url 'site:market_report_detail' related.slug %}" class="list-group-item list-group-item-action">
                         <h6 class="mb-1">{{ related.title }}</h6>
                         <small class="text-muted">{{ related.publication_date|date:"M Y" }}</small>
                     </a>

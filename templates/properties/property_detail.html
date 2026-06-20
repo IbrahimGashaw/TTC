@@ -4,7 +4,7 @@
 {% load content_filters %}
 {% load translation_tags %}
 
-{% block title %}{{ property.title }} - Andromeda Properties{% endblock %}
+{% block title %}{{ property.title }} - Team Training and Consultancy Service PLC{% endblock %}
 
 {% block content %}
 <!-- Intro Single - EstateAgency Style -->
@@ -23,10 +23,10 @@
                 <nav aria-label="breadcrumb" class="breadcrumb-box d-flex justify-content-lg-end">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">
-                            <a href="{% url 'properties:home' %}">Home</a>
+                            <a href="{% url 'site:home' %}">Home</a>
                         </li>
                         <li class="breadcrumb-item">
-                            <a href="{% url 'properties:property_list' %}">Properties</a>
+                            <a href="{% url 'site:service_list' %}">Services</a>
                         </li>
                         <li class="breadcrumb-item active" aria-current="page">
                             {{ property.title|truncatewords:5 }}
@@ -292,16 +292,16 @@
                     <hr>
                     <p class="mb-0">
                         <strong>{% trans "Project" %}:</strong> 
-                        <a href="{% url 'properties:project_detail' property.project.slug %}">{{ property.project.name }}</a>
+                        <a href="{% url 'site:project_detail' property.project.slug %}">{{ property.project.name }}</a>
                     </p>
                     {% endif %}
                     {% if property.status in 'active,new_offer' %}
                     <hr>
                     <div class="d-flex flex-column gap-2">
-                        <a href="{% url 'properties:book_viewing' property.slug %}" class="btn btn-primary btn-lg">
+                        <a href="{% url 'site:book_viewing' property.slug %}" class="btn btn-primary btn-lg">
                             <i class="bi bi-calendar-event"></i> {% translate_text "Book a Visiting" CURRENT_LANGUAGE_CODE %}
                         </a>
-                        {% load property_tags %}
+                        {% load ttcs_tags %}
                         {% if site_settings.whatsapp_enabled and site_settings.whatsapp_number %}
                             {% whatsapp_url property.title as whatsapp_url %}
                             {% if whatsapp_url %}
@@ -314,7 +314,7 @@
                             {% endif %}
                         {% endif %}
                         {% if user.is_authenticated %}
-                            <a href="{% url 'properties:book_property' property.slug %}" class="btn btn-outline-primary">
+                            <a href="{% url 'site:book_property' property.slug %}" class="btn btn-outline-primary">
                                 <i class="bi bi-calendar-check"></i> {% translate_text "Book This Property" CURRENT_LANGUAGE_CODE %}
                             </a>
                         {% endif %}
@@ -383,7 +383,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="section-header">
-                        <h3 class="title-a">Related Properties</h3>
+                        <h3 class="title-a">Related Showcases</h3>
                     </div>
                     <div class="row">
                         {% for related in related_properties %}
@@ -404,14 +404,14 @@
                                     <div class="card-overlay-a-content">
                                         <div class="card-header-a">
                                             <h2 class="card-title-a">
-                                                <a href="{% url 'properties:property_detail' related.slug %}">{{ related.title }}</a>
+                                                <a href="{% url 'site:property_detail' related.slug %}">{{ related.title }}</a>
                                             </h2>
                                         </div>
                                         <div class="card-body-a">
                                             <div class="price-box d-flex">
                                                 <span class="price-a">{{ related.price|floatformat:0 }} ETB</span>
                                             </div>
-                                            <a href="{% url 'properties:property_detail' related.slug %}" class="link-a">Click here to view
+                                            <a href="{% url 'site:property_detail' related.slug %}" class="link-a">Click here to view
                                                 <span class="bi bi-chevron-right"></span>
                                             </a>
                                         </div>

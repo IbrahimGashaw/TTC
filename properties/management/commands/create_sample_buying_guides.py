@@ -1,5 +1,5 @@
 """
-Management command to create sample buying guides for the Andromeda Properties website.
+Legacy management command for sample buying guides (not used on TTCS public site).
 """
 from django.core.management.base import BaseCommand
 from django.utils import timezone

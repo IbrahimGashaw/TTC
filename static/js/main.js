@@ -1,4 +1,4 @@
-// Soft UI Dashboard Django - Main JavaScript for Andromeda Properties
+// Main JavaScript for Team Training and Consultancy Service PLC
 
 // Prevent loading of corrupted or non-existent video files
 document.addEventListener('DOMContentLoaded', function() {
@@ -542,33 +542,23 @@ function initializeChatbot() {
     function getBotResponse(userMessage) {
         const message = userMessage.toLowerCase();
         
-        // Property viewing
-        if (message.includes('view') || message.includes('property') || message.includes('house') || message.includes('apartment')) {
-            return 'I can help you find the perfect property! You can browse our properties list or book a viewing appointment. Would you like me to show you how?';
+        if (message.includes('train') || message.includes('event') || message.includes('workshop') || message.includes('seminar')) {
+            return 'Browse our Training & Events section to see upcoming programs and register online. You can also view the event calendar for scheduled sessions.';
         }
-        
-        // Booking
-        if (message.includes('book') || message.includes('booking') || message.includes('appointment') || message.includes('viewing')) {
-            return 'Great! You can book a viewing appointment directly from any property page. Just click the "Book a Viewing" button. Would you like to see our available properties?';
+
+        if (message.includes('service') || message.includes('consult') || message.includes('what do you do') || message.includes('help')) {
+            return 'Team Training and Consultancy Service PLC offers management consultancy, strategic leadership training, HR sourcing, investment advisory, and organizational development programs across Ethiopia.';
         }
-        
-        // Services
-        if (message.includes('service') || message.includes('what do you do') || message.includes('help')) {
-            return 'We are Andromeda Properties, one of the top real estate developers in Addis Ababa, Ethiopia. We offer high-quality properties, construction updates, market reports, and expert guidance. How can I assist you today?';
-        }
-        
-        // Contact
+
         if (message.includes('contact') || message.includes('phone') || message.includes('email') || message.includes('address')) {
-            return 'You can reach us at:\n• Hotline: 6033\n• Phone: +251913677468\n• Email: info@andromedaproperties.com\n• Address: Kolfie Keranio, Woreda 07, Apple Plaza Building\nOr use the WhatsApp button for instant messaging!';
+            return 'You can reach us at:\n• Phone: +251969055405 / +251911744353\n• Email: teamconsultency@gmail.com\n• Location: Adama City, Ethiopia\nOr use the WhatsApp button for instant messaging!';
         }
-        
-        // Greeting
+
         if (message.includes('hello') || message.includes('hi') || message.includes('hey') || message.includes('good morning') || message.includes('good afternoon') || message.includes('good evening')) {
-            return 'Hello! Welcome to Andromeda Properties. I\'m here to help you find your dream property or answer any questions. What would you like to know?';
+            return 'Hello! Welcome to Team Training and Consultancy Service PLC. I can help with training programs, consultancy services, or general inquiries. How can I assist you?';
         }
-        
-        // Default response
-        return 'Thank you for your message! I\'m here to help you with property inquiries, bookings, or any questions about our services. Feel free to ask me anything!';
+
+        return 'Thank you for your message! I can help with training events, consultancy services, team information, or contact details. Feel free to ask anything!';
     }
 
     // Scroll to bottom of messages

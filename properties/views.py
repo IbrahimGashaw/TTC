@@ -12,7 +12,9 @@ from django.http import HttpResponseRedirect
 from django.urls import translate_url
 from .models import (
     Project, Property, Contact, TeamMember, PropertyBooking, ConstructionProgress,
-    HomePageSettings, SiteSettings, ViewingAppointment, MarketReport, BuyingGuide
+    HomePageSettings, SiteSettings, ViewingAppointment, MarketReport, BuyingGuide,
+    Service, TrainingEvent, EventRegistration, CaseStudy, Testimonial, Partner,
+    Milestone, MediaAlbum, WorkingSchedule,
 )
 # PromotionalOffer may not exist
 try:
@@ -21,66 +23,30 @@ except ImportError:
     PromotionalOffer = None
 from .forms import (
     ContactForm, PropertyInquiryForm, PropertySearchForm, PropertyBookingForm,
-    ViewingAppointmentForm, PropertyNeedRequestForm
+    ViewingAppointmentForm, PropertyNeedRequestForm, EventRegistrationForm,
 )
 
 
 def home(request):
-    featured_properties = Property.objects.filter(featured=True, status__in=['active', 'new_offer'])[:6]
-    latest_properties = Property.objects.filter(status__in=['active', 'new_offer'])[:6]
-    projects = Project.objects.all()[:15]
-    team_members = TeamMember.objects.all()[:6]  # Get team members for agents section
-    
-    # Dropdown options for homepage search
-    locations = (
-        Property.objects.exclude(location__isnull=True)
-        .exclude(location__exact='')
-        .values_list('location', flat=True)
-        .distinct()
-        .order_by('location')
-    )
-    bedroom_options = (
-        Property.objects.exclude(bedrooms__isnull=True)
-        .values_list('bedrooms', flat=True)
-        .distinct()
-        .order_by('bedrooms')
-    )
-    
-    # Get homepage settings (singleton)
     homepage_settings = HomePageSettings.load()
     site_settings = SiteSettings.load()
-    
-    # Get active promotional offers - use context processor's logic for consistency
-    # Note: promotional_offers is also provided by context processor, but we include it here
-    # to ensure it's available even if context processor fails
-    promotional_offers = []
-    if PromotionalOffer is not None:
-        try:
-            active_offers = PromotionalOffer.objects.filter(is_active=True)
-            # Filter offers that are currently valid (considering dates) - same logic as context processor
-            promotional_offers = [offer for offer in active_offers if offer.is_valid()][:5]  # Limit to 5 offers
-        except Exception as e:
-            # If there's an error, fall back to context processor's value (if available)
-            promotional_offers = []
-    
-    # Statistics (you can make these dynamic later)
-    stats = {
-        'customers': 1000,
-        'years_experience': 10,
-        'delivered_projects': 50,
-    }
-    
+
     context = {
-        'featured_properties': featured_properties,
-        'latest_properties': latest_properties,
-        'projects': projects,
-        'stats': stats,
         'homepage_settings': homepage_settings,
         'site_settings': site_settings,
-        'promotional_offers': promotional_offers,
-        'team_members': team_members,  # Added for agents section
-        'locations': locations,
-        'bedroom_options': bedroom_options,
+        'featured_services': Service.objects.filter(is_active=True, is_featured=True)[:6],
+        'services': Service.objects.filter(is_active=True)[:5],
+        'upcoming_events': TrainingEvent.objects.filter(is_published=True).order_by('start_date')[:4],
+        'testimonials': Testimonial.objects.filter(is_active=True, is_featured=True)[:6],
+        'partners': Partner.objects.filter(is_active=True)[:12],
+        'case_studies': CaseStudy.objects.filter(is_published=True, is_featured=True)[:3],
+        'team_members': TeamMember.objects.all()[:4],
+        'stats': {
+            'clients_served': 15,
+            'years_experience': 10,
+            'training_programs': 25,
+            'associate_trainers': 20,
+        },
     }
     return render(request, 'properties/home.html', context)
 
@@ -165,7 +131,7 @@ def property_detail(request, slug):
             inquiry.property = property
             inquiry.save()
             messages.success(request, _('Your inquiry has been submitted successfully!'))
-            return redirect('properties:property_detail', slug=slug)
+            return redirect('site:property_detail', slug=slug)
     else:
         form = PropertyInquiryForm()
     
@@ -201,55 +167,157 @@ def project_detail(request, slug):
 
 
 def about(request):
-    # AboutPageSettings may not exist
     about_settings = None
     try:
         from .models import AboutPageSettings
         about_settings = AboutPageSettings.load()
     except ImportError:
         pass
-    
-    # Statistics (you can make these dynamic later)
-    stats = {
-        'customers': 1000,
-        'years_experience': 10,
-        'delivered_projects': 50,
-    }
-    
+
     context = {
         'about_settings': about_settings,
-        'stats': stats,
+        'milestones': Milestone.objects.all(),
+        'stats': {
+            'clients_served': 15,
+            'years_experience': 10,
+            'training_programs': 25,
+            'associate_trainers': 20,
+        },
     }
     return render(request, 'properties/about.html', context)
 
 
 def team(request):
     team_members = TeamMember.objects.all()
-    sales_officers = TeamMember.objects.filter(role='sales_officer')
-    sales_agents = TeamMember.objects.filter(role='sales_agent')
+    founders = TeamMember.objects.filter(is_founder=True)
+    trainers = TeamMember.objects.filter(role='associate_trainer')
+    consultants = TeamMember.objects.filter(role='consultant')
     site_settings = SiteSettings.load()
     context = {
         'team_members': team_members,
-        'sales_officers': sales_officers,
-        'sales_agents': sales_agents,
+        'founders': founders,
+        'trainers': trainers,
+        'consultants': consultants,
         'site_settings': site_settings,
     }
     return render(request, 'properties/team.html', context)
 
 
-def agent_detail(request, agent_id):
-    """Detailed agent profile page"""
-    agent = get_object_or_404(TeamMember, id=agent_id)
-    # Get properties assigned to this agent (if any)
-    properties = Property.objects.filter(status__in=['active', 'new_offer'])[:6]  # Can be enhanced with agent assignment
+def team_member_detail(request, pk):
+    member = get_object_or_404(TeamMember, pk=pk)
     site_settings = SiteSettings.load()
-    
     context = {
-        'agent': agent,
-        'properties': properties,
+        'member': member,
         'site_settings': site_settings,
     }
-    return render(request, 'properties/agent_detail.html', context)
+    return render(request, 'properties/team_member_detail.html', context)
+
+
+def agent_detail(request, agent_id):
+    return team_member_detail(request, agent_id)
+
+
+def service_list(request):
+    category = request.GET.get('category', '')
+    services = Service.objects.filter(is_active=True)
+    if category:
+        services = services.filter(category=category)
+    context = {
+        'services': services,
+        'categories': Service.CATEGORY_CHOICES,
+        'active_category': category,
+    }
+    return render(request, 'properties/service_list.html', context)
+
+
+def service_detail(request, slug):
+    service = get_object_or_404(Service, slug=slug, is_active=True)
+    related = Service.objects.filter(is_active=True, category=service.category).exclude(pk=service.pk)[:3]
+    context = {'service': service, 'related_services': related}
+    return render(request, 'properties/service_detail.html', context)
+
+
+def training_events(request):
+    from django.utils import timezone
+    now = timezone.now()
+    upcoming = TrainingEvent.objects.filter(is_published=True, start_date__gte=now).order_by('start_date')
+    past = TrainingEvent.objects.filter(is_published=True, start_date__lt=now).order_by('-start_date')[:6]
+    context = {
+        'upcoming_events': upcoming,
+        'past_events': past,
+    }
+    return render(request, 'properties/training_events.html', context)
+
+
+def event_detail(request, slug):
+    event = get_object_or_404(TrainingEvent, slug=slug, is_published=True)
+    if request.method == 'POST':
+        form = EventRegistrationForm(request.POST)
+        if form.is_valid():
+            if not event.is_registration_open:
+                messages.error(request, _('Registration is closed for this event.'))
+            else:
+                registration = form.save(commit=False)
+                registration.event = event
+                registration.status = 'confirmed'
+                registration.save()
+                messages.success(request, _('You have been registered successfully! We will contact you with details.'))
+                return redirect('site:event_detail', slug=slug)
+    else:
+        form = EventRegistrationForm()
+    context = {'event': event, 'form': form}
+    return render(request, 'properties/event_detail.html', context)
+
+
+def event_calendar(request):
+    import json
+    events = TrainingEvent.objects.filter(is_published=True).order_by('start_date')
+    calendar_events = []
+    for event in events:
+        calendar_events.append({
+            'title': event.title,
+            'start': event.start_date.isoformat(),
+            'end': event.end_date.isoformat(),
+            'url': event.get_absolute_url(),
+            'color': '#1e5a96',
+        })
+    context = {
+        'events': events,
+        'calendar_events_json': json.dumps(calendar_events),
+    }
+    return render(request, 'properties/event_calendar.html', context)
+
+
+def case_study_list(request):
+    case_studies = CaseStudy.objects.filter(is_published=True)
+    context = {'case_studies': case_studies}
+    return render(request, 'properties/case_study_list.html', context)
+
+
+def case_study_detail(request, slug):
+    case_study = get_object_or_404(CaseStudy, slug=slug, is_published=True)
+    context = {'case_study': case_study}
+    return render(request, 'properties/case_study_detail.html', context)
+
+
+def gallery_list(request):
+    category = request.GET.get('category', '')
+    albums = MediaAlbum.objects.filter(is_published=True)
+    if category:
+        albums = albums.filter(category__iexact=category)
+    categories = MediaAlbum.objects.filter(is_published=True).values_list('category', flat=True).distinct()
+    context = {
+        'albums': albums,
+        'categories': [c for c in categories if c],
+        'active_category': category,
+    }
+    return render(request, 'properties/gallery_list.html', context)
+
+
+def gallery_detail(request, slug):
+    album = get_object_or_404(MediaAlbum, slug=slug, is_published=True)
+    context = {'album': album}
+    return render(request, 'properties/gallery_detail.html', context)
 
 
 def market_report_list(request):
@@ -405,12 +473,15 @@ def contact(request):
         if form.is_valid():
             form.save()
             messages.success(request, _('Your message has been sent successfully!'))
-            return redirect('properties:contact')
+            return redirect('site:contact')
     else:
         form = ContactForm()
-    
+
+    site_settings = SiteSettings.load()
     context = {
         'form': form,
+        'site_settings': site_settings,
+        'working_schedule': WorkingSchedule.objects.all(),
     }
     return render(request, 'properties/contact.html', context)
 
@@ -422,7 +493,7 @@ def property_request(request):
         if form.is_valid():
             form.save()
             messages.success(request, _('Your property request has been submitted! Our team will contact you soon.'))
-            return redirect('properties:property_request')
+            return redirect('site:property_request')
     else:
         form = PropertyNeedRequestForm()
     
@@ -445,7 +516,7 @@ def book_property(request, slug):
             booking.status = 'pending'
             booking.save()
             messages.success(request, _('Your booking request has been submitted and is pending approval.'))
-            return redirect('properties:my_bookings')
+            return redirect('site:my_bookings')
     else:
         form = PropertyBookingForm()
     
@@ -580,7 +651,7 @@ def book_viewing(request, slug):
             appointment.status = 'pending'
             appointment.save()
             messages.success(request, _('Your viewing appointment request has been submitted! We will contact you soon to confirm.'))
-            return redirect('properties:property_detail', slug=slug)
+            return redirect('site:property_detail', slug=slug)
     else:
         form = ViewingAppointmentForm()
     

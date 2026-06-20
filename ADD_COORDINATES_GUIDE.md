@@ -15,7 +15,7 @@ pip install requests
 ```
 
 **Step 2: Make sure your Google Maps API key is configured**
-- The API key should be in `andromedaproperties/local_settings.py`
+- The API key should be in `ttcs_site/local_settings.py`
 - The same API key works for both Maps JavaScript API and Geocoding API
 
 **Step 3: Enable Geocoding API in Google Cloud Console**

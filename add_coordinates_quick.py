@@ -6,7 +6,7 @@ import os
 import django
 
 # Setup Django
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'andromedaproperties.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'ttcs_site.settings')
 django.setup()
 
 from properties.models import Property

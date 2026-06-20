@@ -1,0 +1,57 @@
+{% load media_tags %}
+{% if media_items %}
+<section class="ttcs-media-gallery mt-4">
+    {% if gallery_id != 'gallery' %}
+    <h4 class="ttcs-content-heading">Gallery</h4>
+    {% endif %}
+    <div class="row g-3">
+        {% for item in media_items %}
+        {% if item.image or item.video_file or item.video_url %}
+        <div class="col-md-6 col-lg-4">
+            <figure class="ttcs-media-card">
+                {% if item.image %}
+                <button type="button" class="ttcs-media-trigger p-0 border-0 bg-transparent w-100"
+                        data-bs-toggle="modal" data-bs-target="#{{ gallery_id }}Modal{{ item.id }}">
+                    <div class="ttcs-media-frame ttcs-media-frame--photo">
+                        <img src="{{ item.image.url }}"
+                             alt="{{ item.title|default:item.caption|default:'Gallery image' }}"
+                             loading="lazy"
+                             class="ttcs-media-img">
+                    </div>
+                </button>
+                <div class="modal fade ttcs-media-modal" id="{{ gallery_id }}Modal{{ item.id }}" tabindex="-1">
+                    <div class="modal-dialog modal-dialog-centered modal-xl">
+                        <div class="modal-content border-0 bg-transparent">
+                            <div class="modal-body p-0 text-center">
+                                <img src="{{ item.image.url }}" alt="{{ item.title }}" class="ttcs-media-modal-img">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% elif item.video_file %}
+                <div class="ttcs-media-frame ttcs-media-frame--video">
+                    <video class="ttcs-video-player" controls preload="metadata" playsinline>
+                        <source src="{{ item.video_file.url }}" type="video/mp4">
+                        <source src="{{ item.video_file.url }}" type="video/webm">
+                    </video>
+                </div>
+                {% elif item.video_url %}
+                <div class="ttcs-media-frame ttcs-media-frame--video">
+                    <iframe src="{{ item|embed_video_url }}"
+                            title="{{ item.title|default:'Video' }}"
+                            allowfullscreen loading="lazy"></iframe>
+                </div>
+                {% endif %}
+                {% if item.title or item.caption %}
+                <figcaption class="ttcs-media-caption">
+                    {% if item.title %}<strong>{{ item.title }}</strong>{% endif %}
+                    {% if item.caption %}<span>{{ item.caption }}</span>{% endif %}
+                </figcaption>
+                {% endif %}
+            </figure>
+        </div>
+        {% endif %}
+        {% endfor %}
+    </div>
+</section>
+{% endif %}

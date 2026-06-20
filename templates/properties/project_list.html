@@ -3,14 +3,14 @@
 {% load translation_tags %}
 {% load i18n %}
 
-{% block title %}Projects - Andromeda Properties{% endblock %}
+{% block title %}Projects - Team Training and Consultancy Service PLC{% endblock %}
 
 {% block content %}
 <div class="container mt-5 pt-4">
     <div class="row mb-4">
         <div class="col-12">
             <h1 class="display-5 fw-bold">{% translate_text "Our Projects" CURRENT_LANGUAGE_CODE %}</h1>
-            <p class="text-muted">{% translate_text "Explore our real estate projects in Ethiopia" CURRENT_LANGUAGE_CODE %}</p>
+            <p class="text-muted">{% translate_text "Explore our training and consultancy showcases in Ethiopia" CURRENT_LANGUAGE_CODE %}</p>
         </div>
     </div>
 
@@ -41,7 +41,7 @@
                     {% if project.description %}
                         <p class="card-text">{{ project.description|translate:CURRENT_LANGUAGE_CODE|truncatewords:20 }}</p>
                     {% endif %}
-                    <a href="{% url 'properties:project_detail' project.slug %}" class="btn btn-primary">{% translate_text "View Project" CURRENT_LANGUAGE_CODE %}</a>
+                    <a href="{% url 'site:project_detail' project.slug %}" class="btn btn-primary">{% translate_text "View Project" CURRENT_LANGUAGE_CODE %}</a>
                 </div>
             </div>
         </div>

@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% load media_tags %}
+
+{% block title %}{{ case_study.title }} - Team Training and Consultancy Service PLC{% endblock %}
+
+{% block content %}
+<section class="page-header-ttcs">
+    <div class="container">
+        <h1>{{ case_study.title }}</h1>
+        <p class="lead mb-0">{{ case_study.client_name }}{% if case_study.industry %} | {{ case_study.industry }}{% endif %}</p>
+    </div>
+</section>
+
+<section class="section-ttcs">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-lg-8">
+                {% if case_study.featured_image %}
+                <div class="ttcs-featured-media">
+                    <div class="ttcs-media-frame ttcs-media-frame--hero">
+                        <img src="{{ case_study.featured_image.url }}" alt="{{ case_study.title }}" class="ttcs-media-img" loading="eager">
+                    </div>
+                </div>
+                {% endif %}
+
+                <h4 class="ttcs-content-heading">The Challenge</h4>
+                <div class="ttcs-content">{{ case_study.challenge|linebreaks }}</div>
+
+                <h4 class="ttcs-content-heading">Our Solution</h4>
+                <div class="ttcs-content">{{ case_study.solution|linebreaks }}</div>
+
+                <h4 class="ttcs-content-heading">Results & Impact</h4>
+                <div class="ttcs-content">{{ case_study.results|linebreaks }}</div>
+
+                {% render_media_gallery case_study.media_items.all gallery_id='casestudy' %}
+
+                {% if case_study.timeline.all %}
+                <h4 class="ttcs-content-heading">Project Timeline</h4>
+                <div class="timeline-ttcs">
+                    {% for item in case_study.timeline.all %}
+                    <div class="timeline-item">
+                        <div class="year">{{ item.date|date:"M Y" }}</div>
+                        <h5>{{ item.title }}</h5>
+                        <p class="text-muted mb-0">{{ item.description }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+            <div class="col-lg-4">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body ttcs-card-text">
+                        <h5 class="text-primary">Project Details</h5>
+                        <hr>
+                        <p><strong>Client:</strong> {{ case_study.client_name }}</p>
+                        {% if case_study.industry %}<p><strong>Industry:</strong> {{ case_study.industry }}</p>{% endif %}
+                        {% if case_study.project_start %}
+                        <p class="mb-0"><strong>Duration:</strong> {{ case_study.project_start|date:"M Y" }}{% if case_study.project_end %} - {{ case_study.project_end|date:"M Y" }}{% endif %}</p>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="card border-0 shadow-sm mt-4">
+                    <div class="card-body text-center">
+                        <h5 class="text-primary">Interested in Similar Results?</h5>
+                        <p class="small text-muted">Contact us to discuss how we can help your organization.</p>
+                        <a href="{% url 'site:contact' %}" class="btn btn-ttcs-primary">Get in Touch</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
