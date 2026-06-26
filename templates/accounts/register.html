@@ -2,58 +2,78 @@
 {% load static %}
 {% load translation_tags %}
 {% load i18n %}
+{% load form_tags %}
 
 {% block title %}Register - Team Training and Consultancy Service PLC{% endblock %}
 
 {% block content %}
-<div class="container mt-5 pt-4">
+<div class="container mt-5 pt-4 pb-5">
     <div class="row justify-content-center">
-        <div class="col-md-5">
-            <div class="card elevation-4">
-                <div class="card-body p-5">
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm ttcs-auth-card">
+                <div class="card-body p-4 p-md-5">
                     <div class="text-center mb-4">
-                        <div class="icon-circle mx-auto mb-3">
-                            <i class="bi bi-person-plus-fill" style="font-size: 2rem;"></i>
+                        <div class="ttcs-auth-icon mx-auto mb-3">
+                            <i class="bi bi-person-plus-fill"></i>
                         </div>
-                        <h2 class="fw-bold text-dark">{% translate_text "Create an account" CURRENT_LANGUAGE_CODE %}</h2>
-                        <p class="text-secondary">{% translate_text "Sign up to access exclusive features" CURRENT_LANGUAGE_CODE %}</p>
+                        <h2 class="fw-bold text-primary">{% translate_text "Create an account" CURRENT_LANGUAGE_CODE %}</h2>
+                        <p class="text-muted mb-0">{% translate_text "Sign up to access training resources and event registration" CURRENT_LANGUAGE_CODE %}</p>
                     </div>
-                    <form method="post">
+                    <form method="post" class="ttcs-form">
                         {% csrf_token %}
-                        <div class="mb-3">
-                            <label class="form-label required">{% translate_text "Username" CURRENT_LANGUAGE_CODE %}</label>
-                            <input type="text" name="username" class="form-control" required autofocus>
-                            <small class="form-text">Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.</small>
+
+                        {% if form.non_field_errors %}
+                        <div class="alert alert-danger" role="alert">
+                            {% for error in form.non_field_errors %}{{ error }}{% endfor %}
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label required">{% translate_text "Password" CURRENT_LANGUAGE_CODE %}</label>
-                            <input type="password" name="password1" class="form-control" required>
-                            <small class="form-text">Your password must contain at least 8 characters.</small>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label required">{% translate_text "Password confirmation" CURRENT_LANGUAGE_CODE %}</label>
-                            <input type="password" name="password2" class="form-control" required>
-                            <small class="form-text">Enter the same password as before, for verification.</small>
-                        </div>
-                        <div class="mb-3 form-check">
-                            <input type="checkbox" class="form-check-input" id="terms" required>
-                            <label class="form-check-label" for="terms">
-                                {% translate_text "I agree with terms & conditions" CURRENT_LANGUAGE_CODE %}
-                            </label>
-                        </div>
-                        {% if form.errors %}
-                            <div class="alert alert-danger elevation-2">
-                                <strong>{% translate_text "Please correct the following errors:" CURRENT_LANGUAGE_CODE %}</strong>
-                                <ul class="mb-0 mt-2">
-                                    {% for field, errors in form.errors.items %}
-                                        {% for error in errors %}
-                                            <li>{{ error }}</li>
-                                        {% endfor %}
-                                    {% endfor %}
-                                </ul>
-                            </div>
                         {% endif %}
-                        <button type="submit" class="btn btn-primary w-100 mb-3">{% translate_text "Register" CURRENT_LANGUAGE_CODE %}</button>
+
+                        {% for field in form %}
+                            {% if field.name == 'website' %}
+                            <div class="ttcs-honeypot-wrap" aria-hidden="true">{{ field }}</div>
+                            {% elif field.name == 'terms_accepted' %}
+                            <div class="mb-3 ttcs-consent-check">
+                                <div class="form-check">
+                                    {{ field }}
+                                    <label class="form-check-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                </div>
+                                {% if field.errors %}<div class="invalid-feedback d-block">{{ field.errors|first }}</div>{% endif %}
+                            </div>
+                            {% elif field.name == 'username' %}
+                            <div class="mb-3">
+                                <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }} <span class="text-danger">*</span></label>
+                                <div class="input-group ttcs-input-group">
+                                    <span class="input-group-text"><i class="bi {{ field.name|field_icon }}"></i></span>
+                                    {{ field }}
+                                </div>
+                                <small class="text-muted">150 characters or fewer. Letters, digits and @/./+/-/_ only.</small>
+                                {% if field.errors %}<div class="invalid-feedback d-block">{{ field.errors|first }}</div>{% endif %}
+                            </div>
+                            {% elif field.name == 'password1' %}
+                            <div class="mb-3">
+                                <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }} <span class="text-danger">*</span></label>
+                                <div class="input-group ttcs-input-group">
+                                    <span class="input-group-text"><i class="bi {{ field.name|field_icon }}"></i></span>
+                                    {{ field }}
+                                </div>
+                                <small class="text-muted">At least 8 characters.</small>
+                                {% if field.errors %}<div class="invalid-feedback d-block">{{ field.errors|first }}</div>{% endif %}
+                            </div>
+                            {% else %}
+                            <div class="mb-3">
+                                <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }} <span class="text-danger">*</span></label>
+                                <div class="input-group ttcs-input-group">
+                                    <span class="input-group-text"><i class="bi {{ field.name|field_icon }}"></i></span>
+                                    {{ field }}
+                                </div>
+                                {% if field.errors %}<div class="invalid-feedback d-block">{{ field.errors|first }}</div>{% endif %}
+                            </div>
+                            {% endif %}
+                        {% endfor %}
+
+                        <button type="submit" class="btn btn-ttcs-primary w-100 mb-3" data-loading-text="{% translate_text 'Creating account...' CURRENT_LANGUAGE_CODE %}">
+                            <i class="bi bi-person-check me-2"></i>{% translate_text "Register" CURRENT_LANGUAGE_CODE %}
+                        </button>
                     </form>
                     <hr>
                     <div class="text-center">
@@ -65,4 +85,3 @@
     </div>
 </div>
 {% endblock %}
-

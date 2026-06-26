@@ -50,6 +50,30 @@
             </a>
         </div>
         <div class="col-12 col-md-6 col-lg-3">
+            <a href="{% url 'admin:properties_vacancy_changelist' %}" class="admin-card d-block text-decoration-none text-dark">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <div class="admin-card-icon"><i class="fas fa-briefcase"></i></div>
+                        <h5>Vacancies</h5>
+                        <div class="admin-card-count">{% model_count 'properties' 'Vacancy' %}</div>
+                        <small class="text-muted">Job openings & vacancies</small>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-12 col-md-6 col-lg-3">
+            <a href="{% url 'admin:properties_vacancyapplication_changelist' %}" class="admin-card d-block text-decoration-none text-dark">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <div class="admin-card-icon"><i class="fas fa-file-alt"></i></div>
+                        <h5>Applications</h5>
+                        <div class="admin-card-count">{% model_count 'properties' 'VacancyApplication' %}</div>
+                        <small class="text-muted">Job applicant submissions</small>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-12 col-md-6 col-lg-3">
             <a href="{% url 'admin:properties_casestudy_changelist' %}" class="admin-card d-block text-decoration-none text-dark">
                 <div class="card shadow-sm">
                     <div class="card-body">
@@ -165,6 +189,15 @@
                 </div>
             </a>
         </div>
+    </div>
+
+    <h4 class="admin-section-title">Data Export</h4>
+    <div class="admin-quick-links mb-4">
+        <a href="{% url 'admin_export_all_data' %}" class="btn btn-success btn-sm">
+            <i class="fas fa-file-archive"></i> Export All Data (ZIP)
+        </a>
+        <a href="{% url 'admin:properties_contact_changelist' %}" class="btn btn-outline-success btn-sm">Contact Messages</a>
+        <a href="{% url 'admin:properties_eventregistration_changelist' %}" class="btn btn-outline-success btn-sm">Event Registrations</a>
     </div>
 
     <h4 class="admin-section-title">Site Settings</h4>

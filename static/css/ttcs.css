@@ -102,8 +102,92 @@ body {
 
 .navbar-ttcs .btn-outline-primary:hover {
     background: var(--ttcs-orange);
-    border-color: var(--ttcs-orange);
     color: #fff;
+}
+
+/* Social media links */
+.ttcs-social-links {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.ttcs-social-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 50%;
+    color: #fff;
+    text-decoration: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+}
+
+.ttcs-social-link:hover {
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+}
+
+.ttcs-social-link i {
+    font-size: 1.1rem;
+    line-height: 1;
+}
+
+.ttcs-social-links--navbar {
+    padding: 0.5rem 0;
+}
+
+.ttcs-social-links--navbar .ttcs-social-link {
+    width: 2rem;
+    height: 2rem;
+}
+
+.ttcs-social-links--navbar .ttcs-social-link i {
+    font-size: 1rem;
+}
+
+.ttcs-social-links--footer {
+    margin-top: 0.25rem;
+}
+
+.ttcs-social-links--footer .ttcs-social-link {
+    width: 2.5rem;
+    height: 2.5rem;
+}
+
+.ttcs-social-facebook {
+    background: #1877f2;
+}
+
+.ttcs-social-telegram {
+    background: #229ed9;
+}
+
+.ttcs-social-whatsapp {
+    background: #25d366;
+}
+
+.ttcs-social-youtube {
+    background: #ff0000;
+}
+
+@media (max-width: 991.98px) {
+    .navbar-social {
+        padding: 0.75rem 0 0.25rem;
+        border-top: 1px solid rgba(30, 90, 150, 0.12);
+        margin-top: 0.5rem;
+    }
+}
+
+@media (min-width: 992px) {
+    .navbar-social {
+        padding-left: 1rem;
+        margin-left: 0.5rem;
+        border-left: 1px solid rgba(30, 90, 150, 0.12);
+    }
 }
 
 /* Hero */
@@ -521,6 +605,32 @@ body {
     font-size: calc(0.95rem - 2pt);
 }
 
+.partner-card {
+    border-radius: 16px;
+    border: 1px solid rgba(30, 90, 150, 0.08) !important;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.partner-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(30, 90, 150, 0.12) !important;
+}
+
+.partner-card-logo {
+    min-height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.vacancy-card .event-body {
+    min-height: 220px;
+}
+
+.about-media-stack .ttcs-media-frame--hero {
+    max-height: 360px;
+}
+
 /* CTA section */
 .cta-ttcs {
     background: linear-gradient(135deg, var(--ttcs-orange), var(--ttcs-orange-dark));
@@ -731,7 +841,204 @@ body {
 }
 
 .schedule-table td {
-    padding: 0.5rem 0;
+    padding: 0.35rem 0;
+    border: none;
+}
+
+/* Contact page */
+.contact-info-card,
+.contact-form-card {
+    border-radius: 16px;
+    border: 1px solid rgba(30, 90, 150, 0.08) !important;
+}
+
+.contact-info-item {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    margin-bottom: 1.25rem;
+    text-align: left;
+}
+
+.contact-info-item h6 {
+    margin-bottom: 0.25rem;
+    font-weight: 600;
+    color: var(--ttcs-dark);
+}
+
+.contact-info-item p,
+.contact-info-item a {
+    text-align: left;
+    color: #4a5568;
+    text-decoration: none;
+}
+
+.contact-info-item a:hover {
+    color: var(--ttcs-blue);
+}
+
+.contact-info-icon {
+    flex-shrink: 0;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 10px;
+    background: rgba(30, 90, 150, 0.1);
+    color: var(--ttcs-blue);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+}
+
+.contact-form-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    text-align: left;
+}
+
+.contact-form-icon {
+    flex-shrink: 0;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--ttcs-blue), var(--ttcs-blue-light));
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.35rem;
+}
+
+.contact-form,
+.ttcs-form,
+.contact-form .form-label,
+.ttcs-form .form-label,
+.contact-form .form-control,
+.ttcs-form .form-control,
+.contact-form .form-select,
+.ttcs-form .form-select,
+.contact-form .form-check-label,
+.ttcs-form .form-check-label,
+.contact-form small,
+.ttcs-form small,
+.contact-form .input-group-text,
+.ttcs-form .input-group-text {
+    text-align: left;
+}
+
+.contact-form .form-label,
+.ttcs-form .form-label {
+    font-weight: 600;
+    color: var(--ttcs-dark);
+    margin-bottom: 0.35rem;
+}
+
+.contact-input-group .input-group-text,
+.ttcs-input-group .input-group-text {
+    background: var(--ttcs-light);
+    border-color: #dce6f0;
+    color: var(--ttcs-blue);
+}
+
+.contact-form .form-control,
+.ttcs-form .form-control,
+.contact-form .form-select,
+.ttcs-form .form-select {
+    border-color: #dce6f0;
+    padding: 0.65rem 0.85rem;
+    border-radius: 0 8px 8px 0;
+}
+
+.contact-input-group .form-control,
+.ttcs-input-group .form-control,
+.contact-input-group .form-select,
+.ttcs-input-group .form-select {
+    border-left: 0;
+}
+
+.contact-input-group .input-group-text,
+.ttcs-input-group .input-group-text {
+    border-radius: 8px 0 0 8px;
+}
+
+.contact-form textarea.form-control,
+.ttcs-form textarea.form-control {
+    border-radius: 8px;
+    min-height: 140px;
+    resize: vertical;
+}
+
+.contact-form .form-control:focus,
+.ttcs-form .form-control:focus,
+.contact-form .form-select:focus,
+.ttcs-form .form-select:focus {
+    border-color: var(--ttcs-blue-light);
+    box-shadow: 0 0 0 0.2rem rgba(30, 90, 150, 0.12);
+}
+
+.contact-consent-check,
+.ttcs-consent-check {
+    padding: 0.85rem 1rem;
+    background: var(--ttcs-light);
+    border-radius: 10px;
+    border: 1px solid #e8eef5;
+}
+
+.contact-consent-check .form-check-label,
+.ttcs-consent-check .form-check-label {
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.contact-submit-btn {
+    min-width: 200px;
+    padding: 0.75rem 1.5rem;
+    border-radius: 10px;
+    font-weight: 600;
+}
+
+.contact-honeypot-wrap,
+.ttcs-honeypot-wrap {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+
+.contact-honeypot,
+.ttcs-honeypot {
+    display: none;
+}
+
+/* Auth forms */
+.ttcs-auth-card {
+    border-radius: 16px;
+    border: 1px solid rgba(30, 90, 150, 0.08) !important;
+}
+
+.ttcs-auth-icon {
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--ttcs-blue), var(--ttcs-blue-light));
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+}
+
+.ttcs-search-form .form-control {
+    border-left: 0;
+}
+
+.ttcs-search-form .input-group-text {
+    background: var(--ttcs-light);
+    border-color: #dce6f0;
+    color: var(--ttcs-blue);
+    border-radius: 8px 0 0 8px;
 }
 
 /* Blog */

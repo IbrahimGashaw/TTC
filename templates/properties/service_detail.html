@@ -35,6 +35,9 @@
                 {% render_media_gallery service.media_items.all gallery_id='service' %}
                 <div class="mt-4 d-flex flex-wrap gap-2">
                     <a href="{% url 'site:contact' %}" class="btn btn-ttcs-primary">Request This Service</a>
+                    {% if service.category == 'hr_sourcing' %}
+                    <a href="{% url 'site:vacancy_list' %}" class="btn btn-outline-primary"><i class="bi bi-briefcase me-1"></i> View Available Vacancies</a>
+                    {% endif %}
                     <a href="{% url 'site:training_events' %}" class="btn btn-outline-primary">View Training Programs</a>
                 </div>
             </div>

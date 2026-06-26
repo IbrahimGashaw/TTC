@@ -14,7 +14,7 @@ from .models import (
     Project, Property, Contact, TeamMember, PropertyBooking, ConstructionProgress,
     HomePageSettings, SiteSettings, ViewingAppointment, MarketReport, BuyingGuide,
     Service, TrainingEvent, EventRegistration, CaseStudy, Testimonial, Partner,
-    Milestone, MediaAlbum, WorkingSchedule,
+    Milestone, MediaAlbum, WorkingSchedule, Vacancy, VacancyApplication,
 )
 # PromotionalOffer may not exist
 try:
@@ -24,6 +24,7 @@ except ImportError:
 from .forms import (
     ContactForm, PropertyInquiryForm, PropertySearchForm, PropertyBookingForm,
     ViewingAppointmentForm, PropertyNeedRequestForm, EventRegistrationForm,
+    VacancyApplicationForm,
 )
 
 
@@ -167,12 +168,8 @@ def project_detail(request, slug):
 
 
 def about(request):
-    about_settings = None
-    try:
-        from .models import AboutPageSettings
-        about_settings = AboutPageSettings.load()
-    except ImportError:
-        pass
+    from .models import AboutPageSettings
+    about_settings = AboutPageSettings.load()
 
     context = {
         'about_settings': about_settings,
@@ -259,6 +256,7 @@ def event_detail(request, slug):
             else:
                 registration = form.save(commit=False)
                 registration.event = event
+                registration.gdpr_consent = form.cleaned_data['gdpr_consent']
                 registration.status = 'confirmed'
                 registration.save()
                 messages.success(request, _('You have been registered successfully! We will contact you with details.'))
@@ -286,6 +284,53 @@ def event_calendar(request):
         'calendar_events_json': json.dumps(calendar_events),
     }
     return render(request, 'properties/event_calendar.html', context)
+
+
+def vacancy_list(request):
+    vacancies = Vacancy.objects.filter(is_published=True)
+    open_vacancies = [v for v in vacancies if v.is_application_open]
+    closed_vacancies = [v for v in vacancies if not v.is_application_open]
+    hr_sourcing_service = Service.objects.filter(category='hr_sourcing', is_active=True).first()
+    context = {
+        'open_vacancies': open_vacancies,
+        'closed_vacancies': closed_vacancies,
+        'hr_sourcing_service': hr_sourcing_service,
+    }
+    return render(request, 'properties/vacancy_list.html', context)
+
+
+def vacancy_detail(request, slug):
+    vacancy = get_object_or_404(Vacancy, slug=slug, is_published=True)
+    if request.method == 'POST':
+        form = VacancyApplicationForm(request.POST, request.FILES)
+        if form.is_valid():
+            if not vacancy.is_application_open:
+                messages.error(request, _('Applications are closed for this vacancy.'))
+            else:
+                application = form.save(commit=False)
+                application.vacancy = vacancy
+                application.gdpr_consent = form.cleaned_data['gdpr_consent']
+                application.status = 'pending'
+                application.save()
+                messages.success(
+                    request,
+                    _('Your application has been submitted successfully! We will review it and contact you.'),
+                )
+                return redirect('site:vacancy_detail', slug=slug)
+    else:
+        form = VacancyApplicationForm()
+    context = {'vacancy': vacancy, 'form': form}
+    return render(request, 'properties/vacancy_detail.html', context)
+
+
+def partner_list(request):
+    partners = Partner.objects.filter(is_active=True)
+    context = {'partners': partners}
+    return render(request, 'properties/partner_list.html', context)
+
+
+def legacy_vacancy_redirect(request, slug):
+    return redirect('site:vacancy_detail', slug=slug, permanent=True)
 
 
 def case_study_list(request):
@@ -471,8 +516,13 @@ def contact(request):
     if request.method == 'POST':
         form = ContactForm(request.POST)
         if form.is_valid():
-            form.save()
-            messages.success(request, _('Your message has been sent successfully!'))
+            contact_message = form.save(commit=False)
+            contact_message.gdpr_consent = form.cleaned_data['gdpr_consent']
+            contact_message.save()
+            messages.success(
+                request,
+                _('Thank you! Your message has been sent. Our team will get back to you within 1–2 business days.'),
+            )
             return redirect('site:contact')
     else:
         form = ContactForm()

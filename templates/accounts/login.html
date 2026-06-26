@@ -6,38 +6,53 @@
 {% block title %}Login - Team Training and Consultancy Service PLC{% endblock %}
 
 {% block content %}
-<div class="container mt-5 pt-4">
+<div class="container mt-5 pt-4 pb-5">
     <div class="row justify-content-center">
         <div class="col-md-5">
-            <div class="card elevation-4">
-                <div class="card-body p-5">
+            <div class="card border-0 shadow-sm ttcs-auth-card">
+                <div class="card-body p-4 p-md-5">
                     <div class="text-center mb-4">
-                        <div class="icon-circle mx-auto mb-3">
-                            <i class="bi bi-person-fill" style="font-size: 2rem;"></i>
+                        <div class="ttcs-auth-icon mx-auto mb-3">
+                            <i class="bi bi-person-fill"></i>
                         </div>
-                        <h2 class="fw-bold text-dark">{% translate_text "Sign into your account" CURRENT_LANGUAGE_CODE %}</h2>
-                        <p class="text-secondary">{% translate_text "Enter your credentials to access your account" CURRENT_LANGUAGE_CODE %}</p>
+                        <h2 class="fw-bold text-primary">{% translate_text "Sign into your account" CURRENT_LANGUAGE_CODE %}</h2>
+                        <p class="text-muted mb-0">{% translate_text "Enter your credentials to access your account" CURRENT_LANGUAGE_CODE %}</p>
                     </div>
-                    <form method="post">
+                    <form method="post" class="ttcs-form">
                         {% csrf_token %}
+
+                        {% if form.non_field_errors %}
+                        <div class="alert alert-danger" role="alert">
+                            {% for error in form.non_field_errors %}{{ error }}{% endfor %}
+                        </div>
+                        {% endif %}
+
                         <div class="mb-3">
-                            <label class="form-label required">{% translate_text "Username" CURRENT_LANGUAGE_CODE %}</label>
-                            <input type="text" name="username" class="form-control" required autofocus>
+                            <label class="form-label" for="id_username">{% translate_text "Username" CURRENT_LANGUAGE_CODE %} <span class="text-danger">*</span></label>
+                            <div class="input-group ttcs-input-group">
+                                <span class="input-group-text"><i class="bi bi-person"></i></span>
+                                <input type="text" name="username" id="id_username" class="form-control{% if form.username.errors %} is-invalid{% endif %}" required autofocus autocomplete="username" value="{{ form.username.value|default:'' }}">
+                            </div>
+                            {% if form.username.errors %}<div class="invalid-feedback d-block">{{ form.username.errors|first }}</div>{% endif %}
                         </div>
                         <div class="mb-3">
-                            <label class="form-label required">{% translate_text "Password" CURRENT_LANGUAGE_CODE %}</label>
-                            <div class="position-relative">
-                                <input type="password" name="password" id="id_password" class="form-control" required style="padding-right: 45px;">
-                                <button type="button" class="btn btn-link position-absolute" id="password-toggle-btn" style="right: 0; top: 50%; transform: translateY(-50%); padding: 0.375rem 0.75rem; color: #6c757d; text-decoration: none; border: none; background: none; z-index: 10;" aria-label="Toggle password visibility">
+                            <label class="form-label" for="id_password">{% translate_text "Password" CURRENT_LANGUAGE_CODE %} <span class="text-danger">*</span></label>
+                            <div class="input-group ttcs-input-group">
+                                <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                                <input type="password" name="password" id="id_password" class="form-control{% if form.password.errors %} is-invalid{% endif %}" required autocomplete="current-password">
+                                <button type="button" class="btn btn-outline-secondary" id="password-toggle-btn" aria-label="Toggle password visibility">
                                     <i class="bi bi-eye" id="password-toggle-icon"></i>
                                 </button>
                             </div>
+                            {% if form.password.errors %}<div class="invalid-feedback d-block">{{ form.password.errors|first }}</div>{% endif %}
                         </div>
                         <div class="mb-3 form-check">
                             <input type="checkbox" class="form-check-input" id="remember">
                             <label class="form-check-label" for="remember">{% translate_text "Remember me" CURRENT_LANGUAGE_CODE %}</label>
                         </div>
-                        <button type="submit" class="btn btn-primary w-100 mb-3">{% translate_text "Login" CURRENT_LANGUAGE_CODE %}</button>
+                        <button type="submit" class="btn btn-ttcs-primary w-100 mb-3" data-loading-text="{% translate_text 'Signing in...' CURRENT_LANGUAGE_CODE %}">
+                            <i class="bi bi-box-arrow-in-right me-2"></i>{% translate_text "Login" CURRENT_LANGUAGE_CODE %}
+                        </button>
                         <div class="text-center">
                             <a href="{% url 'accounts:password_reset' %}" class="text-decoration-none">{% translate_text "Forgot password?" CURRENT_LANGUAGE_CODE %}</a>
                         </div>
@@ -55,27 +70,13 @@
 
 {% block extra_js %}
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const passwordField = document.getElementById('id_password');
-    const toggleBtn = document.getElementById('password-toggle-btn');
-    const toggleIcon = document.getElementById('password-toggle-icon');
-    
-    if (passwordField && toggleBtn && toggleIcon) {
-        toggleBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            
-            const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
-            passwordField.setAttribute('type', type);
-            
-            // Toggle icon
-            if (type === 'password') {
-                toggleIcon.className = 'bi bi-eye';
-            } else {
-                toggleIcon.className = 'bi bi-eye-slash';
-            }
-        });
-    }
+document.getElementById('password-toggle-btn')?.addEventListener('click', function () {
+    var field = document.getElementById('id_password');
+    var icon = document.getElementById('password-toggle-icon');
+    if (!field || !icon) return;
+    var isPassword = field.getAttribute('type') === 'password';
+    field.setAttribute('type', isPassword ? 'text' : 'password');
+    icon.className = isPassword ? 'bi bi-eye-slash' : 'bi bi-eye';
 });
 </script>
 {% endblock %}

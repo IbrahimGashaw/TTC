@@ -4,7 +4,23 @@ from django.urls import path, reverse
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
+from .admin_export import (
+    ExportMixin,
+    CONTACT_EXPORT,
+    EVENT_REGISTRATION_EXPORT,
+    SERVICE_EXPORT,
+    TRAINING_EVENT_EXPORT,
+    TEAM_MEMBER_EXPORT,
+    TESTIMONIAL_EXPORT,
+    CASE_STUDY_EXPORT,
+    PARTNER_EXPORT,
+    MILESTONE_EXPORT,
+    WORKING_SCHEDULE_EXPORT,
+    VACANCY_EXPORT,
+    VACANCY_APPLICATION_EXPORT,
+)
 from .event_export import EXPORTERS, export_registrations
+from .vacancy_export import EXPORTERS as VACANCY_EXPORTERS, export_applications
 from .media_bulk_upload import add_bulk_media_to_album
 from .models import (
     Project, Property, PropertyImage, Contact, TeamMember,
@@ -12,6 +28,7 @@ from .models import (
     HomePageSettings, SiteSettings, ViewingAppointment, FloorPlan,
     MarketReport, BuyingGuide, Service, TrainingEvent, EventRegistration,
     CaseStudy, CaseStudyTimeline, Testimonial, Partner, Milestone,
+    Vacancy, VacancyApplication,
     MediaAlbum, MediaItem, WorkingSchedule, ServiceMedia, CaseStudyMedia, EventMedia,
 )
 # PromotionalOffer and AboutPageSettings may not exist - check models.py
@@ -88,16 +105,26 @@ class PropertyImageAdmin(admin.ModelAdmin):
 
 
 @admin.register(Contact)
-class ContactAdmin(admin.ModelAdmin):
-    list_display = ['name', 'email', 'message', 'created_at']
-    list_filter = ['created_at', 'gdpr_consent']
-    search_fields = ['name', 'email', 'message']
+class ContactAdmin(ExportMixin, admin.ModelAdmin):
+    export_config = CONTACT_EXPORT
+    list_display = ['name', 'email', 'phone', 'subject', 'created_at', 'gdpr_consent']
+    list_filter = ['subject', 'created_at', 'gdpr_consent']
+    search_fields = ['name', 'last_name', 'email', 'phone', 'message']
     readonly_fields = ['created_at']
     exclude = ['property']
+    fieldsets = (
+        (_('Contact Details'), {
+            'fields': ('name', 'last_name', 'email', 'phone', 'subject'),
+        }),
+        (_('Message'), {
+            'fields': ('message', 'gdpr_consent', 'created_at'),
+        }),
+    )
 
 
 @admin.register(TeamMember)
-class TeamMemberAdmin(admin.ModelAdmin):
+class TeamMemberAdmin(ExportMixin, admin.ModelAdmin):
+    export_config = TEAM_MEMBER_EXPORT
     list_display = ['name', 'title', 'role', 'is_founder', 'email', 'years_experience', 'order']
     list_filter = ['role', 'is_founder', 'is_verified']
     search_fields = ['name', 'email', 'phone', 'title']
@@ -246,6 +273,13 @@ class SiteSettingsAdmin(admin.ModelAdmin):
                 'whatsapp_enabled',
                 'whatsapp_number',
                 'whatsapp_default_message',
+            )
+        }),
+        (_('Social Media'), {
+            'fields': (
+                'facebook_url',
+                'telegram_url',
+                'youtube_url',
             )
         }),
         (_('Company Information'), {
@@ -495,7 +529,8 @@ class EventMediaInline(admin.StackedInline):
 
 
 @admin.register(Service)
-class ServiceAdmin(admin.ModelAdmin):
+class ServiceAdmin(ExportMixin, admin.ModelAdmin):
+    export_config = SERVICE_EXPORT
     list_display = ['title', 'category', 'is_featured', 'is_active', 'order']
     list_filter = ['category', 'is_featured', 'is_active']
     list_editable = ['is_featured', 'is_active', 'order']
@@ -513,7 +548,8 @@ class ServiceAdmin(admin.ModelAdmin):
 
 
 @admin.register(TrainingEvent)
-class TrainingEventAdmin(admin.ModelAdmin):
+class TrainingEventAdmin(ExportMixin, admin.ModelAdmin):
+    export_config = TRAINING_EVENT_EXPORT
     list_display = ['title', 'event_type', 'start_date', 'location', 'registration_count', 'is_published', 'is_featured']
     list_filter = ['event_type', 'is_published', 'is_featured']
     list_editable = ['is_published', 'is_featured']
@@ -590,30 +626,17 @@ class TrainingEventAdmin(admin.ModelAdmin):
         return export_registrations(queryset, file_format, event=event)
 
 
-def _make_export_action(file_format, label):
-    def action(modeladmin, request, queryset):
-        return export_registrations(queryset, file_format)
-
-    action.short_description = label
-    action.__name__ = f'export_selected_{file_format}'
-    return action
-
-
 @admin.register(EventRegistration)
-class EventRegistrationAdmin(admin.ModelAdmin):
+class EventRegistrationAdmin(ExportMixin, admin.ModelAdmin):
+    export_config = EVENT_REGISTRATION_EXPORT
     list_display = ['full_name', 'event', 'email', 'organization', 'status', 'created_at']
     list_filter = ['status', 'event', 'created_at']
     search_fields = ['full_name', 'email', 'organization']
-    actions = [
-        _make_export_action('xlsx', _('Export selected to Excel (.xlsx)')),
-        _make_export_action('csv', _('Export selected to CSV (.csv)')),
-        _make_export_action('docx', _('Export selected to Word (.docx)')),
-        _make_export_action('pdf', _('Export selected to PDF (.pdf)')),
-    ]
 
 
 @admin.register(CaseStudy)
-class CaseStudyAdmin(admin.ModelAdmin):
+class CaseStudyAdmin(ExportMixin, admin.ModelAdmin):
+    export_config = CASE_STUDY_EXPORT
     list_display = ['title', 'client_name', 'industry', 'is_featured', 'is_published']
     list_filter = ['is_featured', 'is_published', 'industry']
     prepopulated_fields = {'slug': ('title',)}
@@ -621,19 +644,109 @@ class CaseStudyAdmin(admin.ModelAdmin):
 
 
 @admin.register(Testimonial)
-class TestimonialAdmin(admin.ModelAdmin):
+class TestimonialAdmin(ExportMixin, admin.ModelAdmin):
+    export_config = TESTIMONIAL_EXPORT
     list_display = ['client_name', 'organization', 'rating', 'is_featured', 'is_active']
     list_filter = ['is_featured', 'is_active', 'rating']
 
 
 @admin.register(Partner)
-class PartnerAdmin(admin.ModelAdmin):
+class PartnerAdmin(ExportMixin, admin.ModelAdmin):
+    export_config = PARTNER_EXPORT
     list_display = ['name', 'is_active', 'order']
     list_filter = ['is_active']
+    search_fields = ['name', 'description']
+    list_editable = ['is_active', 'order']
+    fields = ('name', 'logo', 'website', 'description', 'is_active', 'order')
+
+
+@admin.register(Vacancy)
+class VacancyAdmin(ExportMixin, admin.ModelAdmin):
+    export_config = VACANCY_EXPORT
+    list_display = [
+        'title', 'department', 'employment_type', 'application_deadline',
+        'application_count_display', 'is_published', 'is_featured',
+    ]
+    list_filter = ['employment_type', 'is_published', 'is_featured']
+    list_editable = ['is_published', 'is_featured']
+    prepopulated_fields = {'slug': ('title',)}
+    search_fields = ['title', 'department', 'location']
+    readonly_fields = ['export_applicants_links']
+    fieldsets = (
+        (_('Position Details'), {
+            'fields': ('title', 'slug', 'department', 'location', 'employment_type', 'short_description', 'description', 'requirements'),
+        }),
+        (_('Application Period'), {
+            'fields': ('application_open_at', 'application_deadline', 'max_applications', 'export_applicants_links'),
+            'description': _('Control when applicants can apply and export received applications.'),
+        }),
+        (_('Publishing'), {
+            'fields': ('is_published', 'is_featured'),
+        }),
+    )
+
+    @admin.display(description=_('Applications'))
+    def application_count_display(self, obj):
+        return obj.application_count
+
+    @admin.display(description=_('Export applicants'))
+    def export_applicants_links(self, obj):
+        if not obj or not obj.pk:
+            return _('Save this vacancy first to export applicants.')
+        links = []
+        labels = {
+            'xlsx': _('Excel (.xlsx)'),
+            'csv': _('CSV (.csv)'),
+            'docx': _('Word (.docx)'),
+            'pdf': _('PDF (.pdf)'),
+        }
+        for file_format, label in labels.items():
+            url = reverse(
+                'admin:properties_vacancy_export_applicants',
+                args=[obj.pk, file_format],
+            )
+            links.append(format_html('<a class="button" href="{}">{}</a>', url, label))
+        return mark_safe(' &nbsp;|&nbsp; '.join(str(link) for link in links))
+
+    def get_urls(self):
+        urls = super().get_urls()
+        custom_urls = [
+            path(
+                '<path:object_id>/export-applicants/<str:file_format>/',
+                self.admin_site.admin_view(self.export_applicants_view),
+                name='properties_vacancy_export_applicants',
+            ),
+        ]
+        return custom_urls + urls
+
+    def export_applicants_view(self, request, object_id, file_format):
+        if file_format not in VACANCY_EXPORTERS:
+            raise Http404(_('Unsupported export format.'))
+
+        vacancy = self.get_object(request, object_id)
+        if vacancy is None:
+            raise Http404(_('Vacancy not found.'))
+
+        queryset = vacancy.applications.all()
+        status = request.GET.get('status')
+        if status:
+            queryset = queryset.filter(status=status)
+        return export_applications(queryset, file_format, vacancy=vacancy)
+
+
+@admin.register(VacancyApplication)
+class VacancyApplicationAdmin(ExportMixin, admin.ModelAdmin):
+    export_config = VACANCY_APPLICATION_EXPORT
+    list_display = ['full_name', 'vacancy', 'email', 'phone', 'status', 'created_at']
+    list_filter = ['status', 'vacancy', 'created_at']
+    search_fields = ['full_name', 'email', 'phone', 'vacancy__title']
+    readonly_fields = ['created_at']
+    date_hierarchy = 'created_at'
 
 
 @admin.register(Milestone)
-class MilestoneAdmin(admin.ModelAdmin):
+class MilestoneAdmin(ExportMixin, admin.ModelAdmin):
+    export_config = MILESTONE_EXPORT
     list_display = ['year', 'title', 'order']
 
 
@@ -679,7 +792,8 @@ class MediaAlbumAdmin(admin.ModelAdmin):
 
 
 @admin.register(WorkingSchedule)
-class WorkingScheduleAdmin(admin.ModelAdmin):
+class WorkingScheduleAdmin(ExportMixin, admin.ModelAdmin):
+    export_config = WORKING_SCHEDULE_EXPORT
     list_display = ['get_day_of_week_display', 'open_time', 'close_time', 'is_closed']
 
 

@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load form_tags %}
+
+{% block title %}{{ vacancy.title }} - Vacancy - Team Training and Consultancy Service PLC{% endblock %}
+
+{% block content %}
+<section class="page-header-ttcs">
+    <div class="container">
+        <h1>{{ vacancy.title }}</h1>
+        <span class="badge bg-primary">{{ vacancy.get_employment_type_display }}</span>
+        {% if vacancy.department %}<span class="badge bg-light text-dark">{{ vacancy.department }}</span>{% endif %}
+    </div>
+</section>
+
+<section class="section-ttcs">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-body">
+                        <div class="row">
+                            {% if vacancy.location %}
+                            <div class="col-md-6 mb-3">
+                                <h6 class="text-primary"><i class="bi bi-geo-alt"></i> Location</h6>
+                                <p class="mb-0">{{ vacancy.location }}</p>
+                            </div>
+                            {% endif %}
+                            {% if vacancy.application_open_at %}
+                            <div class="col-md-6 mb-3">
+                                <h6 class="text-primary"><i class="bi bi-calendar-plus"></i> Applications Open</h6>
+                                <p class="mb-0">{{ vacancy.application_open_at|date:"l, F d, Y H:i" }}</p>
+                            </div>
+                            {% endif %}
+                            {% if vacancy.application_deadline %}
+                            <div class="col-md-6 mb-3">
+                                <h6 class="text-primary"><i class="bi bi-calendar-x"></i> Application Deadline</h6>
+                                <p class="mb-0">{{ vacancy.application_deadline|date:"l, F d, Y H:i" }}</p>
+                            </div>
+                            {% endif %}
+                            <div class="col-md-6 mb-3">
+                                <h6 class="text-primary"><i class="bi bi-people"></i> Applications Received</h6>
+                                <p class="mb-0">{{ vacancy.application_count }}{% if vacancy.max_applications %} / {{ vacancy.max_applications }}{% endif %}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h4 class="ttcs-content-heading">Job Description</h4>
+                <div class="ttcs-content mb-4">{{ vacancy.description|linebreaks }}</div>
+
+                {% if vacancy.requirements %}
+                <h4 class="ttcs-content-heading">Requirements</h4>
+                <div class="ttcs-content">{{ vacancy.requirements|linebreaks }}</div>
+                {% endif %}
+            </div>
+
+            <div class="col-lg-4">
+                <div class="card border-0 shadow-sm contact-form-card sticky-top" style="top: 100px;">
+                    <div class="card-body p-4">
+                        <div class="contact-form-header mb-4">
+                            <div class="contact-form-icon">
+                                <i class="bi bi-briefcase-fill"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-primary mb-1">Apply for This Role</h4>
+                                <p class="text-muted small mb-0">Submit your application during the open period. We'll review and get back to you.</p>
+                            </div>
+                        </div>
+
+                        {% if vacancy.is_application_open %}
+                        {% if form.non_field_errors %}
+                        <div class="alert alert-danger" role="alert">
+                            {% for error in form.non_field_errors %}{{ error }}{% endfor %}
+                        </div>
+                        {% endif %}
+
+                        <form method="post" enctype="multipart/form-data" class="ttcs-form row g-3" id="vacancyApplicationForm" novalidate>
+                            {% csrf_token %}
+                            {% for field in form %}
+                                {% if field.name == 'website' %}
+                                <div class="ttcs-honeypot-wrap" aria-hidden="true">{{ field }}</div>
+                                {% elif field.name == 'cover_letter' %}
+                                <div class="col-12">
+                                    <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                                    {{ field }}
+                                    <div class="d-flex justify-content-between align-items-center mt-1">
+                                        <small class="text-muted">Optional — highlight your relevant experience.</small>
+                                        <small class="text-muted"><span id="coverLetterCount">0</span> / 3000</small>
+                                    </div>
+                                    {% if field.errors %}<div class="invalid-feedback d-block">{{ field.errors|first }}</div>{% endif %}
+                                </div>
+                                {% elif field.name == 'resume' %}
+                                <div class="col-12">
+                                    <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                                    {{ field }}
+                                    <small class="text-muted d-block mt-1">PDF, DOC, or DOCX — max 5 MB.</small>
+                                    {% if field.errors %}<div class="invalid-feedback d-block">{{ field.errors|first }}</div>{% endif %}
+                                </div>
+                                {% elif field.name == 'gdpr_consent' %}
+                                {% include 'properties/includes/ttcs_form_field.html' with field=field wide=True %}
+                                {% else %}
+                                {% include 'properties/includes/ttcs_form_field.html' with field=field icon=field.name|field_icon wide=True %}
+                                {% endif %}
+                            {% endfor %}
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-ttcs-primary btn-lg w-100 contact-submit-btn" data-loading-text="{% trans 'Submitting...' %}">
+                                    <i class="bi bi-send-fill me-2"></i> {% trans "Submit Application" %}
+                                </button>
+                            </div>
+                        </form>
+                        {% else %}
+                        <div class="alert alert-secondary">
+                            <i class="bi bi-info-circle"></i> Applications are currently closed for this position.
+                        </div>
+                        <a href="{% url 'site:vacancy_list' %}" class="btn btn-outline-primary w-100 mb-2">View Other Vacancies</a>
+                        <a href="{% url 'site:contact' %}" class="btn btn-outline-secondary w-100">{% trans "Contact Us" %}</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

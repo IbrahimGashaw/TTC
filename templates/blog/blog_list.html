@@ -14,9 +14,12 @@
     <div class="container">
         <div class="row mb-4">
             <div class="col-lg-8 mx-auto">
-                <form method="get" class="d-flex gap-2">
-                    <input type="text" name="q" class="form-control" placeholder="Search articles..." value="{{ search_query }}">
-                    <button type="submit" class="btn btn-primary"><i class="bi bi-search"></i></button>
+                <form method="get" class="ttcs-search-form d-flex gap-2">
+                    <div class="input-group ttcs-input-group flex-grow-1">
+                        <span class="input-group-text"><i class="bi bi-search"></i></span>
+                        <input type="text" name="q" class="form-control" placeholder="Search articles..." value="{{ search_query }}" aria-label="Search articles">
+                    </div>
+                    <button type="submit" class="btn btn-ttcs-primary px-4">Search</button>
                 </form>
             </div>
         </div>

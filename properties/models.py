@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
@@ -167,20 +168,41 @@ class PropertyImage(models.Model):
 
 
 class Contact(models.Model):
-    name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100, blank=True)
-    email = models.EmailField()
-    phone = models.CharField(max_length=20, blank=True)
-    message = models.TextField()
+    INQUIRY_CHOICES = [
+        ('general', _('General Inquiry')),
+        ('training', _('Training Programs')),
+        ('consultancy', _('Consultancy Services')),
+        ('hr_sourcing', _('HR Sourcing & Recruitment')),
+        ('events', _('Events & Workshops')),
+        ('partnership', _('Partnership')),
+    ]
+
+    name = models.CharField(max_length=100, verbose_name=_('First Name'))
+    last_name = models.CharField(max_length=100, blank=True, verbose_name=_('Last Name'))
+    email = models.EmailField(verbose_name=_('Email'))
+    phone = models.CharField(max_length=20, blank=True, verbose_name=_('Phone'))
+    subject = models.CharField(
+        max_length=30,
+        choices=INQUIRY_CHOICES,
+        default='general',
+        verbose_name=_('Subject'),
+    )
+    message = models.TextField(verbose_name=_('Message'))
     property = models.ForeignKey(Property, on_delete=models.SET_NULL, null=True, blank=True, related_name='inquiries')
     created_at = models.DateTimeField(auto_now_add=True)
-    gdpr_consent = models.BooleanField(default=False)
+    gdpr_consent = models.BooleanField(default=False, verbose_name=_('Privacy Consent'))
 
     class Meta:
         ordering = ['-created_at']
+        verbose_name = _('Contact Message')
+        verbose_name_plural = _('Contact Messages')
 
     def __str__(self):
         return f"Contact from {self.name}"
+
+    def get_full_name(self):
+        parts = [self.name, self.last_name]
+        return ' '.join(part for part in parts if part).strip()
 
 
 class PropertyNeedRequest(models.Model):
@@ -628,6 +650,25 @@ class SiteSettings(models.Model):
         help_text=_('Enable WhatsApp floating button'),
         verbose_name=_('WhatsApp Enabled')
     )
+
+    # Social Media
+    facebook_url = models.URLField(
+        blank=True,
+        default='https://www.facebook.com/share/18gfdQKHEu/',
+        help_text=_('Facebook page URL'),
+        verbose_name=_('Facebook URL'),
+    )
+    telegram_url = models.URLField(
+        blank=True,
+        default='https://t.me/teamconsultency',
+        help_text=_('Telegram channel or group URL'),
+        verbose_name=_('Telegram URL'),
+    )
+    youtube_url = models.URLField(
+        blank=True,
+        help_text=_('YouTube channel URL'),
+        verbose_name=_('YouTube URL'),
+    )
     
     # Contact Information
     company_name = models.CharField(
@@ -966,6 +1007,16 @@ class AboutPageSettings(models.Model):
         obj, created = cls.objects.get_or_create(pk=1)
         return obj
 
+    def get_embed_video_url(self):
+        if self.about_video_url:
+            return embed_video_url(self.about_video_url)
+        return None
+
+    def has_display_media(self):
+        if self.about_video_enabled and (self.about_video or self.about_video_url):
+            return True
+        return bool(self.about_video_poster)
+
 
 class Service(models.Model):
     CATEGORY_CHOICES = [
@@ -1081,6 +1132,7 @@ class EventRegistration(models.Model):
     organization = models.CharField(max_length=200, blank=True, verbose_name=_('Organization'))
     job_title = models.CharField(max_length=200, blank=True, verbose_name=_('Job Title'))
     notes = models.TextField(blank=True, verbose_name=_('Notes'))
+    gdpr_consent = models.BooleanField(default=False, verbose_name=_('Privacy Consent'))
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -1178,6 +1230,121 @@ class Partner(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Vacancy(models.Model):
+    EMPLOYMENT_TYPE_CHOICES = [
+        ('full_time', _('Full Time')),
+        ('part_time', _('Part Time')),
+        ('contract', _('Contract')),
+        ('internship', _('Internship')),
+    ]
+
+    title = models.CharField(max_length=200, verbose_name=_('Title'))
+    slug = models.SlugField(unique=True, verbose_name=_('Slug'))
+    department = models.CharField(max_length=100, blank=True, verbose_name=_('Department'))
+    location = models.CharField(max_length=200, blank=True, verbose_name=_('Location'))
+    employment_type = models.CharField(
+        max_length=20,
+        choices=EMPLOYMENT_TYPE_CHOICES,
+        default='full_time',
+        verbose_name=_('Employment Type'),
+    )
+    description = models.TextField(verbose_name=_('Description'))
+    short_description = models.TextField(max_length=500, blank=True, verbose_name=_('Short Description'))
+    requirements = models.TextField(blank=True, verbose_name=_('Requirements'))
+    application_open_at = models.DateTimeField(
+        blank=True,
+        null=True,
+        verbose_name=_('Application Opens'),
+        help_text=_('Leave blank to open applications immediately when published.'),
+    )
+    application_deadline = models.DateTimeField(
+        blank=True,
+        null=True,
+        verbose_name=_('Application Deadline'),
+        help_text=_('Leave blank for no deadline.'),
+    )
+    max_applications = models.PositiveIntegerField(
+        default=0,
+        verbose_name=_('Max Applications'),
+        help_text=_('0 means unlimited.'),
+    )
+    is_published = models.BooleanField(default=True, verbose_name=_('Published'))
+    is_featured = models.BooleanField(default=False, verbose_name=_('Featured'))
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+        verbose_name = _('Vacancy')
+        verbose_name_plural = _('Vacancies')
+
+    def __str__(self):
+        return self.title
+
+    def get_absolute_url(self):
+        return reverse('site:vacancy_detail', kwargs={'slug': self.slug})
+
+    @property
+    def application_count(self):
+        return self.applications.exclude(status='withdrawn').count()
+
+    @property
+    def is_application_open(self):
+        now = timezone.now()
+        if self.application_open_at and now < self.application_open_at:
+            return False
+        if self.application_deadline and now > self.application_deadline:
+            return False
+        if self.max_applications and self.application_count >= self.max_applications:
+            return False
+        return True
+
+    @property
+    def spots_remaining(self):
+        if not self.max_applications:
+            return None
+        return max(0, self.max_applications - self.application_count)
+
+
+class VacancyApplication(models.Model):
+    STATUS_CHOICES = [
+        ('pending', _('Pending')),
+        ('reviewed', _('Reviewed')),
+        ('shortlisted', _('Shortlisted')),
+        ('rejected', _('Rejected')),
+        ('withdrawn', _('Withdrawn')),
+    ]
+
+    vacancy = models.ForeignKey(Vacancy, on_delete=models.CASCADE, related_name='applications')
+    full_name = models.CharField(max_length=200, verbose_name=_('Full Name'))
+    email = models.EmailField(verbose_name=_('Email'))
+    phone = models.CharField(max_length=30, verbose_name=_('Phone'))
+    education = models.CharField(max_length=200, blank=True, verbose_name=_('Education'))
+    years_experience = models.PositiveSmallIntegerField(
+        blank=True,
+        null=True,
+        verbose_name=_('Years of Experience'),
+    )
+    cover_letter = models.TextField(blank=True, verbose_name=_('Cover Letter'))
+    resume = models.FileField(
+        upload_to='vacancy_applications/',
+        blank=True,
+        null=True,
+        verbose_name=_('Resume / CV'),
+        help_text=_('PDF, DOC, or DOCX (max 5 MB).'),
+    )
+    gdpr_consent = models.BooleanField(default=False, verbose_name=_('Privacy Consent'))
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+        verbose_name = _('Vacancy Application')
+        verbose_name_plural = _('Vacancy Applications')
+
+    def __str__(self):
+        return f"{self.full_name} - {self.vacancy.title}"
 
 
 class Milestone(models.Model):

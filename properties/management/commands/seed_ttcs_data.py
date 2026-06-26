@@ -26,6 +26,8 @@ class Command(BaseCommand):
         site.longitude = 39.2700
         site.whatsapp_number = '+251969055405'
         site.whatsapp_default_message = 'Hello! I am interested in your training and consultancy services.'
+        site.facebook_url = 'https://www.facebook.com/share/18gfdQKHEu/'
+        site.telegram_url = 'https://t.me/teamconsultency'
         site.save()
 
         homepage = HomePageSettings.load()

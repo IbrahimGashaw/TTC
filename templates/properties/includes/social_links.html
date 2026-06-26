@@ -1,0 +1,26 @@
+{% load ttcs_tags %}
+<div class="ttcs-social-links{% if social_class %} {{ social_class }}{% endif %}" aria-label="Social media links">
+    {% if site_settings.facebook_url %}
+    <a href="{{ site_settings.facebook_url }}" target="_blank" rel="noopener noreferrer" class="ttcs-social-link ttcs-social-facebook" aria-label="Follow us on Facebook" title="Facebook">
+        <i class="bi bi-facebook" aria-hidden="true"></i>
+    </a>
+    {% endif %}
+    {% if site_settings.telegram_url %}
+    <a href="{{ site_settings.telegram_url }}" target="_blank" rel="noopener noreferrer" class="ttcs-social-link ttcs-social-telegram" aria-label="Join us on Telegram" title="Telegram">
+        <i class="bi bi-telegram" aria-hidden="true"></i>
+    </a>
+    {% endif %}
+    {% if site_settings.whatsapp_enabled and site_settings.whatsapp_number %}
+        {% whatsapp_url_simple as whatsapp_url %}
+        {% if whatsapp_url %}
+        <a href="{{ whatsapp_url }}" target="_blank" rel="noopener noreferrer" class="ttcs-social-link ttcs-social-whatsapp" aria-label="Chat on WhatsApp" title="WhatsApp">
+            <i class="bi bi-whatsapp" aria-hidden="true"></i>
+        </a>
+        {% endif %}
+    {% endif %}
+    {% if site_settings.youtube_url %}
+    <a href="{{ site_settings.youtube_url }}" target="_blank" rel="noopener noreferrer" class="ttcs-social-link ttcs-social-youtube" aria-label="Subscribe on YouTube" title="YouTube">
+        <i class="bi bi-youtube" aria-hidden="true"></i>
+    </a>
+    {% endif %}
+</div>

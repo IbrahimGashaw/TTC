@@ -67,7 +67,11 @@ def serve_favicon(request):
 # Import the custom language view directly
 from properties.views import custom_set_language
 
+from django.contrib.admin.views.decorators import staff_member_required
+from properties.admin_export import export_all_data_zip_response
+
 urlpatterns = [
+    path('admin/export-all-data/', staff_member_required(export_all_data_zip_response), name='admin_export_all_data'),
     path('admin/', admin.site.urls),
     path('i18n/', include('django.conf.urls.i18n')),
     path('favicon.ico', serve_favicon),

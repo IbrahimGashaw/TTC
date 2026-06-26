@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
-{% load media_tags %}
+{% load i18n %}
+{% load form_tags %}
 
 {% block title %}{{ event.title }} - Team Training and Consultancy Service PLC{% endblock %}
 
@@ -49,31 +50,61 @@
                 </div>
                 <h4 class="ttcs-content-heading">About This Event</h4>
                 <div class="ttcs-content">{{ event.description|linebreaks }}</div>
+                {% load media_tags %}
                 {% render_media_gallery event.media_items.all gallery_id='event' %}
             </div>
             <div class="col-lg-4">
-                <div class="card border-0 shadow-sm sticky-top" style="top: 100px;">
-                    <div class="card-header bg-primary text-white">
-                        <h5 class="mb-0"><i class="bi bi-pencil-square"></i> Register for Event</h5>
-                    </div>
-                    <div class="card-body">
+                <div class="card border-0 shadow-sm contact-form-card sticky-top" style="top: 100px;">
+                    <div class="card-body p-4">
+                        <div class="contact-form-header mb-4">
+                            <div class="contact-form-icon">
+                                <i class="bi bi-calendar-check-fill"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-primary mb-1">Register for Event</h4>
+                                <p class="text-muted small mb-0">Secure your seat. We'll confirm your registration by email or phone.</p>
+                            </div>
+                        </div>
+
                         {% if event.is_registration_open %}
-                        <form method="post">
+                        {% if form.non_field_errors %}
+                        <div class="alert alert-danger" role="alert">
+                            {% for error in form.non_field_errors %}{{ error }}{% endfor %}
+                        </div>
+                        {% endif %}
+
+                        <form method="post" class="ttcs-form row g-3" id="eventRegistrationForm" novalidate>
                             {% csrf_token %}
                             {% for field in form %}
-                            <div class="mb-3">
-                                <label class="form-label">{{ field.label }}{% if field.field.required %} *{% endif %}</label>
-                                {{ field }}
-                                {% if field.errors %}<div class="text-danger small">{{ field.errors.0 }}</div>{% endif %}
-                            </div>
+                                {% if field.name == 'website' %}
+                                <div class="ttcs-honeypot-wrap" aria-hidden="true">{{ field }}</div>
+                                {% elif field.name == 'notes' %}
+                                <div class="col-12">
+                                    <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                                    {{ field }}
+                                    <div class="d-flex justify-content-between align-items-center mt-1">
+                                        <small class="text-muted">Optional special requirements.</small>
+                                        <small class="text-muted"><span id="registrationNotesCount">0</span> / 1000</small>
+                                    </div>
+                                    {% if field.errors %}<div class="invalid-feedback d-block">{{ field.errors|first }}</div>{% endif %}
+                                </div>
+                                {% elif field.name == 'gdpr_consent' %}
+                                {% include 'properties/includes/ttcs_form_field.html' with field=field %}
+                                {% else %}
+                                {% include 'properties/includes/ttcs_form_field.html' with field=field icon=field.name|field_icon %}
+                                {% endif %}
                             {% endfor %}
-                            <button type="submit" class="btn btn-ttcs-primary w-100">Submit Registration</button>
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-ttcs-primary btn-lg w-100 contact-submit-btn" data-loading-text="{% trans 'Registering...' %}">
+                                    <i class="bi bi-check-circle-fill me-2"></i> {% trans "Submit Registration" %}
+                                </button>
+                            </div>
                         </form>
                         {% else %}
                         <div class="alert alert-secondary">
                             <i class="bi bi-info-circle"></i> Registration is currently closed for this event.
                         </div>
-                        <a href="{% url 'site:contact' %}" class="btn btn-outline-primary w-100">Contact Us for Inquiries</a>
+                        <a href="{% url 'site:contact' %}" class="btn btn-outline-primary w-100">{% trans "Contact Us for Inquiries" %}</a>
                         {% endif %}
                     </div>
                 </div>

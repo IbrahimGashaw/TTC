@@ -1,23 +1,25 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
 from django.contrib.auth.views import LoginView, LogoutView, PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView
 from django.urls import reverse_lazy, reverse
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 
+from .forms import TTCSUserCreationForm
+
 
 def register(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = TTCSUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
             login(request, user)
             messages.success(request, 'Registration successful!')
             return redirect('site:home')
     else:
-        form = UserCreationForm()
+        form = TTCSUserCreationForm()
     return render(request, 'accounts/register.html', {'form': form})
 
 

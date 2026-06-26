@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load media_tags %}
 
 {% block title %}About Us - Team Training and Consultancy Service PLC{% endblock %}
 
@@ -12,7 +13,7 @@
 
 <section class="section-ttcs">
     <div class="container">
-        <div class="row align-items-center mb-5">
+        <div class="row align-items-center mb-5 g-4">
             <div class="col-lg-6 ttcs-content">
                 <h2 class="text-primary mb-4">Our Story</h2>
                 <p>Team Training and Consultancy Service PLC (TTC) was established on Thursday, April 18, 2024, and officially began operations on May 7, 2024. We provide specialized training, consultancy, and human resource sourcing solutions tailored to enhance organizational effectiveness and employee development.</p>
@@ -20,6 +21,41 @@
                 <p>Two visionary individuals with extensive experience in higher education and industry founded TTC. Over the past decade, they have honed their theoretical and practical expertise, supported by numerous testimonial letters and certificates from the companies they have served.</p>
             </div>
             <div class="col-lg-6">
+                {% if about_settings and about_settings.has_display_media %}
+                <div class="about-media-stack">
+                    {% if about_settings.about_video_enabled and about_settings.about_video %}
+                    <div class="ttcs-media-frame ttcs-media-frame--video">
+                        <video class="ttcs-video-player" controls playsinline preload="metadata"
+                               {% if about_settings.about_video_poster %}poster="{{ about_settings.about_video_poster.url }}"{% endif %}>
+                            <source src="{{ about_settings.about_video.url }}" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                    {% elif about_settings.about_video_enabled and about_settings.about_video_url and about_settings.get_embed_video_url %}
+                    <div class="ttcs-media-frame ttcs-media-frame--video">
+                        <iframe src="{{ about_settings.get_embed_video_url }}"
+                                title="About Team Training and Consultancy Service PLC"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowfullscreen loading="lazy"></iframe>
+                    </div>
+                    {% if about_settings.about_video_poster %}
+                    <div class="ttcs-media-frame ttcs-media-frame--hero mt-3">
+                        <img src="{{ about_settings.about_video_poster.url }}"
+                             alt="Team Training and Consultancy Service PLC"
+                             class="ttcs-media-img"
+                             loading="lazy">
+                    </div>
+                    {% endif %}
+                    {% elif about_settings.about_video_poster %}
+                    <div class="ttcs-media-frame ttcs-media-frame--hero">
+                        <img src="{{ about_settings.about_video_poster.url }}"
+                             alt="Team Training and Consultancy Service PLC"
+                             class="ttcs-media-img"
+                             loading="lazy">
+                    </div>
+                    {% endif %}
+                </div>
+                {% else %}
                 <div class="row g-3">
                     <div class="col-6">
                         <div class="value-card">
@@ -46,8 +82,38 @@
                         </div>
                     </div>
                 </div>
+                {% endif %}
             </div>
         </div>
+
+        {% if about_settings and about_settings.has_display_media %}
+        <div class="row g-3 mb-5">
+            <div class="col-6 col-md-3">
+                <div class="value-card text-center">
+                    <div class="stat-number text-primary" style="font-size:2.5rem;">{{ stats.clients_served }}+</div>
+                    <p class="mb-0">Clients Served</p>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="value-card text-center">
+                    <div class="stat-number text-primary" style="font-size:2.5rem;">{{ stats.years_experience }}+</div>
+                    <p class="mb-0">Years Experience</p>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="value-card text-center">
+                    <div class="stat-number text-primary" style="font-size:2.5rem;">{{ stats.training_programs }}+</div>
+                    <p class="mb-0">Training Programs</p>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="value-card text-center">
+                    <div class="stat-number text-primary" style="font-size:2.5rem;">{{ stats.associate_trainers }}+</div>
+                    <p class="mb-0">Associate Trainers</p>
+                </div>
+            </div>
+        </div>
+        {% endif %}
     </div>
 </section>
 
